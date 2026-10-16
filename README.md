@@ -41,7 +41,7 @@ O projeto foi arquitetado tirando o máximo proveito do ecossistema moderno **Ve
 * **Frontend & Backend:** **Next.js (App Router)** com **Server Actions** e **TypeScript**.
 * **Estilização:** **Tailwind CSS** e **Shadcn UI**.
 * **Autenticação:** **Privy** (login simplificado via E-mail, Google e Social Logins com gerenciamento seguro de sessões e perfis).
-* **Banco de Dados:** **PostgreSQL** (hospedado via Neon ou Supabase) gerenciado com **Drizzle ORM**.
+* **Banco de Dados:** **PostgreSQL** (hospedado via Neon) gerenciado com **Drizzle ORM**.
 * **Armazenamento de Arquivos:** **Vercel Blob** (para armazenamento seguro de PDFs de projetos e fotos de evidência do canteiro).
 
 ---
