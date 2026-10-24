@@ -144,7 +144,22 @@ erDiagram
     Material ||--o{ AIRoomSimulation : "é aplicado virtualmente no cômodo"
 ```
 
-## 2. Detalhamento das Novas Regras de Negócio no Banco de Dados
+## 2. Dicionário de Dados Detalhado (Tabelas)
+
+Abaixo explicamos o papel de cada entidade (tabela) que compõe a arquitetura do ObraFlow:
+
+* **User**: Tabela central de usuários. Armazena a identidade (nome, e-mail) e o papel (`role`) no sistema (Cliente, Empreiteiro, Engenheiro, etc.). A autenticação real é delegada ao provedor externo (Privy), por isso o campo `privy_id`.
+* **Project**: Representa a obra em si. É o núcleo que liga o proprietário (`client_id`) à construtora (`contractor_id`). Controla a jornada desde o orçamento (`QUOTE_REQUESTED`) até a execução (`IN_PROGRESS`), armazenando links vitais como o PDF do projeto e do contrato assinado.
+* **Collaborator**: Representa a força de trabalho operacional do empreiteiro (pedreiros, mestres de obras, eletricistas). Armazena seus dados básicos, taxa de remuneração (diária/salário) e chave de pagamento.
+* **Payroll**: Tabela de folha de pagamento que cruza o colaborador com a obra em que ele trabalhou num período específico, gerando a obrigação de pagamento (status pendente ou pago).
+* **FinancialTransaction**: O coração financeiro (ERP) do projeto. Registra todas as movimentações de caixa (entradas do cliente e saídas para fornecedores, folha e impostos). Categoriza cada despesa para permitir o cálculo da margem e do avanço financeiro real.
+* **Epic**: A macro-divisão estrutural da obra (ex: Fundação, Alvenaria, Acabamento). Serve para ordenar a linha do tempo (Master Pipeline) e travar/destravar o progresso caso existam dependências financeiras ou de compra pendentes.
+* **Task**: As tarefas atômicas da obra que compõem um Épico. Elas vivem no Kanban e possuem categorias específicas (execução civil, compra de material, recebimento, etc.). É no nível da tarefa que se registra o custo da mão de obra (`cost_labor`).
+* **Material**: Insumos necessários para completar uma tarefa. Esta tabela controla o que, quanto, e por quanto deve ser comprado. Também incorpora toda a inteligência logística: quem recebe no canteiro, frete, e taxa extra caso o empreiteiro assuma o tempo de recebimento da carga.
+* **Evidence**: Registro de comprovação em campo (foto obrigatória). Garante transparência total: uma tarefa só é `DONE` fisicamente quando uma evidência fotográfica é anexada.
+* **AIRoomSimulation**: O módulo de Inovação em Prototipagem. Registra simulações onde a IA mescla uma foto real do canteiro (em reboco, por exemplo) com materiais virtuais, facilitando a decisão de compra e gerando receita de consultoria (`consulting_fee`).
+
+## 3. Detalhamento das Novas Regras de Negócio no Banco de Dados
 
 | Módulo | Entidades Envolvidas | Como Funciona na Prática |
 |---|---|---|
@@ -187,3 +202,30 @@ O avanço financeiro reflete o consumo real do orçamento somando insumos adquir
 3. **Relatório Comparativo de Saúde da Obra (Termômetro Físico vs. Financeiro)**
 * Compara lado a lado o % de Avanço Físico e o % de Avanço Financeiro geral e por Épico.
 * Aponta desvios automaticamente: se o cliente antecipou compras de revestimentos e fretes mas a alvenaria ainda não terminou, o relatório explica de forma transparente que a diferença entre o Financeiro e o Físico decorre do estoque de materiais já adquiridos no canteiro, mantendo a confiança entre cliente e empreiteiro.
+
+### 3.5. Simulação Visual de Relatórios (Gráficos)
+
+Abaixo simulamos como os dados estruturados no MER se traduzem em painéis visuais dentro da plataforma ObraFlow.
+
+**Avanço Físico x Avanço Financeiro (Termômetro de Saúde)**
+```mermaid
+gantt
+    title Saúde da Obra (Residencial Alpha)
+    dateFormat  YYYY-MM-DD
+    axisFormat  %
+
+    section Status Global
+    Avanço Físico (Executado)        :done, 2023-01-01, 62d
+    Avanço Financeiro (Gasto/Comprado) :active, 2023-01-01, 75d
+```
+*Interpretação:* O gráfico alerta visualmente que a obra já comprometeu 75% do orçamento financeiro, mas executou apenas 62% do cronograma físico no canteiro.
+
+**Distribuição do Orçamento (Fluxo de Caixa / FinancialTransaction)**
+```mermaid
+pie title Consumo do Orçamento por Categoria
+    "Materiais e Insumos" : 45
+    "Folha de Pagamento (Mão de Obra)" : 30
+    "Frete e Logística" : 10
+    "Impostos e Taxas" : 8
+    "Consultoria IA (Prototipagem)" : 7
+```

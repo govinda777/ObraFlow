@@ -1,0 +1,12 @@
+[
+  {
+    "id": "pay_1",
+    "collaborator_id": "collab_1",
+    "project_id": "proj_1",
+    "reference_period": "Semana 42 - 2023",
+    "amount": 1250.00,
+    "status": "PAID",
+    "due_date": "2023-10-20T00:00:00Z",
+    "paid_at": "2023-10-20T10:00:00Z"
+  }
+]
