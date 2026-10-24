@@ -1,17 +1,17 @@
-# Modelo Entidade-Relacionamento (MER) do ObraFlow e Regras de Negócio
+# Arquitetura de Dados e MER Atualizado do ObraFlow
 
-Abaixo está a versão atualizada e consolidada do Modelo Entidade-Relacionamento (MER) do ObraFlow, com o diagrama limpo, o dicionário de dados atualizado e uma seção exclusiva detalhando os relatórios e as regras matemáticas de cálculo de avanço físico e financeiro.
+A nova arquitetura de dados do ObraFlow expande o motor central de Épicos e Kanban para englobar o ciclo comercial do cliente (orçamento e assinatura de contrato), o ERP financeiro do empreiteiro (colaboradores, folha de pagamento, contas a pagar/receber), a logística de frete e recebimento em obra, e o módulo de prototipagem de ambientes por Inteligência Artificial.
 
-## 1. Diagrama Entidade-Relacionamento (MER)
+## 1. Diagrama Entidade-Relacionamento (MER Atualizado)
 
 ```mermaid
 erDiagram
     User {
         string id PK
-        string privy_id UK "ID de autenticação do Privy"
+        string privy_id UK "Autenticação via Privy"
         string name "Nome completo"
-        string email UK "E-mail de contato"
-        string role "ADMIN | ENGINEER | CLIENT | FOREMAN"
+        string email UK "E-mail"
+        string role "CLIENT | CONTRACTOR | ENGINEER | FOREMAN | ADMIN"
         timestamp created_at
     }
 
@@ -19,111 +19,171 @@ erDiagram
         string id PK
         string name "Nome da Obra"
         string address "Endereço do canteiro"
-        string client_id FK "Proprietário / Cliente Final"
-        string engineer_id FK "Engenheiro / Orçamentista responsável"
-        string status "PENDING_ANALYSIS | PLANNING | IN_PROGRESS | COMPLETED"
-        string pdf_url "Link do PDF no Vercel Blob"
+        string client_id FK "Cliente Proprietário"
+        string contractor_id FK "Empreiteiro / Construtora responsável"
+        string status "QUOTE_REQUESTED | AI_ANALYZING | BUDGET_READY | APPROVED | CONTRACT_SIGNED | IN_PROGRESS | COMPLETED"
+        string scope_pdf_url "PDF inicial no Vercel Blob"
+        string contract_pdf_url "Contrato assinado no Vercel Blob"
+        timestamp contract_signed_at "Data de assinatura do contrato"
         timestamp created_at
+    }
+
+    Collaborator {
+        string id PK
+        string contractor_id FK "Empreiteiro empregador"
+        string name "Nome do colaborador"
+        string role_function "Pedreiro | Mestre | Eletricista | Conferente"
+        decimal remuneration_rate "Valor da diária ou salário base"
+        string payment_info "Dados bancários / Chave PIX"
+        boolean active "Status do colaborador"
+    }
+
+    Payroll {
+        string id PK
+        string collaborator_id FK "Colaborador pago"
+        string project_id FK "Obra alocada"
+        string reference_period "Período (Semana / Mês)"
+        decimal amount "Valor total pago"
+        string status "PENDING | PAID"
+        timestamp due_date "Data de vencimento"
+        timestamp paid_at "Data de pagamento"
+    }
+
+    FinancialTransaction {
+        string id PK
+        string project_id FK "Obra relacionada"
+        string contractor_id FK "Gestor financeiro"
+        string type "PAYABLE | RECEIVABLE"
+        string category "MATERIAL | FREIGHT | PAYROLL | RECEIVING_FEE | CLIENT_INSTALLMENT | AI_PROTOTYPING"
+        string description "Descrição do lançamento"
+        decimal amount "Valor da transação"
+        string status "PENDING | PAID | OVERDUE"
+        timestamp due_date "Vencimento"
+        timestamp paid_at "Data de quitação"
     }
 
     Epic {
         string id PK
         string project_id FK "Obra associada"
-        string title "Macroetapa (Ex: 1. Fundação, 2. Estrutura...)"
-        int order_index "Ordem sequencial na Pipeline"
+        string title "Macroetapa (Fundação, Estrutura, Acabamento...)"
+        int order_index "Ordem na Master Pipeline"
         string status "LOCKED | IN_PROGRESS | COMPLETED"
-        boolean requires_materials_purchase "Trava de dependência de insumos"
+        boolean requires_materials_purchase "Trava de dependência de compra"
+        timestamp start_date "Previsão de início"
+        timestamp end_date "Previsão de término"
     }
 
     Task {
         string id PK
         string epic_id FK "Épico associado"
-        string title "Título da tarefa operacional"
-        string description "Detalhes técnicos da tarefa"
+        string assigned_collaborator_id FK "Colaborador responsável"
+        string title "Título da tarefa"
+        string description "Instruções técnicas"
+        string category "EXECUTION | MATERIAL_PURCHASE | MATERIAL_RECEIVING | INSPECTION | ADMINISTRATIVE"
         string kanban_status "TODO | IN_PROGRESS | REVIEW | DONE"
         decimal cost_labor "Custo planejado de mão de obra"
+        timestamp due_date "Prazo limite (alimenta os cronogramas)"
     }
 
     Material {
         string id PK
-        string task_id FK "Tarefa associada"
-        string name "Nome do insumo de material"
-        string unit "Unidade (m2, kg, un, saco)"
+        string task_id FK "Tarefa vinculada"
+        string created_by_id FK "Cadastrado pelo Cliente ou Empreiteiro"
+        string name "Especificação do material"
+        string material_group "STRUCTURAL | FINISHINGS | LIGHTING | PLUMBING | DRYWALL"
+        string unit "m2 | kg | un | sc"
         decimal quantity "Quantidade necessária"
-        decimal unit_price "Preço unitário estimado"
-        decimal total_price "Preço total (quantity * unit_price)"
-        boolean purchased "Status de compra pelo cliente"
+        decimal unit_price "Preço unitário"
+        decimal freight_cost "Custo do frete"
+        decimal receiving_fee "Custo de recepção na obra (se Empreiteiro receber)"
+        decimal total_price " (quantity * unit_price) + freight_cost + receiving_fee "
+        string receiver_responsible "CLIENT | CONTRACTOR"
+        string received_by_user_id FK "Usuário que conferiu na entrega"
+        boolean purchased "Comprado pelo cliente/empreiteiro"
+        string delivery_status "PENDING_PURCHASE | IN_TRANSIT | DELIVERED_INSPECTED | REJECTED"
+        timestamp purchase_deadline "Data limite para compra sem atrasar o Épico"
+        timestamp estimated_delivery "Previsão de chegada na obra"
     }
 
     Evidence {
         string id PK
-        string task_id FK "Tarefa validada"
-        string uploaded_by FK "Mestre de Obras que enviou"
-        string photo_url "URL da foto no Vercel Blob"
-        string notes "Observações de campo"
+        string task_id FK "Tarefa ou Recebimento validado"
+        string uploaded_by FK "Responsável pela foto (Mestre/Cliente/Conferente)"
+        string evidence_type "TASK_EXECUTION | MATERIAL_INSPECTION"
+        string photo_url "Foto obrigatória no Vercel Blob"
+        string notes "Observações de campo ou avarias no material"
         timestamp created_at
     }
 
-    User ||--o{ Project : "gerencia / possui"
-    Project ||--|{ Epic : "divide-se em épicos (Pipeline)"
-    Epic ||--|{ Task : "contém tarefas (Kanban)"
-    Task ||--o{ Material : "demanda insumos"
-    Task ||--o{ Evidence : "exige foto de comprovação"
-    User ||--o{ Evidence : "registra em campo"
+    AIRoomSimulation {
+        string id PK
+        string project_id FK "Obra associada"
+        string material_id FK "Material testado (Pia, Revestimento, Luminária...)"
+        string requested_by_id FK "Cliente ou Empreiteiro solicitante"
+        string room_name "Cômodo (Ex: Banheiro Suíte, Cozinha)"
+        string target_element "COUNTERTOP_SINK | FLOOR_TILE | DRYWALL_CEILING | LIGHTING | COATING"
+        string original_photo_url "Foto real do cômodo na obra (Vercel Blob)"
+        string generated_photo_url "Imagem renderizada pela IA com material instalado"
+        decimal consulting_fee "Custo do serviço de consultoria/prototipagem IA"
+        string status "PROCESSING | READY | APPROVED_BY_CLIENT"
+        timestamp created_at
+    }
+
+    User ||--o{ Project : "cria / contrata / gerencia"
+    User ||--o{ Collaborator : "emprega (Empreiteiro)"
+    Collaborator ||--o{ Payroll : "recebe"
+    Project ||--o{ Payroll : "aloca custo de equipe"
+    Project ||--o{ FinancialTransaction : "movimenta caixa"
+    Project ||--|{ Epic : "divide-se em pipeline"
+    Epic ||--|{ Task : "decompõe-se no Kanban"
+    Collaborator ||--o{ Task : "executa"
+    Task ||--o{ Material : "exige insumos e logística"
+    User ||--o{ Material : "cadastra / recebe no canteiro"
+    Task ||--o{ Evidence : "comprova conclusão ou recebimento"
+    Project ||--o{ AIRoomSimulation : "simula acabamentos via IA"
+    Material ||--o{ AIRoomSimulation : "é aplicado virtualmente no cômodo"
 ```
 
-## 2. Dicionário de Dados Resumido
+## 2. Detalhamento das Novas Regras de Negócio no Banco de Dados
 
-* **users**: Armazena os perfis (ADMIN, ENGINEER, CLIENT, FOREMAN) autenticados via Privy.
-* **projects**: Centraliza a obra, vinculando o cliente, o engenheiro e o PDF base armazenado no Vercel Blob.
-* **epics**: Representa as macroetapas sequenciais da pipeline superior (com controle de trava para compra de materiais).
-* **tasks**: As unidades de trabalho operacionais divididas nas colunas do Kanban (TODO, IN_PROGRESS, REVIEW, DONE), contendo o custo de mão de obra.
-* **materials**: Insumos de materiais atrelados às tarefas, controlando o preço total e se já foram adquiridos (purchased).
-* **evidences**: Fotos obrigatórias vinculadas às tarefas concluídas para garantir a veracidade do avanço físico.
+| Módulo | Entidades Envolvidas | Como Funciona na Prática |
+|---|---|---|
+| Jornada Comercial do Cliente | projects | O status evolui de QUOTE_REQUESTED (pedido de orçamento) -> AI_ANALYZING (leitura do PDF via IA) -> BUDGET_READY -> APPROVED (aprovação do orçamento) -> CONTRACT_SIGNED (assinatura registrada em contract_pdf_url e contract_signed_at) -> IN_PROGRESS. |
+| Kanban Polimórfico (Visões Personalizadas) | tasks (category) | Cliente e Empreiteiro enxergam o mesmo quadro Kanban (TODO, IN_PROGRESS, REVIEW, DONE), mas o atributo tasks.category permite criar filtros e visões dinâmicas por assunto: Execução Civil, Compras de Material, Recebimento e Conferência, Vistorias e Administrativo. |
+| Logística, Frete e Recebimento de Material | materials, tasks, evidences | Tanto CLIENT quanto CONTRACTOR podem cadastrar materiais (created_by_id) e informar o frete (freight_cost). Na entrega, o campo receiver_responsible define quem receberá no canteiro: se for CLIENT, o custo adicional é R$ 0,00 (mas o cliente assume o compromisso de estar na obra); se for CONTRACTOR, o sistema adiciona a taxa receiving_fee ao custo da tarefa para cobrir o deslocamento/tempo do colaborador que fará a checagem com foto obrigatória (evidence_type = MATERIAL_INSPECTION). |
+| ERP do Empreiteiro (RH e Financeiro) | collaborators, payrolls, financial_transactions | O empreiteiro cadastra sua equipe em collaborators, gera a folha de pagamento por obra em payrolls e controla todo o fluxo de caixa (parcelas a receber do cliente, pagamento de fornecedores, fretes e diárias) em financial_transactions. |
+| Prototipagem de Ambientes via IA | ai_room_simulations, materials | Conectado ao cronograma de compras: o usuário tira uma foto real do cômodo ainda em osso ou reboco (original_photo_url), escolhe os materiais de acabamento (pia, revestimento, forro de gesso, luminárias) e a IA gera uma visualização realista do item instalado (generated_photo_url), destravando a decisão de compra e gerando receita de consultoria (consulting_fee). |
 
-## 3. Sessão Específica: Relatórios e Cálculos de Avanço (Físico vs. Financeiro)
+## 3. Relatórios e Cálculos de Avanço (Físico, Financeiro e Compras)
 
-Para que o ObraFlow entregue previsibilidade real e elimine o atrito entre cliente, engenheiro e construtor, o motor de relatórios do sistema calcula dinamicamente o Avanço Físico e o Avanço Financeiro com base no peso de cada tarefa dentro da Estrutura Analítica de Projeto (EAP).
-
-### 3.1. O Conceito de Peso na EAP (Valor Agregado Simplificado)
-
-Como tarefas possuem importâncias distintas (ex: Concretagem da Fundação custa e consome muito mais tempo do que a Instalação de uma Tomada), o sistema utiliza o Custo Total da Tarefa como peso relativo.
+### 3.1. Cálculo de Peso da EAP (Orçamento Base Expandido)
+Com a inclusão do frete, da taxa de recebimento em obra e da consultoria de IA, o custo planejado de cada tarefa (C_tarefa) passa a integrar todas as variáveis logísticas e operacionais:
+`Custo Total da Tarefa = Custo Mão de Obra + (Soma dos Insumos) + Custo Fretes + Custo Recebimentos + Consultoria IA`
 
 ### 3.2. Cálculo do Avanço Físico (% Físico)
+O avanço físico mede exclusivamente o trabalho e a logística concluídos e comprovados visualmente no canteiro.
+* **Regra de Validação**: Uma tarefa de execução ou de recebimento/conferência de material só atinge 100% quando seu status muda para DONE mediante o upload de uma foto em evidences.
+* **Fórmula Matemática**:
+`Avanço Físico (%) = (Soma do C_tarefa das Tarefas DONE e Comprovadas) / (Custo Total do Projeto)`
 
-O avanço físico mede a execução real no canteiro, validada por evidências imutáveis.
-* **Regra de Conclusão**: Uma tarefa só pontua 100% de avanço físico quando seu `kanban_status` é `DONE` e possui uma foto registrada na tabela `evidences`. Tarefas em andamento (TODO, IN_PROGRESS, REVIEW) pontuam proporcionalmente ou 0%.
-* **Fórmula do Projeto**: `Avanço Físico = (Soma do custo das tarefas concluídas) / (Custo total do projeto)`
-* **Visualização nos Relatórios**: Exibido em barras de progresso na Master Pipeline (por épico) e em um card principal de KPI no Dashboard do Cliente e Admin.
+### 3.3. Cálculo do Avanço Financeiro (% Financeiro e Fluxo de Caixa)
+O avanço financeiro reflete o consumo real do orçamento somando insumos adquiridos, fretes contratados, taxas de recebimento, folha de pagamento executada e serviços de prototipagem IA.
+* **Visão do Orçamento da Obra (Cliente e Empreiteiro)**:
+`Avanço Financeiro (%) = (Soma dos Custos Realizados) / (Custo Total Orçado do Projeto)`
+* **Visão de Margem e Fluxo de Caixa (Exclusiva do Empreiteiro)**:
+`Margem do Projeto = (Receita Total Recebida do Cliente) - (Soma dos Custos de Folha + Repasses a Fornecedores + Impostos)`
 
-### 3.3. Cálculo do Avanço Financeiro (% Financeiro / Consumo de Orçamento)
+### 3.4. Especificação dos Relatórios Inteligentes do Sistema
 
-O avanço financeiro mede o comprometimento do orçamento planejado em relação ao que foi gasto ou efetivamente comprado.
-* **Fórmula do Projeto**: `Avanço Financeiro = (Soma do custo financeiro realizado) / (Custo total do projeto)`
-* **Trava de Dependência**: Se um épico possui `requires_materials_purchase = true` e os materiais (`materials.purchased`) ainda não foram quitados pelo cliente, o avanço financeiro e a liberação operacional daquele bloco ficam travados.
+1. **Relatório de Gestão e Cronograma de Compras (Supply Chain + Consultoria IA)**
+* **Lógica de Geração**: Varre todas as tasks filtrando pela categoria MATERIAL_PURCHASE e cruza a data de início dos epics (start_date) com o prazo de entrega do frete (estimated_delivery), ordenando pela data limite de compra (purchase_deadline).
+* **Prevenção de Gargalos**: Destaca em vermelho os materiais com purchased = false cujo purchase_deadline vence nos próximos 7 dias, evitando que o Épico fique bloqueado (status = LOCKED).
+* **Gatilho de Venda (Consultoria / Prototipagem IA)**: Para todos os itens dos grupos FINISHINGS, LIGHTING e DRYWALL que ainda não foram comprados, o relatório exibe o botão "Simular no Cômodo com IA", abrindo o fluxo da tabela ai_room_simulations para o cliente visualizar pias, revestimentos, gesso e luminárias aplicados na foto real da sua obra antes de bater o martelo na compra.
 
-### 3.4. O Painel de Saúde da Obra (Comparativo Físico vs. Financeiro)
+2. **Painel de Visões Personalizadas do Kanban (Filtros por Categoria)**
+* **Visão "Logística e Recebimento em Canteiro"**: Filtra tasks.category = 'MATERIAL_RECEIVING'. Exibe cartões contendo a data prevista do frete (estimated_delivery), quem deve estar na obra para assinar e conferir (receiver_responsible = CLIENT ou CONTRACTOR) e o botão para anexar a foto do material entregue sem avarias.
+* **Visão "Execução de Campo"**: Filtra tasks.category = 'EXECUTION', focada no Mestre de Obras e nos colaboradores alocados.
 
-Os relatórios gerenciais geram automaticamente um termômetro de desvio para alertar o Administrador e o Engenheiro sobre gargalos:
-
-```text
-========================================================
-📊 RELATÓRIO DE SAÚDE DA OBRA: Residencial Alpha
-========================================================
-[==========================                  ] 62% Avanço Físico (Executado no canteiro)
-[================================            ] 75% Avanço Financeiro (Gasto / Comprado)
---------------------------------------------------------
-⚠️ ALERTA DE DESVIO: O avanço financeiro está 13% acima do avanço físico.
-```
-
-* **Cenário Ideal (Físico > Financeiro)**: A obra está altamente eficiente, produzindo mais do que consome de orçamento.
-* **Cenário de Alerta (Físico < Financeiro)**: A obra está consumindo recursos mais rápido do que a execução física no canteiro (indica compra antecipada excessiva de materiais, desperdício ou baixa produtividade da mão de obra).
-
-### 3.5. Tipos de Relatórios Disponibilizados no ObraFlow
-
-* **Relatório Executivo (Para o Cliente Final / Proprietário)**:
-  * Focado em simplificar a complexidade: Mostra o % de avanço físico geral, a linha do tempo dos épicos e a galeria de fotos comprovadas (evidences), reduzindo a ansiedade e eliminando ligações de cobrança diária.
-* **Relatório Operacional (Para o Engenheiro / Mestre de Obras)**:
-  * Focado no fluxo de tarefas diárias (Kanban) e na listagem de insumos de materiais necessários para destravar os próximos épicos da pipeline.
-* **Relatório Consolidado Corporativo (Para o Administrador da Construtora)**:
-  * Visão macro cruzando todas as obras ativas da construtora, exibindo margens operacionais, desvios orçamentários em tempo real e o status global dos canteiros.
+3. **Relatório Comparativo de Saúde da Obra (Termômetro Físico vs. Financeiro)**
+* Compara lado a lado o % de Avanço Físico e o % de Avanço Financeiro geral e por Épico.
+* Aponta desvios automaticamente: se o cliente antecipou compras de revestimentos e fretes mas a alvenaria ainda não terminou, o relatório explica de forma transparente que a diferença entre o Financeiro e o Físico decorre do estoque de materiais já adquiridos no canteiro, mantendo a confiança entre cliente e empreiteiro.
