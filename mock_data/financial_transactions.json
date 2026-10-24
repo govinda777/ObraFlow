@@ -1,0 +1,26 @@
+[
+  {
+    "id": "tx_1",
+    "project_id": "proj_1",
+    "contractor_id": "usr_2",
+    "type": "RECEIVABLE",
+    "category": "CLIENT_INSTALLMENT",
+    "description": "Parcela 1 - Entrada Contrato",
+    "amount": 50000.00,
+    "status": "PAID",
+    "due_date": "2023-10-05T00:00:00Z",
+    "paid_at": "2023-10-05T15:00:00Z"
+  },
+  {
+    "id": "tx_2",
+    "project_id": "proj_1",
+    "contractor_id": "usr_2",
+    "type": "PAYABLE",
+    "category": "MATERIAL",
+    "description": "Compra Cimento Votorantim",
+    "amount": 1500.00,
+    "status": "PAID",
+    "due_date": "2023-10-10T00:00:00Z",
+    "paid_at": "2023-10-10T09:00:00Z"
+  }
+]

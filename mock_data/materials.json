@@ -1,0 +1,21 @@
+[
+  {
+    "id": "mat_1",
+    "task_id": "task_1",
+    "created_by_id": "usr_2",
+    "name": "Cimento CP II",
+    "material_group": "STRUCTURAL",
+    "unit": "sc",
+    "quantity": 50,
+    "unit_price": 30.00,
+    "freight_cost": 50.00,
+    "receiving_fee": 0.00,
+    "total_price": 1550.00,
+    "receiver_responsible": "CONTRACTOR",
+    "received_by_user_id": "usr_2",
+    "purchased": true,
+    "delivery_status": "DELIVERED_INSPECTED",
+    "purchase_deadline": "2023-10-09T00:00:00Z",
+    "estimated_delivery": "2023-10-12T00:00:00Z"
+  }
+]
