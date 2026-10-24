@@ -2,10 +2,37 @@
   {
     "id": "collab_1",
     "contractor_id": "usr_2",
-    "name": "José Pedreiro",
+    "name": "José Silva (Mestre de Obras)",
     "role_function": "Mestre",
-    "remuneration_rate": 250.00,
-    "payment_info": "PIX: 12345678909",
+    "remuneration_rate": 320.00,
+    "payment_info": "PIX: 123.456.789-09",
+    "active": true
+  },
+  {
+    "id": "collab_2",
+    "contractor_id": "usr_2",
+    "name": "Antônio Ferreira",
+    "role_function": "Pedreiro",
+    "remuneration_rate": 220.00,
+    "payment_info": "PIX: antonio.pedreiro@email.com",
+    "active": true
+  },
+  {
+    "id": "collab_3",
+    "contractor_id": "usr_2",
+    "name": "Roberto Santos",
+    "role_function": "Eletricista",
+    "remuneration_rate": 260.00,
+    "payment_info": "PIX: (11) 98888-7766",
+    "active": true
+  },
+  {
+    "id": "collab_4",
+    "contractor_id": "usr_2",
+    "name": "Marcos Oliveira",
+    "role_function": "Conferente",
+    "remuneration_rate": 180.00,
+    "payment_info": "PIX: 456.789.123-00",
     "active": true
   }
 ]

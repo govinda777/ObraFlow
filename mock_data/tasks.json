@@ -3,11 +3,121 @@
     "id": "task_1",
     "epic_id": "epic_1",
     "assigned_collaborator_id": "collab_1",
-    "title": "Concretagem Sapata S1",
-    "description": "Nivelar e concretar sapata de acordo com projeto estrutural",
+    "title": "Escavação e Concretagem das Sapatas S1 a S8",
+    "description": "Nivelar fundo de vala, montar armadura e concretar sapatas conforme projeto estrutural.",
     "category": "EXECUTION",
     "kanban_status": "DONE",
-    "cost_labor": 500.00,
-    "due_date": "2023-10-15T00:00:00Z"
+    "cost_labor": 6500.00,
+    "due_date": "2026-09-25T00:00:00Z"
+  },
+  {
+    "id": "task_2",
+    "epic_id": "epic_1",
+    "assigned_collaborator_id": "collab_4",
+    "title": "Recebimento de Aço CA-50 e Cimento Estrutural",
+    "description": "Conferir nota fiscal, contagem de sacos de cimento e bitolas das barras de aço na descarga.",
+    "category": "MATERIAL_RECEIVING",
+    "kanban_status": "DONE",
+    "cost_labor": 400.00,
+    "due_date": "2026-09-18T00:00:00Z"
+  },
+  {
+    "id": "task_3",
+    "epic_id": "epic_1",
+    "assigned_collaborator_id": "collab_2",
+    "title": "Impermeabilização de Vigas Baldrame",
+    "description": "Aplicar 3 demãos cruzadas de emulsão asfáltica nas vigas baldrame curadas.",
+    "category": "EXECUTION",
+    "kanban_status": "DONE",
+    "cost_labor": 3200.00,
+    "due_date": "2026-10-04T00:00:00Z"
+  },
+  {
+    "id": "task_4",
+    "epic_id": "epic_2",
+    "assigned_collaborator_id": "collab_2",
+    "title": "Levantamento de Alvenaria e Reboco Interno",
+    "description": "Assentamento de blocos cerâmicos e execução de chapisco e reboco desempenado.",
+    "category": "EXECUTION",
+    "kanban_status": "DONE",
+    "cost_labor": 7800.00,
+    "due_date": "2026-10-18T00:00:00Z"
+  },
+  {
+    "id": "task_5",
+    "epic_id": "epic_2",
+    "assigned_collaborator_id": "collab_3",
+    "title": "Infraestrutura Elétrica e Hidrossanitária em Embutimento",
+    "description": "Rasgo de paredes, passagem de conduítes, caixas 4x2 e tubulação de água fria/quente.",
+    "category": "EXECUTION",
+    "kanban_status": "DONE",
+    "cost_labor": 4500.00,
+    "due_date": "2026-10-22T00:00:00Z"
+  },
+  {
+    "id": "task_6",
+    "epic_id": "epic_2",
+    "assigned_collaborator_id": "collab_1",
+    "title": "Vistoria de Teste de Estanqueidade e Pressão",
+    "description": "Pressurizar rede hidráulica por 24h antes do fechamento das alvenarias.",
+    "category": "INSPECTION",
+    "kanban_status": "IN_PROGRESS",
+    "cost_labor": 900.00,
+    "due_date": "2026-10-26T00:00:00Z"
+  },
+  {
+    "id": "task_7",
+    "epic_id": "epic_3",
+    "assigned_collaborator_id": "collab_4",
+    "title": "Compra e Logística de Porcelanatos e Bancada Cozinha",
+    "description": "Aquisição antecipada dos lotes de porcelanato retificado e bancada esculpida em Quartzo.",
+    "category": "MATERIAL_PURCHASE",
+    "kanban_status": "IN_PROGRESS",
+    "cost_labor": 0.00,
+    "due_date": "2026-10-25T00:00:00Z"
+  },
+  {
+    "id": "task_8",
+    "epic_id": "epic_3",
+    "assigned_collaborator_id": "collab_4",
+    "title": "Recebimento em Canteiro: Porcelanato Calacata 90x90",
+    "description": "Conferência de tonalidade, calibre e integridade das caixas no descarregamento.",
+    "category": "MATERIAL_RECEIVING",
+    "kanban_status": "REVIEW",
+    "cost_labor": 350.00,
+    "due_date": "2026-10-25T00:00:00Z"
+  },
+  {
+    "id": "task_9",
+    "epic_id": "epic_3",
+    "assigned_collaborator_id": "collab_2",
+    "title": "Assentamento de Piso Porcelanato e Revestimento Banheiros",
+    "description": "Assentamento com argamassa AC-III, niveladores de clipe e rejunte epóxi.",
+    "category": "EXECUTION",
+    "kanban_status": "TODO",
+    "cost_labor": 5200.00,
+    "due_date": "2026-11-10T00:00:00Z"
+  },
+  {
+    "id": "task_10",
+    "epic_id": "epic_4",
+    "assigned_collaborator_id": "collab_3",
+    "title": "Compra de Forro Drywall e Kit Iluminação LED",
+    "description": "Especificação e compra das chapas ST/RU, perfis metálicos, trilhos eletrificados e pendentes.",
+    "category": "MATERIAL_PURCHASE",
+    "kanban_status": "TODO",
+    "cost_labor": 0.00,
+    "due_date": "2026-10-28T00:00:00Z"
+  },
+  {
+    "id": "task_11",
+    "epic_id": "epic_4",
+    "assigned_collaborator_id": "collab_3",
+    "title": "Instalação de Forro de Gesso e Luminárias",
+    "description": "Montagem de estrutura de drywall com sanca iluminada e instalação de spots e pendentes.",
+    "category": "EXECUTION",
+    "kanban_status": "TODO",
+    "cost_labor": 3800.00,
+    "due_date": "2026-11-20T00:00:00Z"
   }
 ]

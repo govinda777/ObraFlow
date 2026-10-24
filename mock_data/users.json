@@ -1,18 +1,34 @@
 [
   {
     "id": "usr_1",
-    "privy_id": "privy_12345",
-    "name": "João Cliente",
-    "email": "joao.cliente@email.com",
+    "privy_id": "did:privy:cl_joao_001",
+    "name": "João Mendes (Proprietário)",
+    "email": "joao.mendes@email.com",
     "role": "CLIENT",
-    "created_at": "2023-10-01T10:00:00Z"
+    "created_at": "2026-09-01T10:00:00Z"
   },
   {
     "id": "usr_2",
-    "privy_id": "privy_67890",
-    "name": "Construtora Alpha (Maria)",
-    "email": "maria@alphaengenharia.com",
+    "privy_id": "did:privy:ct_alpha_002",
+    "name": "Construtora Alpha (Eng. Maria Souza)",
+    "email": "maria@alphaengenharia.com.br",
     "role": "CONTRACTOR",
-    "created_at": "2023-09-15T09:00:00Z"
+    "created_at": "2026-08-15T09:00:00Z"
+  },
+  {
+    "id": "usr_3",
+    "privy_id": "did:privy:eng_carlos_003",
+    "name": "Eng. Carlos Eduardo (Orçamentista)",
+    "email": "carlos@alphaengenharia.com.br",
+    "role": "ENGINEER",
+    "created_at": "2026-08-20T14:00:00Z"
+  },
+  {
+    "id": "usr_4",
+    "privy_id": "did:privy:for_jose_004",
+    "name": "Mestre José Silva (Campo)",
+    "email": "jose.mestre@alphaengenharia.com.br",
+    "role": "FOREMAN",
+    "created_at": "2026-08-22T08:00:00Z"
   }
 ]

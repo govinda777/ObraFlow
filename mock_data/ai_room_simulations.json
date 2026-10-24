@@ -2,14 +2,40 @@
   {
     "id": "ai_1",
     "project_id": "proj_1",
-    "material_id": "mat_2_mocked_for_ai",
+    "material_id": "mat_6",
     "requested_by_id": "usr_1",
     "room_name": "Cozinha Integrada",
     "target_element": "COUNTERTOP_SINK",
-    "original_photo_url": "https://vercel.blob.com/cozinha_reboco.jpg",
-    "generated_photo_url": "https://vercel.blob.com/cozinha_com_pia.jpg",
-    "consulting_fee": 150.00,
+    "original_photo_url": "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80",
+    "generated_photo_url": "https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=800&q=80",
+    "consulting_fee": 350.00,
     "status": "APPROVED_BY_CLIENT",
-    "created_at": "2023-10-20T10:00:00Z"
+    "created_at": "2026-10-20T10:00:00Z"
+  },
+  {
+    "id": "ai_2",
+    "project_id": "proj_1",
+    "material_id": "mat_5",
+    "requested_by_id": "usr_1",
+    "room_name": "Living e Jantar",
+    "target_element": "FLOOR_TILE",
+    "original_photo_url": "https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&fit=crop&w=800&q=80",
+    "generated_photo_url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+    "consulting_fee": 350.00,
+    "status": "APPROVED_BY_CLIENT",
+    "created_at": "2026-10-19T14:20:00Z"
+  },
+  {
+    "id": "ai_3",
+    "project_id": "proj_1",
+    "material_id": "mat_8",
+    "requested_by_id": "usr_1",
+    "room_name": "Sala de Jantar",
+    "target_element": "LIGHTING",
+    "original_photo_url": "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80",
+    "generated_photo_url": "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=800&q=80",
+    "consulting_fee": 250.00,
+    "status": "READY",
+    "created_at": "2026-10-23T16:10:00Z"
   }
 ]
