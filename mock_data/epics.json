@@ -1,0 +1,12 @@
+[
+  {
+    "id": "epic_1",
+    "project_id": "proj_1",
+    "title": "Fundação e Estrutura",
+    "order_index": 1,
+    "status": "IN_PROGRESS",
+    "requires_materials_purchase": true,
+    "start_date": "2023-10-10T00:00:00Z",
+    "end_date": "2023-11-10T00:00:00Z"
+  }
+]

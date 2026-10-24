@@ -1,0 +1,11 @@
+[
+  {
+    "id": "collab_1",
+    "contractor_id": "usr_2",
+    "name": "José Pedreiro",
+    "role_function": "Mestre",
+    "remuneration_rate": 250.00,
+    "payment_info": "PIX: 12345678909",
+    "active": true
+  }
+]
