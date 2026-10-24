@@ -1,0 +1,18 @@
+[
+  {
+    "id": "usr_1",
+    "privy_id": "privy_12345",
+    "name": "João Cliente",
+    "email": "joao.cliente@email.com",
+    "role": "CLIENT",
+    "created_at": "2023-10-01T10:00:00Z"
+  },
+  {
+    "id": "usr_2",
+    "privy_id": "privy_67890",
+    "name": "Construtora Alpha (Maria)",
+    "email": "maria@alphaengenharia.com",
+    "role": "CONTRACTOR",
+    "created_at": "2023-09-15T09:00:00Z"
+  }
+]

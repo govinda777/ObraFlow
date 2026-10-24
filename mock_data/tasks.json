@@ -1,0 +1,13 @@
+[
+  {
+    "id": "task_1",
+    "epic_id": "epic_1",
+    "assigned_collaborator_id": "collab_1",
+    "title": "Concretagem Sapata S1",
+    "description": "Nivelar e concretar sapata de acordo com projeto estrutural",
+    "category": "EXECUTION",
+    "kanban_status": "DONE",
+    "cost_labor": 500.00,
+    "due_date": "2023-10-15T00:00:00Z"
+  }
+]
