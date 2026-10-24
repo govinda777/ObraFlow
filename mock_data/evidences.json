@@ -4,8 +4,44 @@
     "task_id": "task_1",
     "uploaded_by": "collab_1",
     "evidence_type": "TASK_EXECUTION",
-    "photo_url": "https://vercel.blob.com/sapata_s1.jpg",
-    "notes": "Concretagem finalizada sem problemas.",
-    "created_at": "2023-10-15T16:00:00Z"
+    "photo_url": "https://images.unsplash.com/photo-1541888946425-d09bb18086f6?auto=format&fit=crop&w=800&q=80",
+    "notes": "Concretagem das sapatas S1 a S8 finalizada e vibrada conforme projeto estrutural.",
+    "created_at": "2026-09-24T16:30:00Z"
+  },
+  {
+    "id": "evid_2",
+    "task_id": "task_2",
+    "uploaded_by": "collab_4",
+    "evidence_type": "MATERIAL_INSPECTION",
+    "photo_url": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=800&q=80",
+    "notes": "120 sacos de cimento CP-II e vergalhões conferidos sem avarias e armazenados em baia seca.",
+    "created_at": "2026-09-18T11:15:00Z"
+  },
+  {
+    "id": "evid_3",
+    "task_id": "task_3",
+    "uploaded_by": "collab_2",
+    "evidence_type": "TASK_EXECUTION",
+    "photo_url": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80",
+    "notes": "Impermeabilização das vigas baldrame concluída com 3 demãos cruzadas.",
+    "created_at": "2026-10-03T17:00:00Z"
+  },
+  {
+    "id": "evid_4",
+    "task_id": "task_4",
+    "uploaded_by": "collab_1",
+    "evidence_type": "TASK_EXECUTION",
+    "photo_url": "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80",
+    "notes": "Alvenaria e reboco interno desempenado da cozinha integrada e suíte master concluídos.",
+    "created_at": "2026-10-18T15:45:00Z"
+  },
+  {
+    "id": "evid_5",
+    "task_id": "task_5",
+    "uploaded_by": "collab_3",
+    "evidence_type": "TASK_EXECUTION",
+    "photo_url": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80",
+    "notes": "Tubulação PPR e eletrodutos corrugados instalados e chumbados.",
+    "created_at": "2026-10-22T17:20:00Z"
   }
 ]

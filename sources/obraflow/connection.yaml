@@ -1,0 +1,4 @@
+name: obraflow
+type: duckdb
+options:
+  filename: ":memory:"

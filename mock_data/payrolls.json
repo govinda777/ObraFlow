@@ -3,10 +3,40 @@
     "id": "pay_1",
     "collaborator_id": "collab_1",
     "project_id": "proj_1",
-    "reference_period": "Semana 42 - 2023",
-    "amount": 1250.00,
+    "reference_period": "Quinzena 1 - Out/2026",
+    "amount": 4800.00,
     "status": "PAID",
-    "due_date": "2023-10-20T00:00:00Z",
-    "paid_at": "2023-10-20T10:00:00Z"
+    "due_date": "2026-10-15T00:00:00Z",
+    "paid_at": "2026-10-15T10:00:00Z"
+  },
+  {
+    "id": "pay_2",
+    "collaborator_id": "collab_2",
+    "project_id": "proj_1",
+    "reference_period": "Quinzena 1 - Out/2026",
+    "amount": 6600.00,
+    "status": "PAID",
+    "due_date": "2026-10-15T00:00:00Z",
+    "paid_at": "2026-10-15T10:15:00Z"
+  },
+  {
+    "id": "pay_3",
+    "collaborator_id": "collab_3",
+    "project_id": "proj_1",
+    "reference_period": "Quinzena 2 - Out/2026",
+    "amount": 4500.00,
+    "status": "PAID",
+    "due_date": "2026-10-23T00:00:00Z",
+    "paid_at": "2026-10-23T11:00:00Z"
+  },
+  {
+    "id": "pay_4",
+    "collaborator_id": "collab_4",
+    "project_id": "proj_1",
+    "reference_period": "Quinzena 2 - Out/2026",
+    "amount": 1800.00,
+    "status": "PENDING",
+    "due_date": "2026-10-30T00:00:00Z",
+    "paid_at": null
   }
 ]
