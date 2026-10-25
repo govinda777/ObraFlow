@@ -48,7 +48,9 @@ ORDER BY e.created_at DESC
 {#each evidencias_galeria as evid}
     <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-200">
         <div class="text-[10px] text-gray-500 font-bold mb-1">{evid.data_envio}</div>
-        <img src={evid.photo_url} alt="Evidência" class="w-full h-32 object-cover rounded border border-gray-200 mb-2" />
+        <div class="mb-2 text-xs">
+            <a href="{evid.photo_url}" target="_blank" rel="noreferrer" class="text-blue-600 hover:underline">📷 Ver Foto da Evidência</a>
+        </div>
         <div class="font-bold text-xs text-gray-900 leading-tight mb-1">{evid.tarefa_ref}</div>
         <p class="text-[11px] text-gray-600 leading-snug m-0">{evid.notes}</p>
     </div>

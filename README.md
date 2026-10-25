@@ -57,44 +57,61 @@ O projeto foi arquitetado tirando o máximo proveito do ecossistema moderno **Ve
 
 ---
 
-## ⚙️ Instalação e Execução Local
+## ⚙️ Instalação e Execução do Protótipo Local
 
-Siga os passos abaixo para configurar o ambiente de desenvolvimento do **ObraFlow**:
+O protótipo do **ObraFlow** é executado como uma aplicação **BI-as-Code** interativa alimentada por **Evidence.dev + DuckDB** consultando diretamente os dados de simulação em [`mock_data/`](./mock_data).
+
+### Pré-requisitos
+* **Node.js**: Versão 18, 20 ou superior
+* **NPM**: Gerenciador de pacotes padrão
+
+---
+
+### Passo a Passo
 
 1. **Clone o repositório:**
-```bash
-git clone https://github.com/govinda777/obraflow.git
-cd obraflow
-
-```
+   ```bash
+   git clone https://github.com/govinda777/obraflow.git
+   cd ObraFlow
+   ```
 
 2. **Instale as dependências:**
+   ```bash
+   npm install
+   ```
+
+3. **Compile as fontes de dados (DuckDB):**
+   ```bash
+   npm run sources
+   ```
+   > Este comando lê todos os arquivos `.json` da pasta `mock_data/` e gera as tabelas analíticas em formato Parquet/DuckDB.
+
+4. **Inicie o servidor de desenvolvimento:**
+   ```bash
+   npm run dev
+   ```
+   Abra seu navegador em [http://localhost:3000](http://localhost:3000) (ou na porta indicada no terminal) para interagir com o protótipo.
+
+---
+
+### 🤖 Configuração da Chamada à IA (Google Gemini)
+
+O protótipo conta com um **Simulador de Onboarding de 8 Etapas** integrado no topo do dashboard:
+* Na **Etapa 4 (Processamento IA)**, você pode inserir sua chave **Google Gemini API Key** (`AIzaSy...`) diretamente na interface.
+* A chave é salva no `localStorage` do seu navegador para facilitar os testes subsequentes.
+* **Teste sem chave:** O protótipo também possui botões de fallback pré-carregados para que você possa avançar e validar todas as 8 etapas sem necessidade de chave de API externa.
+
+---
+
+### 📦 Build Estático e Deploy (GitHub Pages)
+
+Para gerar e testar a versão estática idêntica à que é publicada no GitHub Pages:
+
 ```bash
-npm install
+# Compilar versão estática de produção
+npm run build
 
+# Pré-visualizar o build localmente
+npm run preview
 ```
-
-3. **Configure as variáveis de ambiente:**
-Crie um arquivo `.env.local` na raiz do projeto com base no `.env.example`:
-```env
-NEXT_PUBLIC_PRIVY_APP_ID=seu_app_id
-PRIVY_APP_SECRET=seu_app_secret
-DATABASE_URL=sua_connection_string_postgresql
-BLOB_READ_WRITE_TOKEN=seu_token_vercel_blob
-
-```
-
-4. **Execute as migrações do banco de dados:**
-```bash
-npm run db:push
-
-```
-
-5. **Inicie o servidor de desenvolvimento:**
-```bash
-npm run dev
-
-```
-
-Abra [http://localhost:3000](http://localhost:3000) no seu navegador para acessar a aplicação.
 

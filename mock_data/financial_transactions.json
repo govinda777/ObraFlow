@@ -118,5 +118,29 @@
     "status": "PAID",
     "due_date": "2026-10-23T00:00:00Z",
     "paid_at": "2026-10-23T18:00:00Z"
+  },
+  {
+    "id": "tx_11",
+    "project_id": "proj_2",
+    "contractor_id": "usr_2",
+    "type": "RECEIVABLE",
+    "category": "CLIENT_INSTALLMENT",
+    "description": "Sinal Contratual e Início Reforma Loft (Assinatura)",
+    "amount": 20000.00,
+    "status": "PAID",
+    "due_date": "2026-10-25T00:00:00Z",
+    "paid_at": "2026-10-25T09:00:00Z"
+  },
+  {
+    "id": "tx_12",
+    "project_id": "proj_2",
+    "contractor_id": "usr_2",
+    "type": "PAYABLE",
+    "category": "PAYROLL",
+    "description": "Diárias Demolição e Elétrica (Loft Jardins)",
+    "amount": 4000.00,
+    "status": "PAID",
+    "due_date": "2026-10-28T00:00:00Z",
+    "paid_at": "2026-10-28T17:00:00Z"
   }
 ]

@@ -150,5 +150,43 @@
     "delivery_status": "PENDING_PURCHASE",
     "purchase_deadline": "2026-11-05T00:00:00Z",
     "estimated_delivery": "2026-11-12T00:00:00Z"
+  },
+  {
+    "id": "mat_9",
+    "task_id": "task_14",
+    "created_by_id": "usr_5",
+    "name": "Porcelanato Cimento Queimado Retificado 120x120",
+    "material_group": "FINISHINGS",
+    "unit": "m2",
+    "quantity": 65,
+    "unit_price": 145.00,
+    "freight_cost": 420.00,
+    "receiving_fee": 180.00,
+    "total_price": 10025.00,
+    "receiver_responsible": "CONTRACTOR",
+    "received_by_user_id": "usr_4",
+    "purchased": true,
+    "delivery_status": "IN_TRANSIT",
+    "purchase_deadline": "2026-10-28T00:00:00Z",
+    "estimated_delivery": "2026-11-03T00:00:00Z"
+  },
+  {
+    "id": "mat_10",
+    "task_id": "task_16",
+    "created_by_id": "usr_5",
+    "name": "Kit Trilhos Eletrificados de Sobrepor 3m + 6 Spots 3000K",
+    "material_group": "LIGHTING",
+    "unit": "un",
+    "quantity": 2,
+    "unit_price": 1150.00,
+    "freight_cost": 110.00,
+    "receiving_fee": 0.00,
+    "total_price": 2410.00,
+    "receiver_responsible": "CLIENT",
+    "received_by_user_id": null,
+    "purchased": false,
+    "delivery_status": "PENDING_PURCHASE",
+    "purchase_deadline": "2026-11-08T00:00:00Z",
+    "estimated_delivery": "2026-11-15T00:00:00Z"
   }
 ]

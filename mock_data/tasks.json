@@ -8,7 +8,9 @@
     "category": "EXECUTION",
     "kanban_status": "DONE",
     "cost_labor": 6500.00,
-    "due_date": "2026-09-25T00:00:00Z"
+    "due_date": "2026-09-25T00:00:00Z",
+    "ai_generated": false,
+    "contractor_approved": true
   },
   {
     "id": "task_2",
@@ -19,7 +21,9 @@
     "category": "MATERIAL_RECEIVING",
     "kanban_status": "DONE",
     "cost_labor": 400.00,
-    "due_date": "2026-09-18T00:00:00Z"
+    "due_date": "2026-09-18T00:00:00Z",
+    "ai_generated": false,
+    "contractor_approved": true
   },
   {
     "id": "task_3",
@@ -30,7 +34,9 @@
     "category": "EXECUTION",
     "kanban_status": "DONE",
     "cost_labor": 3200.00,
-    "due_date": "2026-10-04T00:00:00Z"
+    "due_date": "2026-10-04T00:00:00Z",
+    "ai_generated": false,
+    "contractor_approved": true
   },
   {
     "id": "task_4",
@@ -41,7 +47,9 @@
     "category": "EXECUTION",
     "kanban_status": "DONE",
     "cost_labor": 7800.00,
-    "due_date": "2026-10-18T00:00:00Z"
+    "due_date": "2026-10-18T00:00:00Z",
+    "ai_generated": false,
+    "contractor_approved": true
   },
   {
     "id": "task_5",
@@ -52,7 +60,9 @@
     "category": "EXECUTION",
     "kanban_status": "DONE",
     "cost_labor": 4500.00,
-    "due_date": "2026-10-22T00:00:00Z"
+    "due_date": "2026-10-22T00:00:00Z",
+    "ai_generated": false,
+    "contractor_approved": true
   },
   {
     "id": "task_6",
@@ -63,7 +73,9 @@
     "category": "INSPECTION",
     "kanban_status": "IN_PROGRESS",
     "cost_labor": 900.00,
-    "due_date": "2026-10-26T00:00:00Z"
+    "due_date": "2026-10-26T00:00:00Z",
+    "ai_generated": false,
+    "contractor_approved": true
   },
   {
     "id": "task_7",
@@ -74,7 +86,9 @@
     "category": "MATERIAL_PURCHASE",
     "kanban_status": "IN_PROGRESS",
     "cost_labor": 0.00,
-    "due_date": "2026-10-25T00:00:00Z"
+    "due_date": "2026-10-25T00:00:00Z",
+    "ai_generated": false,
+    "contractor_approved": true
   },
   {
     "id": "task_8",
@@ -85,7 +99,9 @@
     "category": "MATERIAL_RECEIVING",
     "kanban_status": "REVIEW",
     "cost_labor": 350.00,
-    "due_date": "2026-10-25T00:00:00Z"
+    "due_date": "2026-10-25T00:00:00Z",
+    "ai_generated": false,
+    "contractor_approved": true
   },
   {
     "id": "task_9",
@@ -96,7 +112,9 @@
     "category": "EXECUTION",
     "kanban_status": "TODO",
     "cost_labor": 5200.00,
-    "due_date": "2026-11-10T00:00:00Z"
+    "due_date": "2026-11-10T00:00:00Z",
+    "ai_generated": false,
+    "contractor_approved": true
   },
   {
     "id": "task_10",
@@ -107,7 +125,9 @@
     "category": "MATERIAL_PURCHASE",
     "kanban_status": "TODO",
     "cost_labor": 0.00,
-    "due_date": "2026-10-28T00:00:00Z"
+    "due_date": "2026-10-28T00:00:00Z",
+    "ai_generated": false,
+    "contractor_approved": true
   },
   {
     "id": "task_11",
@@ -118,6 +138,73 @@
     "category": "EXECUTION",
     "kanban_status": "TODO",
     "cost_labor": 3800.00,
-    "due_date": "2026-11-20T00:00:00Z"
+    "due_date": "2026-11-20T00:00:00Z",
+    "ai_generated": false,
+    "contractor_approved": true
+  },
+  {
+    "id": "task_12",
+    "epic_id": "epic_5",
+    "assigned_collaborator_id": "collab_2",
+    "title": "Demolição de Mureta e Remoção de Entulho",
+    "description": "Abertura de vão integrado para cozinha e descarte em caçamba autorizada.",
+    "category": "EXECUTION",
+    "kanban_status": "DONE",
+    "cost_labor": 2200.00,
+    "due_date": "2026-10-28T00:00:00Z",
+    "ai_generated": true,
+    "contractor_approved": true
+  },
+  {
+    "id": "task_13",
+    "epic_id": "epic_5",
+    "assigned_collaborator_id": "collab_3",
+    "title": "Readequação de Pontos Elétricos e Ilha",
+    "description": "Passagem de novos circuitos 220V para cooktop e tomadas na ilha central.",
+    "category": "EXECUTION",
+    "kanban_status": "DONE",
+    "cost_labor": 1800.00,
+    "due_date": "2026-10-30T00:00:00Z",
+    "ai_generated": true,
+    "contractor_approved": true
+  },
+  {
+    "id": "task_14",
+    "epic_id": "epic_6",
+    "assigned_collaborator_id": "collab_4",
+    "title": "Recebimento e Inspeção do Porcelanato Cinza 120x120",
+    "description": "Conferência de lote e calibração das peças no descarregamento do loft.",
+    "category": "MATERIAL_RECEIVING",
+    "kanban_status": "IN_PROGRESS",
+    "cost_labor": 300.00,
+    "due_date": "2026-11-03T00:00:00Z",
+    "ai_generated": true,
+    "contractor_approved": true
+  },
+  {
+    "id": "task_15",
+    "epic_id": "epic_6",
+    "assigned_collaborator_id": "collab_2",
+    "title": "Assentamento de Porcelanato 120x120 em Área Social",
+    "description": "Aplicação de dupla colagem com niveladores e junta mínima de 1mm.",
+    "category": "EXECUTION",
+    "kanban_status": "TODO",
+    "cost_labor": 4200.00,
+    "due_date": "2026-11-12T00:00:00Z",
+    "ai_generated": true,
+    "contractor_approved": true
+  },
+  {
+    "id": "task_16",
+    "epic_id": "epic_7",
+    "assigned_collaborator_id": "collab_3",
+    "title": "Instalação de Trilhos Magnéticos e Perfis de LED",
+    "description": "Fixação de perfis embutidos no gesso com driver dimerizável.",
+    "category": "EXECUTION",
+    "kanban_status": "TODO",
+    "cost_labor": 2600.00,
+    "due_date": "2026-11-24T00:00:00Z",
+    "ai_generated": true,
+    "contractor_approved": true
   }
 ]

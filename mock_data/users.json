@@ -30,5 +30,13 @@
     "email": "jose.mestre@alphaengenharia.com.br",
     "role": "FOREMAN",
     "created_at": "2026-08-22T08:00:00Z"
+  },
+  {
+    "id": "usr_5",
+    "privy_id": "did:privy:cl_marina_005",
+    "name": "Marina Costa (Nova Cliente)",
+    "email": "marina.costa@email.com",
+    "role": "CLIENT",
+    "created_at": "2026-10-24T18:00:00Z"
   }
 ]
