@@ -9,8 +9,8 @@ sidebar_link: false
     function setRoleAndRedirect(role, targetSlug) {
         if (typeof window !== 'undefined') {
             localStorage.setItem('obraflow_active_role', role);
-            // Redireciona com caminho relativo seguro a partir de /onboarding/
-            window.location.href = `../${targetSlug}`;
+            const base = (window.__sveltekit_dev && window.__sveltekit_dev.base) || '/ObraFlow';
+            window.location.href = `${base}/${targetSlug}/`;
         }
     }
 </script>
@@ -25,7 +25,7 @@ sidebar_link: false
     </div>
     <div class="flex items-center gap-2 bg-gray-100 text-gray-700 font-semibold px-3.5 py-1.5 rounded-full border border-gray-200">
       <span>✉️ marina.costa@email.com</span>
-      <a href="../login/" class="text-gray-400 hover:text-rose-500 ml-1 no-underline font-bold" title="Sair / Trocar de conta">✕</a>
+      <a href="/login/" class="text-gray-400 hover:text-rose-500 ml-1 no-underline font-bold" title="Sair / Trocar de conta">✕</a>
     </div>
   </div>
 

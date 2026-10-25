@@ -29,10 +29,10 @@ FROM obraflow.projects
     </div>
 
     <div class="flex items-center gap-4">
-        <a href="./login" class="text-xs font-bold text-gray-700 hover:text-indigo-600 no-underline transition-colors">
+        <a href="/login/" class="text-xs font-bold text-gray-700 hover:text-indigo-600 no-underline transition-colors">
             Entrar
         </a>
-        <a href="./login" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black py-2.5 px-5 rounded-xl shadow-md shadow-indigo-600/20 no-underline transition-all">
+        <a href="/login/" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black py-2.5 px-5 rounded-xl shadow-md shadow-indigo-600/20 no-underline transition-all">
             Acessar Plataforma →
         </a>
     </div>
@@ -55,10 +55,10 @@ FROM obraflow.projects
         </p>
 
         <div class="flex flex-wrap gap-3">
-            <a href="./login" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs md:text-sm font-black px-6 py-3.5 rounded-xl shadow-lg shadow-indigo-600/30 no-underline transition-all flex items-center gap-2">
+            <a href="/login/" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs md:text-sm font-black px-6 py-3.5 rounded-xl shadow-lg shadow-indigo-600/30 no-underline transition-all flex items-center gap-2">
                 <span>🚀</span> Entrar na Plataforma →
             </a>
-            <a href="./onboarding" class="bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs md:text-sm font-bold px-5 py-3.5 rounded-xl no-underline transition-all flex items-center gap-2">
+            <a href="/onboarding/" class="bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs md:text-sm font-bold px-5 py-3.5 rounded-xl no-underline transition-all flex items-center gap-2">
                 <span>🎭</span> Experimentar os 5 Perfis
             </a>
         </div>
@@ -138,14 +138,14 @@ FROM obraflow.projects
             <h2 class="text-xl md:text-2xl font-black text-gray-900 m-0">5 Visões Especializadas por Perfil</h2>
             <p class="text-xs text-gray-500 mt-1">Cada usuário atua com as ferramentas e indicadores específicos do seu papel na obra:</p>
         </div>
-        <a href="./onboarding" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 no-underline mt-2 md:mt-0">
+        <a href="/onboarding/" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 no-underline mt-2 md:mt-0">
             Ir para Central de Onboarding →
         </a>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <!-- 1. Cliente -->
-        <a href="./dashboard" class="p-5 rounded-2xl border border-blue-100 bg-blue-50/20 hover:bg-blue-50/60 hover:border-blue-300 transition-all no-underline block space-y-2">
+        <a href="/dashboard/" class="p-5 rounded-2xl border border-blue-100 bg-blue-50/20 hover:bg-blue-50/60 hover:border-blue-300 transition-all no-underline block space-y-2">
             <div class="text-3xl">👤</div>
             <div class="font-bold text-sm text-gray-900">Cliente / Proprietário</div>
             <p class="text-xs text-gray-600 m-0 leading-relaxed">Portal de transparência, acompanhamento por fotos de vistoria e botão exclusivo para solicitar novos orçamentos.</p>
@@ -153,7 +153,7 @@ FROM obraflow.projects
         </a>
 
         <!-- 2. Empreiteiro -->
-        <a href="./dashboard" class="p-5 rounded-2xl border border-indigo-100 bg-indigo-50/20 hover:bg-indigo-50/60 hover:border-indigo-300 transition-all no-underline block space-y-2">
+        <a href="/dashboard/" class="p-5 rounded-2xl border border-indigo-100 bg-indigo-50/20 hover:bg-indigo-50/60 hover:border-indigo-300 transition-all no-underline block space-y-2">
             <div class="text-3xl">🏢</div>
             <div class="font-bold text-sm text-gray-900">Empreiteiro Geral (Gestor)</div>
             <p class="text-xs text-gray-600 m-0 leading-relaxed">Cockpit multi-obra, termômetro físico x financeiro, alertas de compras críticas de suprimentos e fluxo de caixa.</p>
@@ -161,7 +161,7 @@ FROM obraflow.projects
         </a>
 
         <!-- 3. Orçamentista -->
-        <a href="./novo-projeto" class="p-5 rounded-2xl border border-emerald-100 bg-emerald-50/20 hover:bg-emerald-50/60 hover:border-emerald-300 transition-all no-underline block space-y-2">
+        <a href="/novo-projeto/" class="p-5 rounded-2xl border border-emerald-100 bg-emerald-50/20 hover:bg-emerald-50/60 hover:border-emerald-300 transition-all no-underline block space-y-2">
             <div class="text-3xl">📐</div>
             <div class="font-bold text-sm text-gray-900">Engenheiro Orçamentista</div>
             <p class="text-xs text-gray-600 m-0 leading-relaxed">Leitura assistida por IA (PDF, XLSX, TXT), calibração técnica de diárias, insumos e emissão de propostas formais.</p>
@@ -171,7 +171,7 @@ FROM obraflow.projects
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <!-- 4. Mestre de Obras -->
-        <a href="./detalhes" class="p-5 rounded-2xl border border-amber-100 bg-amber-50/20 hover:bg-amber-50/60 hover:border-amber-300 transition-all no-underline block space-y-2">
+        <a href="/detalhes/" class="p-5 rounded-2xl border border-amber-100 bg-amber-50/20 hover:bg-amber-50/60 hover:border-amber-300 transition-all no-underline block space-y-2">
             <div class="text-3xl">🏗️</div>
             <div class="font-bold text-sm text-gray-900">Mestre de Obras (Canteiro Mobile)</div>
             <p class="text-xs text-gray-600 m-0 leading-relaxed">Tarefas de hoje, checklist de recebimento de materiais e botão direto para envio de fotos de comprovação.</p>
@@ -179,7 +179,7 @@ FROM obraflow.projects
         </a>
 
         <!-- 5. Designer -->
-        <a href="./detalhes" class="p-5 rounded-2xl border border-purple-100 bg-purple-50/20 hover:bg-purple-50/60 hover:border-purple-300 transition-all no-underline block space-y-2">
+        <a href="/detalhes/" class="p-5 rounded-2xl border border-purple-100 bg-purple-50/20 hover:bg-purple-50/60 hover:border-purple-300 transition-all no-underline block space-y-2">
             <div class="text-3xl">🎨</div>
             <div class="font-bold text-sm text-gray-900">Designer de Interiores</div>
             <p class="text-xs text-gray-600 m-0 leading-relaxed">Estúdio de acabamentos com visualizador Antes x Depois em 3D, controle de aprovações e marcenaria fina.</p>
