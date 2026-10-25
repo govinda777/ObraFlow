@@ -26,6 +26,9 @@ sidebar_link: false
     let custoFrete = 850;
     $: valorFinalHomologado = totalMaoObra + totalMateriais + custoFrete;
 
+    let aiModel = 'gemini-1.5-flash-latest';
+    let availableModels = [];
+
     async function runRealGemini() {
         if (!apiKey) {
             aiError = 'Por favor, insira uma API Key válida do Google Gemini.';
@@ -35,16 +38,70 @@ sidebar_link: false
         aiError = '';
         try {
             const prompt = "Você é o agente técnico de engenharia do ObraFlow. Analise a reforma de 72m² e confirme os quantitativos.";
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: prompt }] }]
-                })
-            });
-            const data = await res.json();
-            if (data.error) throw new Error(data.error.message);
-            alert('⚡ Gemini API respondeu com sucesso! Diagnóstico validado.');
+            
+            // Tentativa prioritária no modelo selecionado ou fallback automático resiliente
+            const candidateModels = [
+                aiModel,
+                'gemini-1.5-flash-latest',
+                'gemini-1.5-flash',
+                'gemini-1.5-pro',
+                'gemini-2.0-flash',
+                'gemini-2.5-flash'
+            ].filter((v, idx, arr) => arr.indexOf(v) === idx);
+
+            let success = false;
+            let lastErr = null;
+            let responseText = '';
+            let usedModel = '';
+
+            for (const model of candidateModels) {
+                try {
+                    // Testa rota v1beta e depois v1 se necessário
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+                    const res = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: prompt }] }]
+                        })
+                    });
+                    const data = await res.json();
+                    if (!res.ok || data.error) {
+                        lastErr = new Error(data.error?.message || `Erro HTTP ${res.status}`);
+                        continue;
+                    }
+                    if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+                        responseText = data.candidates[0].content.parts[0].text;
+                        usedModel = model;
+                        success = true;
+                        break;
+                    }
+                } catch (e) {
+                    lastErr = e;
+                }
+            }
+
+            if (!success) {
+                // Tenta consultar a lista de modelos suportados pela chave do usuário para orientar
+                try {
+                    const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+                    const listData = await listRes.json();
+                    if (listData.models) {
+                        const supported = listData.models
+                            .filter(m => m.supportedGenerationMethods?.includes('generateContent'))
+                            .map(m => m.name.replace('models/', ''));
+                        availableModels = supported;
+                        if (supported.length > 0) {
+                            throw new Error(`O modelo requisitado não está liberado para sua chave. Modelos ativos com suporte a generateContent: ${supported.slice(0, 5).join(', ')}`);
+                        }
+                    }
+                } catch (listErr) {
+                    // ignora erro ao listar
+                }
+                throw lastErr || new Error('Não foi possível gerar conteúdo com a chave informada.');
+            }
+
+            alert(`⚡ Gemini API respondeu com sucesso usando o modelo [${usedModel}]!\n\nDiagnóstico validado pelo agente do ObraFlow.`);
         } catch (err) {
             aiError = err.message;
         } finally {
@@ -130,16 +187,29 @@ sidebar_link: false
 
       <!-- CHAVE REAL GEMINI OPCIONAL -->
       <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs">
-        <div class="font-bold text-gray-800 mb-2">Testar Chamada Real com Chave do Google Gemini:</div>
-        <div class="flex gap-2">
+        <div class="flex items-center justify-between mb-2">
+          <div class="font-bold text-gray-800">Testar Chamada Real com Chave do Google Gemini:</div>
+          <span class="text-[11px] text-gray-500 font-mono">Modelo Selecionado: {aiModel}</span>
+        </div>
+        <div class="flex flex-wrap md:flex-nowrap gap-2">
           <input 
             type="password" 
             placeholder="Cole sua Gemini API Key (ex: AIzaSy...)" 
             bind:value={apiKey} 
-            class="flex-1 border border-gray-300 rounded-xl p-2.5 text-xs bg-white outline-none" 
+            class="flex-1 min-w-[240px] border border-gray-300 rounded-xl p-2.5 text-xs bg-white outline-none" 
           />
+          <select 
+            bind:value={aiModel} 
+            class="border border-gray-300 rounded-xl p-2.5 text-xs bg-white text-gray-800 outline-none"
+          >
+            <option value="gemini-1.5-flash-latest">gemini-1.5-flash-latest</option>
+            <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+            <option value="gemini-1.5-pro">gemini-1.5-pro</option>
+            <option value="gemini-2.0-flash">gemini-2.0-flash</option>
+            <option value="gemini-2.5-flash">gemini-2.5-flash</option>
+          </select>
           <button 
-            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2.5 rounded-xl disabled:opacity-50"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2.5 rounded-xl disabled:opacity-50 whitespace-nowrap"
             on:click={runRealGemini}
             disabled={isAiLoading}
           >
@@ -147,7 +217,24 @@ sidebar_link: false
           </button>
         </div>
         {#if aiError}
-          <div class="text-rose-600 font-semibold mt-2">⚠️ {aiError}</div>
+          <div class="text-rose-600 font-semibold mt-2 bg-rose-50 p-2.5 rounded-xl border border-rose-200">
+            ⚠️ {aiError}
+          </div>
+        {/if}
+        {#if availableModels.length > 0}
+          <div class="mt-2 text-[11px] text-gray-600">
+            <strong>Modelos detectados na sua conta:</strong>
+            <div class="flex flex-wrap gap-1 mt-1">
+              {#each availableModels as m}
+                <button 
+                  class="bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-lg px-2 py-0.5 hover:bg-indigo-100 font-mono text-[10px]"
+                  on:click={() => { aiModel = m; }}
+                >
+                  {m}
+                </button>
+              {/each}
+            </div>
+          </div>
         {/if}
       </div>
 
