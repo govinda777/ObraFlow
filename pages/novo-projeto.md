@@ -1,109 +1,144 @@
 ---
-title: Novo Orçamento - ObraFlow
+title: Novo Orçamento de Obra - ObraFlow
 hide_title: true
 hide_sidebar: true
+sidebar_link: false
 ---
 
-<div class="max-w-3xl mx-auto py-8">
-  <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-200">
-    <div>
-      <div class="text-xs uppercase tracking-wider font-bold text-blue-600">Esteira Comercial & Técnica</div>
-      <h1 class="text-2xl font-bold text-gray-900 m-0">1. Solicitação de Novo Orçamento de Obra</h1>
-      <p class="text-gray-500 text-xs mt-1">Preencha os parâmetros da obra e envie a documentação técnica para extração assistida por IA.</p>
+<div class="max-w-4xl mx-auto py-6 px-4">
+  <!-- BARRA DE CABEÇALHO FIEL AO WIREFRAME 3.2 (Sub-Etapa 1) -->
+  <div class="flex items-center justify-between pb-4 mb-6 border-b border-gray-200">
+    <div class="flex items-center gap-3">
+      <a href="./onboarding" class="text-xs text-gray-400 hover:text-indigo-600 font-bold no-underline">← Voltar</a>
+      <span class="text-gray-300">|</span>
+      <div>
+        <span class="text-xs uppercase tracking-wider font-bold text-indigo-600">🏗️ ObraFlow • Esteira Comercial</span>
+        <h1 class="text-xl md:text-2xl font-black text-gray-900 m-0">Novo Orçamento de Obra / Reforma</h1>
+      </div>
     </div>
     <div class="text-right">
-      <span class="inline-block bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">
-        Etapa 1 de 5
+      <span class="inline-block bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full border border-blue-200">
+        Etapa: [ 1 de 5: Dados ]
       </span>
-      <div class="text-[11px] text-gray-400 mt-1">Status: QUOTE_REQUESTED</div>
+      <div class="text-[11px] text-gray-500 font-mono mt-0.5">Status: QUOTE_REQUESTED</div>
     </div>
   </div>
 
-  <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-6">
-    <!-- Bloco 1: Dados do Imóvel -->
+  <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-200 space-y-8">
+    
+    <!-- 1. DADOS BÁSICOS DO IMÓVEL -->
     <div>
-      <h3 class="text-sm font-bold uppercase text-gray-800 mb-3 flex items-center gap-2">
-        <span>📍</span> Dados Básicos do Projeto e Canteiro
+      <h3 class="text-xs font-bold uppercase tracking-wider text-gray-800 mb-4 flex items-center gap-2">
+        <span class="w-6 h-6 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs">1</span>
+        Dados Básicos do Imóvel & Canteiro
       </h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
         <div>
-          <label class="block text-xs font-semibold text-gray-700 mb-1">Nome da Obra / Reforma</label>
-          <input type="text" value="Reforma Loft Jardins" class="w-full border border-gray-300 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-blue-500 outline-none" />
+          <label class="block font-bold text-gray-700 mb-1">Nome da Obra:</label>
+          <input 
+            type="text" 
+            value="Reforma Loft Jardins" 
+            class="w-full border border-gray-300 rounded-xl py-2.5 px-3.5 focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50/50" 
+          />
         </div>
         <div>
-          <label class="block text-xs font-semibold text-gray-700 mb-1">Endereço Completo</label>
-          <input type="text" value="Alameda dos Anapurus, 780 - Apto 82" class="w-full border border-gray-300 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-blue-500 outline-none" />
+          <label class="block font-bold text-gray-700 mb-1">Endereço Completo do Canteiro:</label>
+          <input 
+            type="text" 
+            value="Alameda dos Anapurus, 780 - Apto 82" 
+            class="w-full border border-gray-300 rounded-xl py-2.5 px-3.5 focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50/50" 
+          />
         </div>
         <div>
-          <label class="block text-xs font-semibold text-gray-700 mb-1">Área Estimada (m²)</label>
-          <input type="number" value="72" class="w-full border border-gray-300 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-blue-500 outline-none" />
+          <label class="block font-bold text-gray-700 mb-1">Área Estimada (m²):</label>
+          <input 
+            type="number" 
+            value="72" 
+            class="w-full border border-gray-300 rounded-xl py-2.5 px-3.5 focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50/50" 
+          />
         </div>
         <div>
-          <label class="block text-xs font-semibold text-gray-700 mb-1">Teto Orçamentário Máximo (R$)</label>
-          <input type="number" value="45000" class="w-full border border-gray-300 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-blue-500 outline-none" />
+          <label class="block font-bold text-gray-700 mb-1">Teto Orçamentário Máximo do Cliente:</label>
+          <input 
+            type="text" 
+            value="R$ 45.000,00" 
+            class="w-full border border-gray-300 rounded-xl py-2.5 px-3.5 focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50/50" 
+          />
         </div>
       </div>
-      <div class="mt-3">
-        <label class="block text-xs font-semibold text-gray-700 mb-1">Resumo do Escopo Desejado</label>
-        <textarea rows="2" class="w-full border border-gray-300 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-blue-500 outline-none">Reforma completa de loft: demolição pontual de mureta, nova iluminação em trilhos, bancada ilha e porcelanatos 120x120.</textarea>
+
+      <div class="mt-4 text-xs">
+        <label class="block font-bold text-gray-700 mb-1">Escopo Preliminar da Intervenção:</label>
+        <textarea rows="2" class="w-full border border-gray-300 rounded-xl py-2.5 px-3.5 focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50/50">Reforma completa de loft: integração da cozinha com a sala, demolição pontual de mureta divisória, piso porcelanato 120x120, forro de gesso e iluminação linear.</textarea>
       </div>
     </div>
 
-    <!-- Bloco 2: Upload dos 3 Documentos Obrigatórios -->
-    <div class="pt-4 border-t border-gray-100">
-      <h3 class="text-sm font-bold uppercase text-gray-800 mb-3 flex items-center gap-2">
-        <span>📂</span> Documentação Técnica da Obra (Arquivos Obrigatórios)
+    <hr class="border-gray-100 m-0" />
+
+    <!-- 2. DOCUMENTAÇÃO TÉCNICA DA OBRA (ARQUIVOS OBRIGATÓRIOS) -->
+    <div>
+      <h3 class="text-xs font-bold uppercase tracking-wider text-gray-800 mb-4 flex items-center gap-2">
+        <span class="w-6 h-6 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs">2</span>
+        Documentação Técnica da Obra (Arquivos Obrigatórios)
       </h3>
-      <p class="text-gray-500 text-xs mb-4">A IA cruza a geometria da planta em PDF com a planilha de quantitativos e as diretrizes do memorial em texto.</p>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- 1. PDF -->
-        <div class="border-2 border-dashed border-blue-200 rounded-xl p-4 text-center bg-blue-50/40">
-          <div class="text-2xl mb-1">📄</div>
-          <div class="font-bold text-xs text-gray-800">Planta / Escopo (PDF)</div>
-          <div class="text-[11px] text-blue-700 font-semibold mt-1">planta_executiva_loft.pdf</div>
-          <div class="text-[10px] text-gray-400 mt-0.5">2.4 MB • Pronto</div>
-          <label class="inline-block mt-3 bg-white border border-blue-300 text-blue-700 hover:bg-blue-50 text-[11px] font-bold py-1 px-3 rounded-lg cursor-pointer">
-            Substituir Arquivo
-            <input type="file" accept=".pdf" class="hidden" />
-          </label>
+        
+        <!-- Arquivo 1: PDF -->
+        <div class="border-2 border-dashed border-blue-200 bg-blue-50/20 rounded-2xl p-4 text-center">
+          <div class="text-3xl mb-2">📄</div>
+          <div class="text-xs font-bold text-gray-900 mb-1">PLANTA EXECUTIVA (PDF)</div>
+          <div class="text-[11px] text-gray-500 mb-3">[ Arraste ou Selecione ]</div>
+          <div class="bg-white border border-blue-200 rounded-xl p-2 text-left text-[11px] text-blue-900 font-mono flex items-center gap-1.5">
+            <span class="text-emerald-500 font-bold">✔️</span>
+            <span class="truncate">planta_loft.pdf (2.4MB)</span>
+          </div>
         </div>
 
-        <!-- 2. XLSX -->
-        <div class="border-2 border-dashed border-emerald-200 rounded-xl p-4 text-center bg-emerald-50/40">
-          <div class="text-2xl mb-1">📊</div>
-          <div class="font-bold text-xs text-gray-800">Planilha Custos (XLSX/CSV)</div>
-          <div class="text-[11px] text-emerald-700 font-semibold mt-1">orcamento_materiais_loft.xlsx</div>
-          <div class="text-[10px] text-gray-400 mt-0.5">840 KB • Pronto</div>
-          <label class="inline-block mt-3 bg-white border border-emerald-300 text-emerald-700 hover:bg-emerald-50 text-[11px] font-bold py-1 px-3 rounded-lg cursor-pointer">
-            Substituir Arquivo
-            <input type="file" accept=".xlsx,.csv" class="hidden" />
-          </label>
+        <!-- Arquivo 2: XLSX/CSV -->
+        <div class="border-2 border-dashed border-emerald-200 bg-emerald-50/20 rounded-2xl p-4 text-center">
+          <div class="text-3xl mb-2">📊</div>
+          <div class="text-xs font-bold text-gray-900 mb-1">PLANILHA CUSTOS (XLSX)</div>
+          <div class="text-[11px] text-gray-500 mb-3">[ Arraste ou Selecione ]</div>
+          <div class="bg-white border border-emerald-200 rounded-xl p-2 text-left text-[11px] text-emerald-900 font-mono flex items-center gap-1.5">
+            <span class="text-emerald-500 font-bold">✔️</span>
+            <span class="truncate">sinapi_loft.xlsx (840KB)</span>
+          </div>
         </div>
 
-        <!-- 3. TXT -->
-        <div class="border-2 border-dashed border-amber-200 rounded-xl p-4 text-center bg-amber-50/40">
-          <div class="text-2xl mb-1">📝</div>
-          <div class="font-bold text-xs text-gray-800">Memorial Técnico (TXT)</div>
-          <div class="text-[11px] text-amber-700 font-semibold mt-1">memorial_descritivo.txt</div>
-          <div class="text-[10px] text-gray-400 mt-0.5">45 KB • Pronto</div>
-          <label class="inline-block mt-3 bg-white border border-amber-300 text-amber-700 hover:bg-amber-50 text-[11px] font-bold py-1 px-3 rounded-lg cursor-pointer">
-            Substituir Arquivo
-            <input type="file" accept=".txt" class="hidden" />
-          </label>
+        <!-- Arquivo 3: TXT -->
+        <div class="border-2 border-dashed border-purple-200 bg-purple-50/20 rounded-2xl p-4 text-center">
+          <div class="text-3xl mb-2">📝</div>
+          <div class="text-xs font-bold text-gray-900 mb-1">MEMORIAL (TXT)</div>
+          <div class="text-[11px] text-gray-500 mb-3">[ Arraste ou Selecione ]</div>
+          <div class="bg-white border border-purple-200 rounded-xl p-2 text-left text-[11px] text-purple-900 font-mono flex items-center gap-1.5">
+            <span class="text-emerald-500 font-bold">✔️</span>
+            <span class="truncate">memorial.txt (45KB)</span>
+          </div>
         </div>
+
       </div>
     </div>
 
-    <!-- Bloco 3: Botões de Ação -->
-    <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
-      <a href="./dashboard" class="text-gray-500 hover:text-gray-700 text-xs font-semibold no-underline">
-        ← Voltar ao Dashboard
-      </a>
-      <a href="./processamento" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-md transition-all text-xs no-underline flex items-center gap-2">
-        <span>⚡ Enviar para Processamento e Análise IA (Etapa 2)</span>
-        <span>→</span>
-      </a>
+    <!-- BOTÕES DE RODAPÉ -->
+    <div class="pt-6 border-t border-gray-100 flex flex-wrap items-center justify-between gap-4">
+      <div class="text-xs font-semibold text-gray-500">
+        Status Inicial: <span class="bg-amber-100 text-amber-800 font-bold px-2.5 py-0.5 rounded-full">QUOTE_REQUESTED</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="./onboarding" class="text-xs text-gray-500 hover:text-gray-700 font-bold px-4 py-2 no-underline">
+          Cancelar
+        </a>
+        <a 
+          href="./processamento" 
+          class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-6 rounded-xl shadow-md shadow-indigo-600/20 no-underline transition-all flex items-center gap-2"
+        >
+          <span>⚡</span> Enviar para Processamento IA →
+        </a>
+      </div>
     </div>
+
   </div>
 </div>
