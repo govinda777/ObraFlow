@@ -1,6 +1,8 @@
 # ObraFlow
 Plataforma inteligente de gestão de obras: do orçamento detalhado e controle de custos à comprovação visual de etapas concluídas em campo. 🏗️⚡
 
+notebookLM: https://miro.com/app/board/uXjVEZPY7OE=/?share_link_id=282892106643
+
 ---
 
 ## 📌 Sobre o Projeto
