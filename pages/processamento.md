@@ -153,7 +153,7 @@ sidebar_link: false
 
       <!-- BOTÕES DE NAVEGAÇÃO -->
       <div class="pt-4 border-t border-gray-100 flex justify-between items-center">
-        <a href="./novo-projeto" class="text-xs font-bold text-gray-500 hover:text-gray-700 no-underline">
+        <a href="../novo-projeto/" class="text-xs font-bold text-gray-500 hover:text-gray-700 no-underline">
           ← Voltar para Documentos
         </a>
         <button 
@@ -339,7 +339,7 @@ sidebar_link: false
           ← Voltar à Minuta
         </button>
         <a 
-          href="./dashboard" 
+          href="../dashboard/" 
           class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black py-3 px-8 rounded-xl shadow-lg shadow-emerald-600/30 no-underline transition-all flex items-center gap-2"
         >
           <span>✅</span> CONFIRMAR ACEITE E CADASTRAR NOVA OBRA NO SISTEMA

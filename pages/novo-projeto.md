@@ -9,7 +9,7 @@ sidebar_link: false
   <!-- BARRA DE CABEÇALHO FIEL AO WIREFRAME 3.2 (Sub-Etapa 1) -->
   <div class="flex items-center justify-between pb-4 mb-6 border-b border-gray-200">
     <div class="flex items-center gap-3">
-      <a href="./onboarding" class="text-xs text-gray-400 hover:text-indigo-600 font-bold no-underline">← Voltar</a>
+      <a href="../onboarding/" class="text-xs text-gray-400 hover:text-indigo-600 font-bold no-underline">← Voltar</a>
       <span class="text-gray-300">|</span>
       <div>
         <span class="text-xs uppercase tracking-wider font-bold text-indigo-600">🏗️ ObraFlow • Esteira Comercial</span>
@@ -128,11 +128,11 @@ sidebar_link: false
       </div>
 
       <div class="flex items-center gap-3">
-        <a href="./onboarding" class="text-xs text-gray-500 hover:text-gray-700 font-bold px-4 py-2 no-underline">
+        <a href="../onboarding/" class="text-xs text-gray-500 hover:text-gray-700 font-bold px-4 py-2 no-underline">
           Cancelar
         </a>
         <a 
-          href="./processamento" 
+          href="../processamento/" 
           class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-6 rounded-xl shadow-md shadow-indigo-600/20 no-underline transition-all flex items-center gap-2"
         >
           <span>⚡</span> Enviar para Processamento IA →

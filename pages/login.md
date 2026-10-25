@@ -40,7 +40,7 @@ sidebar_link: false
       </div>
 
       <a 
-        href="./onboarding" 
+        href="../onboarding/" 
         class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-md shadow-indigo-600/20 text-center no-underline text-xs tracking-wide uppercase transition-all mt-5"
       >
         Entrar com E-mail →
@@ -57,7 +57,7 @@ sidebar_link: false
   </div>
 
   <div class="mt-6 text-center">
-    <a href="./" class="text-xs text-gray-500 hover:text-indigo-600 font-semibold no-underline">
+    <a href="../" class="text-xs text-gray-500 hover:text-indigo-600 font-semibold no-underline">
       ← Voltar para a Apresentação
     </a>
   </div>

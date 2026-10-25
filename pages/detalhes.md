@@ -142,16 +142,16 @@ JOIN obraflow.materials m ON m.id = s.material_id
         
         <!-- Logo e Navegação -->
         <div class="flex items-center gap-6">
-            <a href="./" class="flex items-center gap-2 no-underline text-white">
+            <a href="../" class="flex items-center gap-2 no-underline text-white">
                 <span class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-indigo-600/40">⚡</span>
                 <span class="font-black text-sm tracking-tight">OBRAFLOW</span>
             </a>
 
             <div class="hidden md:flex items-center gap-2 text-xs">
-                <a href="./dashboard" class="text-slate-400 hover:text-white font-semibold px-3 py-1.5 rounded-xl no-underline transition-colors">
+                <a href="../dashboard/" class="text-slate-400 hover:text-white font-semibold px-3 py-1.5 rounded-xl no-underline transition-colors">
                     📊 Visão Global
                 </a>
-                <a href="./detalhes" class="bg-indigo-600/30 text-indigo-300 font-bold px-3 py-1.5 rounded-xl border border-indigo-500/30 no-underline">
+                <a href="../detalhes/" class="bg-indigo-600/30 text-indigo-300 font-bold px-3 py-1.5 rounded-xl border border-indigo-500/30 no-underline">
                     🏗️ Detalhe da Obra
                 </a>
             </div>
@@ -170,7 +170,7 @@ JOIN obraflow.materials m ON m.id = s.material_id
                 />
             </div>
 
-            <a href="./dashboard" class="text-xs text-slate-400 hover:text-white font-semibold no-underline">
+            <a href="../dashboard/" class="text-xs text-slate-400 hover:text-white font-semibold no-underline">
                 ← Voltar ao Dashboard
             </a>
         </div>

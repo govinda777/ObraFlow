@@ -188,20 +188,20 @@ ORDER BY due_date ASC
         
         <!-- Logo e Links de Navegação da Plataforma -->
         <div class="flex items-center gap-6">
-            <a href="./" class="flex items-center gap-2 no-underline text-white group">
+            <a href="../" class="flex items-center gap-2 no-underline text-white group">
                 <span class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-indigo-600/40">⚡</span>
                 <span class="font-black text-sm tracking-tight">OBRAFLOW</span>
             </a>
 
             <div class="hidden md:flex items-center gap-2 text-xs">
-                <a href="./dashboard" class="bg-indigo-600/30 text-indigo-300 font-bold px-3 py-1.5 rounded-xl border border-indigo-500/30 no-underline">
+                <a href="../dashboard/" class="bg-indigo-600/30 text-indigo-300 font-bold px-3 py-1.5 rounded-xl border border-indigo-500/30 no-underline">
                     📊 Visão Global
                 </a>
-                <a href="./detalhes" class="text-slate-400 hover:text-white font-semibold px-3 py-1.5 rounded-xl no-underline transition-colors">
+                <a href="../detalhes/" class="text-slate-400 hover:text-white font-semibold px-3 py-1.5 rounded-xl no-underline transition-colors">
                     🏗️ Detalhe da Obra
                 </a>
                 {#if activeRole === 'CLIENT'}
-                    <a href="./novo-projeto" class="text-emerald-400 hover:text-emerald-300 font-semibold px-3 py-1.5 rounded-xl no-underline transition-colors">
+                    <a href="../novo-projeto/" class="text-emerald-400 hover:text-emerald-300 font-semibold px-3 py-1.5 rounded-xl no-underline transition-colors">
                         📝 Novo Orçamento
                     </a>
                 {/if}
@@ -237,7 +237,7 @@ ORDER BY due_date ASC
                 </button>
             </div>
 
-            <a href="./onboarding" class="text-xs text-slate-400 hover:text-indigo-400 font-bold px-2 py-1" title="Ver todos os 5 perfis">
+            <a href="../onboarding/" class="text-xs text-slate-400 hover:text-indigo-400 font-bold px-2 py-1" title="Ver todos os 5 perfis">
                 Trocar Perfil ⚙️
             </a>
         </div>
@@ -260,7 +260,7 @@ ORDER BY due_date ASC
 
             <!-- BOTÃO EXCLUSIVO DO CLIENTE -->
             <a 
-                href="./novo-projeto" 
+                href="../novo-projeto/" 
                 class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs md:text-sm font-black py-3 px-6 rounded-2xl shadow-lg shadow-emerald-600/30 no-underline transition-all flex items-center gap-2"
             >
                 <span class="text-base font-bold">+</span> Solicitar Novo Orçamento
@@ -307,7 +307,7 @@ ORDER BY due_date ASC
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">62% Concluído</span>
-                        <a href="./detalhes" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 no-underline">Ver Detalhes →</a>
+                        <a href="../detalhes/" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 no-underline">Ver Detalhes →</a>
                     </div>
                 </div>
                 <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
@@ -329,7 +329,7 @@ ORDER BY due_date ASC
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">15% Concluído</span>
-                        <a href="./detalhes" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 no-underline">Ver Detalhes →</a>
+                        <a href="../detalhes/" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 no-underline">Ver Detalhes →</a>
                     </div>
                 </div>
                 <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
@@ -397,7 +397,7 @@ ORDER BY due_date ASC
             </ul>
 
             <div class="pt-2">
-                <a href="./detalhes" class="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold py-2.5 px-5 rounded-xl no-underline inline-block">
+                <a href="../detalhes/" class="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold py-2.5 px-5 rounded-xl no-underline inline-block">
                     Abrir Estúdio Antes x Depois com IA →
                 </a>
             </div>
@@ -421,7 +421,7 @@ ORDER BY due_date ASC
             </div>
 
             <a 
-                href="./novo-projeto" 
+                href="../novo-projeto/" 
                 class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs md:text-sm font-black py-3 px-6 rounded-2xl shadow-lg shadow-indigo-600/30 no-underline transition-all flex items-center gap-2"
             >
                 <span class="text-base font-bold">+</span> Cadastrar Nova Obra
@@ -449,7 +449,7 @@ ORDER BY due_date ASC
                     </h3>
                     <p class="text-xs text-gray-500 mt-0.5">Identifique se o avanço financeiro está superando o avanço físico comprovado por fotos.</p>
                 </div>
-                <a href="./detalhes" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 no-underline">
+                <a href="../detalhes/" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 no-underline">
                     Ver Quadro Kanban →
                 </a>
             </div>
