@@ -1,4 +1,4 @@
-name: Deploy Evidence to GitHub Pages
+name: Deploy ObraFlow to GitHub Pages
 
 on:
   push:
@@ -20,20 +20,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Node
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
+
+      - name: Setup GitHub Pages Environment
+        uses: actions/configure-pages@v5
+
       - name: Install Dependencies
         run: npm ci
-      - name: Evidence Sources
+
+      - name: Build DuckDB Sources
         run: npm run sources
-      - name: Evidence Build
+
+      - name: Build Static Site
         run: npm run build
-      - name: Add .nojekyll
+
+      - name: Disable Jekyll (_app directory support)
         run: touch ./build/.nojekyll
-      - name: Upload artifact
+
+      - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./build

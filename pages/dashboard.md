@@ -323,7 +323,10 @@ ORDER BY order_index, prazo_tarefa
                 </div>
                 <div class="font-bold text-xs text-gray-900 mt-1">{card.tarefa}</div>
                 {#if card.foto_url}
-                    <img src={card.foto_url} alt="Evidência" class="w-full h-20 object-cover rounded mt-2 border border-gray-200" />
+                    <div class="mt-2 text-[10px] text-gray-500 bg-gray-50 p-1 rounded border border-gray-100 flex items-center gap-1">
+                        <span>📷 Evidência:</span>
+                        <a href="{card.foto_url}" target="_blank" rel="noreferrer" class="text-indigo-600 hover:underline truncate">Ver foto no canteiro</a>
+                    </div>
                 {/if}
                 <div class="text-[11px] text-gray-600 mt-2 pt-1.5 border-t border-gray-100 flex justify-between">
                     <span>👷 {card.responsavel.split(' ')[0]}</span>
@@ -437,11 +440,11 @@ JOIN obraflow.materials m ON m.id = s.material_id
         <div class="grid grid-cols-2 gap-1.5 mt-2">
             <div>
                 <div class="text-[9px] text-gray-500 uppercase font-bold">Antes (Obra Real)</div>
-                <img src={sim.original_photo_url} alt="Antes" class="w-full h-24 object-cover rounded border border-gray-200" />
+                <a href="{sim.original_photo_url}" target="_blank" rel="noreferrer" class="text-[10px] text-blue-600 hover:underline block mt-1">Ver foto original</a>
             </div>
             <div>
                 <div class="text-[9px] text-indigo-600 uppercase font-bold">Depois (Render IA)</div>
-                <img src={sim.generated_photo_url} alt="Depois IA" class="w-full h-24 object-cover rounded border-2 border-indigo-400" />
+                <a href="{sim.generated_photo_url}" target="_blank" rel="noreferrer" class="text-[10px] text-indigo-600 font-bold hover:underline block mt-1">Ver render da IA</a>
             </div>
         </div>
     </div>
