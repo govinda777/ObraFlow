@@ -6,10 +6,11 @@ sidebar_link: false
 ---
 
 <script>
-    function setRoleAndRedirect(role, targetUrl) {
+    function setRoleAndRedirect(role, targetSlug) {
         if (typeof window !== 'undefined') {
             localStorage.setItem('obraflow_active_role', role);
-            window.location.href = targetUrl;
+            // Redireciona com caminho relativo seguro a partir de /onboarding/
+            window.location.href = `../${targetSlug}`;
         }
     }
 </script>
@@ -24,7 +25,7 @@ sidebar_link: false
     </div>
     <div class="flex items-center gap-2 bg-gray-100 text-gray-700 font-semibold px-3.5 py-1.5 rounded-full border border-gray-200">
       <span>✉️ marina.costa@email.com</span>
-      <a href="./login" class="text-gray-400 hover:text-rose-500 ml-1 no-underline font-bold" title="Sair / Trocar de conta">✕</a>
+      <a href="../login/" class="text-gray-400 hover:text-rose-500 ml-1 no-underline font-bold" title="Sair / Trocar de conta">✕</a>
     </div>
   </div>
 
@@ -52,7 +53,7 @@ sidebar_link: false
         </ul>
       </div>
       <button 
-        on:click={() => setRoleAndRedirect('CLIENT', './dashboard')}
+        on:click={() => setRoleAndRedirect('CLIENT', 'dashboard')}
         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl text-center text-xs transition-colors shadow-sm"
       >
         Entrar como Cliente →
@@ -74,7 +75,7 @@ sidebar_link: false
         </ul>
       </div>
       <button 
-        on:click={() => setRoleAndRedirect('CONTRACTOR', './dashboard')}
+        on:click={() => setRoleAndRedirect('CONTRACTOR', 'dashboard')}
         class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-center text-xs transition-colors shadow-sm"
       >
         Entrar como Gestor →
@@ -96,7 +97,7 @@ sidebar_link: false
         </ul>
       </div>
       <button 
-        on:click={() => setRoleAndRedirect('ENGINEER', './novo-projeto')}
+        on:click={() => setRoleAndRedirect('ENGINEER', 'novo-projeto')}
         class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-center text-xs transition-colors shadow-sm"
       >
         Iniciar Orçamento →
@@ -123,7 +124,7 @@ sidebar_link: false
         </ul>
       </div>
       <button 
-        on:click={() => setRoleAndRedirect('FOREMAN', './detalhes')}
+        on:click={() => setRoleAndRedirect('FOREMAN', 'detalhes')}
         class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-4 rounded-xl text-center text-xs transition-colors shadow-sm"
       >
         Acessar Canteiro Mobile →
@@ -145,7 +146,7 @@ sidebar_link: false
         </ul>
       </div>
       <button 
-        on:click={() => setRoleAndRedirect('DESIGNER', './detalhes')}
+        on:click={() => setRoleAndRedirect('DESIGNER', 'detalhes')}
         class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl text-center text-xs transition-colors shadow-sm"
       >
         Abrir Estúdio IA →
