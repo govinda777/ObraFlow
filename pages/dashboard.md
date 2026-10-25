@@ -3,11 +3,6 @@ title: ObraFlow — Dashboard Global Multi-Obra
 hide_title: true
 ---
 
-<script>
-    // Role Switcher Interativo: 'CLIENT' ou 'CONTRACTOR'
-    let activeRole = 'CLIENT';
-</script>
-
 ```sql lista_obras
 SELECT id, name, status, address
 FROM obraflow.projects
@@ -168,151 +163,204 @@ WHERE project_id = '${inputs.obra_filtro.value}'
 ORDER BY due_date ASC
 ```
 
-<!-- ========================================== -->
-<!-- BARRA SUPERIOR: HEADER, FILTROS & AÇÕES    -->
-<!-- ========================================== -->
-<div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-5 mb-6 shadow-md border border-indigo-900/40">
+<script>
+    // Inicializa o Role com base no Onboarding (ou fallback para CLIENT)
+    let activeRole = 'CLIENT';
+    
+    if (typeof window !== 'undefined') {
+        const saved = localStorage.getItem('obraflow_active_role');
+        if (saved) activeRole = saved;
+    }
+
+    function switchRole(role) {
+        activeRole = role;
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('obraflow_active_role', role);
+        }
+    }
+</script>
+
+<!-- ======================================================== -->
+<!-- APP SHELL: TOPBAR PERSISTENTE DA ÁREA LOGADA             -->
+<!-- ======================================================== -->
+<div class="bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-5 mb-8 shadow-xl border border-slate-800">
     <div class="flex flex-wrap items-center justify-between gap-4">
         
-        <!-- Identificação e Role Switcher -->
-        <div class="flex items-center gap-3">
-            <span class="text-xs font-black tracking-wider text-indigo-400">🏗️⚡ OBRAFLOW</span>
-            <span class="text-slate-600">|</span>
-            <div class="inline-flex bg-slate-800/80 p-1 rounded-xl border border-slate-700">
-                <button 
-                    class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all {activeRole === 'CLIENT' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-300 hover:text-white'}"
-                    on:click={() => activeRole = 'CLIENT'}
-                >
-                    👤 Visão do Cliente
-                </button>
-                <button 
-                    class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all {activeRole === 'CONTRACTOR' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-300 hover:text-white'}"
-                    on:click={() => activeRole = 'CONTRACTOR'}
-                >
-                    🏢 Visão do Empreiteiro
-                </button>
+        <!-- Logo e Links de Navegação da Plataforma -->
+        <div class="flex items-center gap-6">
+            <a href="./" class="flex items-center gap-2 no-underline text-white group">
+                <span class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-indigo-600/40">⚡</span>
+                <span class="font-black text-sm tracking-tight">OBRAFLOW</span>
+            </a>
+
+            <div class="hidden md:flex items-center gap-2 text-xs">
+                <a href="./dashboard" class="bg-indigo-600/30 text-indigo-300 font-bold px-3 py-1.5 rounded-xl border border-indigo-500/30 no-underline">
+                    📊 Visão Global
+                </a>
+                <a href="./detalhes" class="text-slate-400 hover:text-white font-semibold px-3 py-1.5 rounded-xl no-underline transition-colors">
+                    🏗️ Detalhe da Obra
+                </a>
+                {#if activeRole === 'CLIENT'}
+                    <a href="./novo-projeto" class="text-emerald-400 hover:text-emerald-300 font-semibold px-3 py-1.5 rounded-xl no-underline transition-colors">
+                        📝 Novo Orçamento
+                    </a>
+                {/if}
             </div>
         </div>
 
-        <!-- Seletor de Canteiro e CTA Primário -->
-        <div class="flex items-center gap-3">
-            <span class="text-xs text-slate-400 font-semibold">Canteiro:</span>
-            <Dropdown
-                data={lista_obras}
-                name="obra_filtro"
-                value="id"
-                label="name"
-                defaultValue="proj_1"
-            />
+        <!-- Seletor de Canteiro e Role Switcher Instantâneo -->
+        <div class="flex flex-wrap items-center gap-3">
+            <div class="flex items-center gap-2 text-xs">
+                <span class="text-slate-400 font-semibold">Canteiro:</span>
+                <Dropdown
+                    data={lista_obras}
+                    name="obra_filtro"
+                    value="id"
+                    label="name"
+                    defaultValue="proj_1"
+                />
+            </div>
 
-            {#if activeRole === 'CLIENT'}
-                <a href="./novo-projeto" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black py-2 px-4 rounded-xl no-underline shadow-sm transition-all flex items-center gap-1.5">
-                    <span>+</span> Solicitar Novo Orçamento
-                </a>
-            {:else}
-                <a href="./novo-projeto" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-black py-2 px-4 rounded-xl no-underline shadow-sm transition-all flex items-center gap-1.5">
-                    <span>+</span> Cadastrar Nova Obra
-                </a>
-            {/if}
+            <!-- Role Switcher -->
+            <div class="inline-flex bg-slate-800/90 p-1 rounded-xl border border-slate-700">
+                <button 
+                    class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all {activeRole === 'CLIENT' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'}"
+                    on:click={() => switchRole('CLIENT')}
+                >
+                    👤 Cliente
+                </button>
+                <button 
+                    class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all {activeRole === 'CONTRACTOR' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'}"
+                    on:click={() => switchRole('CONTRACTOR')}
+                >
+                    🏢 Empreiteiro
+                </button>
+            </div>
+
+            <a href="./onboarding" class="text-xs text-slate-400 hover:text-indigo-400 font-bold px-2 py-1" title="Ver todos os 5 perfis">
+                Trocar Perfil ⚙️
+            </a>
         </div>
     </div>
 </div>
 
 <!-- ======================================================== -->
-<!-- 4.1. 👤 DASHBOARD GLOBAL DO CLIENTE PROPRIETÁRIO (WIREFRAME) -->
+<!-- 👤 1. VISÃO DO CLIENTE / PROPRIETÁRIO (WIREFRAME 4.1)     -->
 <!-- ======================================================== -->
 {#if activeRole === 'CLIENT'}
-    <div class="space-y-6">
+    <div class="space-y-8">
         
-        <!-- HEADER DO PERFIL CLIENTE -->
-        <div class="flex flex-wrap items-center justify-between pb-3 border-b border-gray-200">
+        <!-- HEADER DO CLIENTE COM BOTÃO EXCLUSIVO DE ORÇAMENTO -->
+        <div class="flex flex-wrap items-center justify-between pb-4 border-b border-gray-200 gap-4">
             <div>
-                <h2 class="text-xl md:text-2xl font-black text-gray-900 m-0">Minhas Obras & Reformas</h2>
-                <p class="text-xs text-gray-500 mt-0.5">Portal de transparência com avanço físico comprovado por fotos de campo.</p>
+                <div class="text-xs uppercase font-bold tracking-wider text-blue-600">Portal de Transparência do Proprietário</div>
+                <h1 class="text-2xl md:text-3xl font-black text-gray-900 m-0">Minhas Obras & Reformas</h1>
+                <p class="text-xs text-gray-500 mt-1">Olá, <strong>Marina Costa</strong>! Acompanhe o avanço real das suas propriedades com comprovação por fotos auditadas.</p>
             </div>
-            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full border border-blue-200">
-                Perfil: 👤 Cliente Proprietário
-            </span>
+
+            <!-- BOTÃO EXCLUSIVO DO CLIENTE -->
+            <a 
+                href="./novo-projeto" 
+                class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs md:text-sm font-black py-3 px-6 rounded-2xl shadow-lg shadow-emerald-600/30 no-underline transition-all flex items-center gap-2"
+            >
+                <span class="text-base font-bold">+</span> Solicitar Novo Orçamento
+            </a>
         </div>
 
         <!-- 4 BIGVALUES DO CLIENTE (Wireframe 4.1) -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-white p-5 rounded-3xl border border-gray-200 shadow-sm">
+                <div class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Total Orçado Investido</div>
                 <div class="text-2xl font-black text-gray-900">R$ 118.850,00</div>
-                <div class="text-xs text-gray-500 font-semibold mt-1">Total Orçado Investido</div>
+                <div class="text-[11px] text-gray-500 mt-1">2 Contratos em execução</div>
             </div>
-            <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm">
+            <div class="bg-white p-5 rounded-3xl border border-gray-200 shadow-sm">
+                <div class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Avanço Físico c/ Foto</div>
                 <div class="text-2xl font-black text-emerald-600">48%</div>
-                <div class="text-xs text-gray-500 font-semibold mt-1">Avanço Físico c/ Foto</div>
+                <div class="text-[11px] text-emerald-700 font-semibold mt-1">Auditado por imagens</div>
             </div>
-            <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm">
+            <div class="bg-white p-5 rounded-3xl border border-gray-200 shadow-sm">
+                <div class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Vistorias Validadas</div>
                 <div class="text-2xl font-black text-blue-600">6 Fotos</div>
-                <div class="text-xs text-gray-500 font-semibold mt-1">Vistorias Validadas</div>
+                <div class="text-[11px] text-blue-700 font-semibold mt-1">Enviadas pelo canteiro</div>
             </div>
-            <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm">
-                <div class="text-2xl font-black text-purple-600">2 Obras</div>
-                <div class="text-xs text-gray-500 font-semibold mt-1">Em Andamento</div>
+            <div class="bg-white p-5 rounded-3xl border border-gray-200 shadow-sm">
+                <div class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Obras Cadastradas</div>
+                <div class="text-2xl font-black text-purple-600">2 Imóveis</div>
+                <div class="text-[11px] text-purple-700 font-semibold mt-1">Em status IN_PROGRESS</div>
             </div>
         </div>
 
         <!-- 📅 STATUS DAS SUAS OBRAS (MASTER PIPELINE DO CLIENTE) -->
-        <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm space-y-4">
-            <div class="flex items-center justify-between pb-2 border-b border-gray-100">
+        <div class="bg-white rounded-3xl p-6 md:p-8 border border-gray-200 shadow-sm space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
                 <h3 class="text-xs font-bold uppercase tracking-wider text-gray-800 m-0">📅 Status das Suas Obras (Master Pipeline)</h3>
-                <a href="./novo-projeto" class="text-xs font-bold text-emerald-600 hover:text-emerald-700 no-underline">+ Solicitar Novo Orçamento</a>
+                <span class="text-xs text-gray-400">Progresso físico com fotos obrigatórias</span>
             </div>
 
-            <!-- Obra 1 -->
-            <div class="p-4 rounded-2xl border border-emerald-100 bg-emerald-50/20 space-y-2">
+            <!-- Obra 1: Residencial Alpha -->
+            <div class="p-5 rounded-2xl border border-emerald-100 bg-emerald-50/20 space-y-3">
                 <div class="flex flex-wrap items-center justify-between gap-2">
                     <div>
-                        <span class="font-bold text-sm text-gray-900">🏠 Residencial Alpha</span>
-                        <span class="text-xs text-gray-500 ml-2">(Rua das Palmeiras, 123 • Construtora Alpha)</span>
+                        <span class="font-bold text-base text-gray-900">🏠 Residencial Alpha</span>
+                        <span class="text-xs text-gray-500 ml-2">Rua das Palmeiras, 123 • Construtora: Alpha Engenharia</span>
                     </div>
-                    <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-full">62% Concluído</span>
+                    <div class="flex items-center gap-2">
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">62% Concluído</span>
+                        <a href="./detalhes" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 no-underline">Ver Detalhes →</a>
+                    </div>
                 </div>
-                <div class="w-full bg-gray-200 h-2.5 rounded-full overflow-hidden">
+                <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
                     <div class="bg-emerald-500 h-full rounded-full" style="width: 62%;"></div>
                 </div>
-                <div class="text-[11px] text-gray-600 flex flex-wrap gap-4 pt-1">
+                <div class="text-xs text-gray-600 flex flex-wrap gap-4 pt-1 font-medium">
                     <span>• 1. Estrutura: <strong class="text-emerald-700">✅ Concluída</strong></span>
                     <span>• 2. Alvenaria: <strong class="text-amber-700">🚧 Em Andamento</strong></span>
                     <span>• 3. Acabamento: <strong class="text-gray-400">🔒 Aguardando</strong></span>
                 </div>
             </div>
 
-            <!-- Obra 2 -->
-            <div class="p-4 rounded-2xl border border-blue-100 bg-blue-50/20 space-y-2">
+            <!-- Obra 2: Reforma Loft Jardins -->
+            <div class="p-5 rounded-2xl border border-blue-100 bg-blue-50/20 space-y-3">
                 <div class="flex flex-wrap items-center justify-between gap-2">
                     <div>
-                        <span class="font-bold text-sm text-gray-900">🏢 Reforma Loft Jardins</span>
-                        <span class="text-xs text-gray-500 ml-2">(Alameda dos Anapurus, 780 • Construtora Alpha)</span>
+                        <span class="font-bold text-base text-gray-900">🏢 Reforma Loft Jardins</span>
+                        <span class="text-xs text-gray-500 ml-2">Alameda dos Anapurus, 780 • Construtora: Alpha Engenharia</span>
                     </div>
-                    <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-0.5 rounded-full">15% Concluído</span>
+                    <div class="flex items-center gap-2">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">15% Concluído</span>
+                        <a href="./detalhes" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 no-underline">Ver Detalhes →</a>
+                    </div>
                 </div>
-                <div class="w-full bg-gray-200 h-2.5 rounded-full overflow-hidden">
+                <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
                     <div class="bg-blue-500 h-full rounded-full" style="width: 15%;"></div>
                 </div>
-                <div class="text-[11px] text-gray-600 flex flex-wrap gap-4 pt-1">
+                <div class="text-xs text-gray-600 flex flex-wrap gap-4 pt-1 font-medium">
                     <span>• 1. Demolição: <strong class="text-emerald-700">✅ Concluída</strong></span>
                     <span>• 2. Revestimentos: <strong class="text-amber-700">🚧 Em Andamento</strong></span>
                 </div>
             </div>
         </div>
 
-        <!-- 📸 FOTOS RECENTES DO CANTEIRO DE OBRAS -->
-        <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm space-y-4">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-800 m-0">📸 Fotos Recentes do Canteiro de Obras (Evidências de Vistoria)</h3>
+        <!-- 📸 FOTOS RECENTES DO CANTEIRO (EVIDÊNCIAS DE VISTORIA) -->
+        <div class="bg-white rounded-3xl p-6 md:p-8 border border-gray-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-800 m-0">📸 Comprovações Fotográficas Recentes (Evidências de Vistoria)</h3>
+                <span class="text-xs text-gray-400">Enviadas diretamente pelo Mestre de Obras</span>
+            </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {#each fotos_recentes as foto}
-                    <div class="border border-gray-200 rounded-2xl p-4 bg-gray-50/50 space-y-2">
-                        <div class="text-[10px] text-gray-400 font-bold uppercase">📅 {foto.data_envio}</div>
+                    <div class="border border-gray-200 rounded-2xl p-4 bg-gray-50/40 space-y-2">
+                        <div class="flex justify-between items-center text-[10px] text-gray-400 font-bold uppercase">
+                            <span>📅 {foto.data_envio}</span>
+                            <span class="text-emerald-600">✓ Auditada</span>
+                        </div>
                         <div class="font-bold text-xs text-gray-900">{foto.tarefa}</div>
                         <p class="text-xs text-gray-600 leading-snug m-0">{foto.notes}</p>
                         <div class="pt-2 border-t border-gray-200 text-xs">
-                            <a href="{foto.photo_url}" target="_blank" rel="noreferrer" class="text-blue-600 hover:underline font-bold">
-                                📷 Abrir Foto em Alta Resolução
+                            <a href="{foto.photo_url}" target="_blank" rel="noreferrer" class="text-blue-600 hover:underline font-bold flex items-center gap-1">
+                                <span>📷</span> Ver Foto em Alta Resolução
                             </a>
                         </div>
                     </div>
@@ -321,25 +369,36 @@ ORDER BY due_date ASC
         </div>
 
         <!-- ✨ SIMULAÇÕES DE ACABAMENTOS POR INTELIGÊNCIA ARTIFICIAL -->
-        <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm space-y-3">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-800 m-0">✨ Simulações de Acabamentos por Inteligência Artificial</h3>
-            <ul class="text-xs text-gray-700 space-y-2 pl-0 list-none m-0">
-                <li class="flex items-center justify-between p-2.5 rounded-xl bg-gray-50 border border-gray-100">
-                    <span>• Cozinha Integrada: Bancada em Quartzo Branco + Cuba Gourmet</span>
-                    <span class="bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full text-[11px]">✅ Aprovado por Você</span>
+        <div class="bg-white rounded-3xl p-6 md:p-8 border border-gray-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-purple-900 m-0">✨ Simulações de Ambientes & Acabamentos por IA</h3>
+                <span class="text-xs text-gray-400">Sugestões estéticas da Designer de Interiores</span>
+            </div>
+
+            <ul class="text-xs text-gray-700 space-y-2.5 pl-0 list-none m-0">
+                <li class="flex items-center justify-between p-3 rounded-2xl bg-gray-50 border border-gray-100">
+                    <div>
+                        <strong>• Cozinha Integrada:</strong> Bancada em Quartzo Branco + Cuba Gourmet de Inox
+                    </div>
+                    <span class="bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full text-[11px]">✅ Aprovado por Você</span>
                 </li>
-                <li class="flex items-center justify-between p-2.5 rounded-xl bg-gray-50 border border-gray-100">
-                    <span>• Living e Jantar: Porcelanato Retificado Calacata 90x90cm</span>
-                    <span class="bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full text-[11px]">✅ Aprovado por Você</span>
+                <li class="flex items-center justify-between p-3 rounded-2xl bg-gray-50 border border-gray-100">
+                    <div>
+                        <strong>• Living Social:</strong> Porcelanato Retificado Calacata 90x90cm
+                    </div>
+                    <span class="bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full text-[11px]">✅ Aprovado por Você</span>
                 </li>
-                <li class="flex items-center justify-between p-2.5 rounded-xl bg-gray-50 border border-gray-100">
-                    <span>• Sala de Jantar: Pendente Linear Dourado LED</span>
-                    <span class="bg-amber-100 text-amber-800 font-bold px-2.5 py-0.5 rounded-full text-[11px]">⏳ Em Análise</span>
+                <li class="flex items-center justify-between p-3 rounded-2xl bg-gray-50 border border-gray-100">
+                    <div>
+                        <strong>• Sala de Jantar:</strong> Pendente Linear Dourado LED com Fita Embutida
+                    </div>
+                    <span class="bg-amber-100 text-amber-800 font-bold px-3 py-1 rounded-full text-[11px]">⏳ Em Análise</span>
                 </li>
             </ul>
-            <div class="pt-2 flex gap-3">
-                <a href="./detalhes" class="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold py-2 px-4 rounded-xl no-underline">
-                    Ver Antes x Depois com IA →
+
+            <div class="pt-2">
+                <a href="./detalhes" class="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold py-2.5 px-5 rounded-xl no-underline inline-block">
+                    Abrir Estúdio Antes x Depois com IA →
                 </a>
             </div>
         </div>
@@ -348,40 +407,51 @@ ORDER BY due_date ASC
 {/if}
 
 <!-- ======================================================== -->
-<!-- 4.2. 🏢 DASHBOARD GLOBAL DO EMPREITEIRO / GESTOR (WIREFRAME) -->
+<!-- 🏢 2. VISÃO DO EMPREITEIRO / GESTOR (WIREFRAME 4.2)       -->
 <!-- ======================================================== -->
 {#if activeRole === 'CONTRACTOR'}
-    <div class="space-y-6">
+    <div class="space-y-8">
         
-        <!-- HEADER DO PERFIL EMPREITEIRO -->
-        <div class="flex flex-wrap items-center justify-between pb-3 border-b border-gray-200">
+        <!-- HEADER DO EMPREITEIRO -->
+        <div class="flex flex-wrap items-center justify-between pb-4 border-b border-gray-200 gap-4">
             <div>
-                <h2 class="text-xl md:text-2xl font-black text-gray-900 m-0">Cockpit Multi-Obra do Empreiteiro</h2>
-                <p class="text-xs text-gray-500 mt-0.5">Gestão de carteira, termômetro físico x financeiro, supply chain e caixa.</p>
+                <div class="text-xs uppercase font-bold tracking-wider text-indigo-600">Painel Executivo da Construtora</div>
+                <h1 class="text-2xl md:text-3xl font-black text-gray-900 m-0">Cockpit Multi-Obra do Empreiteiro</h1>
+                <p class="text-xs text-gray-500 mt-1">Gestão consolidada da carteira, termômetro físico x financeiro, suprimentos e fluxo de caixa.</p>
             </div>
-            <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full border border-indigo-200">
-                Perfil: 🏢 Empreiteiro / Construtora
-            </span>
+
+            <a 
+                href="./novo-projeto" 
+                class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs md:text-sm font-black py-3 px-6 rounded-2xl shadow-lg shadow-indigo-600/30 no-underline transition-all flex items-center gap-2"
+            >
+                <span class="text-base font-bold">+</span> Cadastrar Nova Obra
+            </a>
         </div>
 
         <!-- 4 BIGVALUES DO EMPREITEIRO (Wireframe 4.2) -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <BigValue data={kpis_obra} value="orcamento_total_eap" title="Carteira Total (R$)" fmt="brl" />
             <BigValue data={caixa_obra} value="margem_caixa" title="Margem Atual em Caixa" fmt="brl" />
             <BigValue data={kpis_obra} value="desvio_pct" title="Desvio Físico x Fin." fmt="pct1" />
-            <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm">
-                <div class="text-2xl font-black text-rose-600">🚨 1 Alerta</div>
-                <div class="text-xs text-gray-500 font-semibold mt-1">Gargalo Compra (&le; 7 dias)</div>
+            <div class="bg-white p-5 rounded-3xl border border-gray-200 shadow-sm">
+                <div class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Gargalos de Compra</div>
+                <div class="text-2xl font-black text-rose-600">🚨 1 Insumo</div>
+                <div class="text-[11px] text-rose-700 font-semibold mt-1">Entrega em &le; 7 dias</div>
             </div>
         </div>
 
         <!-- 📊 COMPARATIVO DE SAÚDE POR CANTEIRO (TERMÔMETRO FÍSICO x FINANCEIRO) -->
-        <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm space-y-4">
-            <div class="flex items-center justify-between pb-2 border-b border-gray-100">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-800 m-0">
-                    📊 Comparativo de Saúde por Canteiro (Termômetro Físico x Financeiro)
-                </h3>
-                <span class="text-xs text-gray-400">Baseado nas vistorias fotográficas</span>
+        <div class="bg-white rounded-3xl p-6 md:p-8 border border-gray-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-800 m-0">
+                        📊 Termômetro de Saúde da Obra (% Físico Auditado vs. % Financeiro Realizado)
+                    </h3>
+                    <p class="text-xs text-gray-500 mt-0.5">Identifique se o avanço financeiro está superando o avanço físico comprovado por fotos.</p>
+                </div>
+                <a href="./detalhes" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 no-underline">
+                    Ver Quadro Kanban →
+                </a>
             </div>
             <BarChart
                 data={saude_epicos_gestor}
@@ -393,12 +463,12 @@ ORDER BY due_date ASC
         </div>
 
         <!-- 🚨 ALERTA DE COMPRAS CRÍTICAS (SUPPLY CHAIN) -->
-        <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm space-y-4">
-            <div class="flex items-center justify-between pb-2 border-b border-gray-100">
+        <div class="bg-white rounded-3xl p-6 md:p-8 border border-gray-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
                 <h3 class="text-xs font-bold uppercase tracking-wider text-rose-700 m-0 flex items-center gap-2">
                     <span>🚨</span> Alerta de Compras Críticas & Suprimentos (Supply Chain)
                 </h3>
-                <span class="text-xs text-gray-400 font-medium">Insumos vinculados à EAP</span>
+                <span class="text-xs text-gray-400 font-medium">Insumos vinculados aos prazos da EAP</span>
             </div>
             <DataTable data={compras_criticas} rows=6>
                 <Column id="alerta" title="Situação" />
@@ -410,8 +480,8 @@ ORDER BY due_date ASC
         </div>
 
         <!-- 💰 EXTRATO FINANCEIRO & FLUXO DE CAIXA CONSOLIDADO -->
-        <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm space-y-4">
-            <div class="flex items-center justify-between pb-2 border-b border-gray-100">
+        <div class="bg-white rounded-3xl p-6 md:p-8 border border-gray-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
                 <h3 class="text-xs font-bold uppercase tracking-wider text-gray-800 m-0 flex items-center gap-2">
                     <span>💰</span> Extrato Financeiro & Fluxo de Caixa Consolidado
                 </h3>
