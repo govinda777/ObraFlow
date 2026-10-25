@@ -2,86 +2,131 @@
 title: Seleção de Perfil - ObraFlow
 hide_title: true
 hide_sidebar: true
+sidebar_link: false
 ---
 
-<div class="max-w-4xl mx-auto py-8">
+<div class="max-w-5xl mx-auto py-6 px-4">
+  <!-- BARRA DE USUÁRIO SUPERIOR (Wireframe 2.2) -->
+  <div class="flex items-center justify-between pb-4 mb-6 border-b border-gray-200 text-xs">
+    <div class="flex items-center gap-2">
+      <span class="font-black text-indigo-700 tracking-wider">🏗️⚡ OBRAFLOW</span>
+      <span class="text-gray-300">|</span>
+      <span class="text-gray-500 font-medium">Onboarding de Sessão</span>
+    </div>
+    <div class="flex items-center gap-2 bg-gray-100 text-gray-700 font-semibold px-3 py-1.5 rounded-full">
+      <span>✉️ marina.costa@email.com</span>
+      <a href="./login" class="text-gray-400 hover:text-rose-500 ml-1 no-underline" title="Trocar de conta">✕</a>
+    </div>
+  </div>
+
+  <!-- CABEÇALHO -->
   <div class="text-center mb-8">
-    <div class="text-3xl mb-1">🏗️⚡</div>
-    <h1 class="text-3xl font-bold text-gray-900">Bem-vindo ao ObraFlow!</h1>
-    <p class="text-gray-600 mt-2 text-base">Selecione o seu perfil de atuação para configurar sua experiência de gestão:</p>
+    <h1 class="text-2xl md:text-3xl font-black text-gray-900 tracking-tight m-0">BEM-VINDO AO OBRAFLOW! 👋</h1>
+    <p class="text-gray-500 text-xs md:text-sm mt-1">Selecione seu perfil para configurar sua experiência de gestão:</p>
   </div>
 
+  <!-- GRADE 3 SUPERIORES (CLIENTE, EMPREITEIRO, ORÇAMENTISTA) -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
-    <!-- 1. Cliente Final -->
-    <a href="./dashboard" class="bg-white border-2 border-transparent hover:border-blue-500 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all cursor-pointer no-underline group block">
-      <div class="flex items-center gap-3 mb-3">
-        <div class="bg-blue-100 text-blue-700 p-2.5 rounded-xl group-hover:bg-blue-600 group-hover:text-white transition-colors">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+    
+    <!-- 1. CLIENTE PROPRIETÁRIO -->
+    <div class="bg-white rounded-2xl border-2 border-gray-200 hover:border-blue-500 p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg">👤 Cliente Proprietário</span>
+          <span class="text-xl">🏠</span>
         </div>
-        <h3 class="text-base font-bold text-gray-900 m-0">👤 Cliente Final</h3>
+        <ul class="text-xs text-gray-600 space-y-1.5 my-4 pl-0 list-none">
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Acompanhe suas obras ativas</span></li>
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Solicite novos orçamentos com 1 clique</span></li>
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Comprovação estrita por fotos de campo</span></li>
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Simulações de acabamentos com IA</span></li>
+        </ul>
       </div>
-      <p class="text-gray-600 text-xs leading-relaxed m-0">Acompanha suas obras, solicita novos orçamentos, visualiza avanço físico comprovado por fotos de campo e simulações com IA.</p>
-      <div class="mt-4 text-xs font-bold text-blue-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+      <a href="./dashboard" class="block w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-xl text-center text-xs no-underline transition-colors shadow-sm">
         Entrar como Cliente →
-      </div>
-    </a>
+      </a>
+    </div>
 
-    <!-- 2. Empreiteiro / Construtora -->
-    <a href="./dashboard" class="bg-white border-2 border-transparent hover:border-indigo-500 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all cursor-pointer no-underline group block">
-      <div class="flex items-center gap-3 mb-3">
-        <div class="bg-indigo-100 text-indigo-700 p-2.5 rounded-xl group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+    <!-- 2. EMPREITEIRO / GESTOR -->
+    <div class="bg-white rounded-2xl border-2 border-gray-200 hover:border-indigo-500 p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-lg">🏢 Empreiteiro / Gestor</span>
+          <span class="text-xl">📊</span>
         </div>
-        <h3 class="text-base font-bold text-gray-900 m-0">🏢 Empreiteiro / Gestor</h3>
+        <ul class="text-xs text-gray-600 space-y-1.5 my-4 pl-0 list-none">
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Cockpit executivo multi-obra</span></li>
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Termômetro de avanço físico vs. financeiro</span></li>
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Alertas de compras críticas (supply chain)</span></li>
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Controle de folha e margem de caixa</span></li>
+        </ul>
       </div>
-      <p class="text-gray-600 text-xs leading-relaxed m-0">Cockpit multi-obra, termômetro físico x financeiro, alertas de compras críticas (supply chain), margem de caixa e equipes.</p>
-      <div class="mt-4 text-xs font-bold text-indigo-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-        Acessar Cockpit de Gestão →
-      </div>
-    </a>
+      <a href="./dashboard" class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl text-center text-xs no-underline transition-colors shadow-sm">
+        Entrar como Gestor →
+      </a>
+    </div>
 
-    <!-- 3. Engenheiro / Orçamentista -->
-    <a href="./novo-projeto" class="bg-white border-2 border-transparent hover:border-emerald-500 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all cursor-pointer no-underline group block">
-      <div class="flex items-center gap-3 mb-3">
-        <div class="bg-emerald-100 text-emerald-700 p-2.5 rounded-xl group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+    <!-- 3. ENGENHEIRO ORÇAMENTISTA -->
+    <div class="bg-white rounded-2xl border-2 border-gray-200 hover:border-emerald-500 p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg">📐 Engenheiro Orçamentista</span>
+          <span class="text-xl">🤖</span>
         </div>
-        <h3 class="text-base font-bold text-gray-900 m-0">📐 Engenheiro Orçamentista</h3>
+        <ul class="text-xs text-gray-600 space-y-1.5 my-4 pl-0 list-none">
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Esteira de projetos técnicos</span></li>
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Leitura de PDF, XLSX e TXT via Gemini IA</span></li>
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Estruturação e calibragem de EAP</span></li>
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Composição de custos de mão de obra e insumos</span></li>
+        </ul>
       </div>
-      <p class="text-gray-600 text-xs leading-relaxed m-0">Ingestão de projetos técnicos (PDF/XLSX/TXT), análise assistida por IA (Google Gemini) e estruturação da EAP com diárias e insumos.</p>
-      <div class="mt-4 text-xs font-bold text-emerald-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-        Iniciar Estudo de Orçamento →
-      </div>
-    </a>
+      <a href="./novo-projeto" class="block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-center text-xs no-underline transition-colors shadow-sm">
+        Iniciar Orçamento →
+      </a>
+    </div>
+
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-2xl mx-auto">
-    <!-- 4. Mestre de Obras / Campo -->
-    <a href="./detalhes" class="bg-white border-2 border-transparent hover:border-amber-500 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all cursor-pointer no-underline group block">
-      <div class="flex items-center gap-3 mb-3">
-        <div class="bg-amber-100 text-amber-700 p-2.5 rounded-xl group-hover:bg-amber-600 group-hover:text-white transition-colors">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+  <!-- GRADE 2 INFERIORES (MESTRE DE OBRAS E DESIGNER) -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl mx-auto">
+    
+    <!-- 4. MESTRE DE OBRAS -->
+    <div class="bg-white rounded-2xl border-2 border-gray-200 hover:border-amber-500 p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg">🏗️ Mestre de Obras (Campo)</span>
+          <span class="text-xl">📲</span>
         </div>
-        <h3 class="text-base font-bold text-gray-900 m-0">🏗️ Mestre de Obras / Campo</h3>
+        <ul class="text-xs text-gray-600 space-y-1.5 my-4 pl-0 list-none">
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Painel mobile para uso direto no canteiro</span></li>
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Checklist de execução das tarefas do dia</span></li>
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Recebimento e conferência de cargas/materiais</span></li>
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Envio mandatório de fotos de comprovação</span></li>
+        </ul>
       </div>
-      <p class="text-gray-600 text-xs leading-relaxed m-0">Interface mobile ágil para execução no canteiro: tarefas de hoje, checklist de recebimento de material e envio obrigatório de fotos.</p>
-      <div class="mt-4 text-xs font-bold text-amber-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-        Abrir Canteiro de Obras →
-      </div>
-    </a>
+      <a href="./detalhes" class="block w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 px-4 rounded-xl text-center text-xs no-underline transition-colors shadow-sm">
+        Acessar Canteiro Mobile →
+      </a>
+    </div>
 
-    <!-- 5. Designer de Interiores -->
-    <a href="./detalhes" class="bg-white border-2 border-transparent hover:border-purple-500 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all cursor-pointer no-underline group block">
-      <div class="flex items-center gap-3 mb-3">
-        <div class="bg-purple-100 text-purple-700 p-2.5 rounded-xl group-hover:bg-purple-600 group-hover:text-white transition-colors">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg>
+    <!-- 5. DESIGNER DE INTERIORES -->
+    <div class="bg-white rounded-2xl border-2 border-gray-200 hover:border-purple-500 p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-purple-700 bg-purple-50 px-2.5 py-1 rounded-lg">🎨 Designer de Interiores</span>
+          <span class="text-xl">✨</span>
         </div>
-        <h3 class="text-base font-bold text-gray-900 m-0">🎨 Designer de Interiores</h3>
+        <ul class="text-xs text-gray-600 space-y-1.5 my-4 pl-0 list-none">
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Estúdio de acabamentos e prototipagem</span></li>
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Simulações Antes x Depois geradas por IA</span></li>
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Especificação de marcenaria e iluminação</span></li>
+          <li class="flex items-start gap-1.5"><span>•</span> <span>Gestão de aprovações com o cliente</span></li>
+        </ul>
       </div>
-      <p class="text-gray-600 text-xs leading-relaxed m-0">Estúdio de acabamentos finos, especificação de marcenaria e iluminação, e prototipagem visual com IA de ambientes reais.</p>
-      <div class="mt-4 text-xs font-bold text-purple-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-        Abrir Estúdio de Ambientes →
-      </div>
-    </a>
+      <a href="./detalhes" class="block w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 px-4 rounded-xl text-center text-xs no-underline transition-colors shadow-sm">
+        Abrir Estúdio IA →
+      </a>
+    </div>
+
   </div>
 </div>
