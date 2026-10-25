@@ -1,3 +1,5 @@
+deployment:
+  basePath: /ObraFlow
 plugins:
   components:
     "@evidence-dev/core-components": {}
