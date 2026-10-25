@@ -5,6 +5,56 @@ hide_sidebar: true
 sidebar_link: false
 ---
 
+<script>
+    let projectName = "Reforma Loft Jardins";
+    let projectAddress = "Alameda dos Anapurus, 780 - Apto 82";
+    let projectArea = 72;
+    let projectBudget = "R$ 45.000,00";
+    let projectScope = "Reforma completa de loft: integração da cozinha com a sala, demolição pontual de mureta divisória, piso porcelanato 120x120, forro de gesso e iluminação linear.";
+    let docPdf = "planta_executiva_loft.pdf";
+    let docSpreadsheet = "orcamento_materiais_loft.xlsx";
+    let docTxt = "especificacoes_tecnicas_loft.txt";
+    let isSaving = false;
+
+    async function submitToAI() {
+        isSaving = true;
+        const newProject = {
+            id: "proj_2",
+            name: projectName,
+            address: projectAddress,
+            client_id: "usr_5",
+            contractor_id: "usr_2",
+            status: "QUOTE_REQUESTED",
+            area_m2: Number(projectArea) || 72,
+            budget_estimated: 45000.0,
+            scope_description: projectScope,
+            doc_pdf_name: docPdf,
+            doc_spreadsheet_name: docSpreadsheet,
+            doc_txt_name: docTxt,
+            created_at: new Date().toISOString(),
+            ai_analysis_summary: "Aguardando processamento técnico pelo Agente de Engenharia Gemini...",
+            ai_confidence_score: 0.0,
+            contract_accepted_by_client: false,
+            eap_approved_by_contractor: false
+        };
+
+        // 1. Grava no mock_data/ via serviço local
+        try {
+            await fetch('http://localhost:3001/api/save-full-project', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ project: newProject })
+            });
+        } catch (e) {
+            console.warn('Servidor de persistência local offline, mantendo em memória', e);
+        }
+
+        // 2. Redireciona com basePath garantido
+        const base = (typeof window !== 'undefined' && window.__sveltekit_dev && window.__sveltekit_dev.base) || '/ObraFlow';
+        window.location.href = `${base}/processamento/`;
+    }
+</script>
+
 <div class="max-w-4xl mx-auto py-6 px-4">
   <!-- BARRA DE CABEÇALHO FIEL AO WIREFRAME 3.2 (Sub-Etapa 1) -->
   <div class="flex items-center justify-between pb-4 mb-6 border-b border-gray-200">
@@ -38,7 +88,7 @@ sidebar_link: false
           <label class="block font-bold text-gray-700 mb-1">Nome da Obra:</label>
           <input 
             type="text" 
-            value="Reforma Loft Jardins" 
+            bind:value={projectName} 
             class="w-full border border-gray-300 rounded-xl py-2.5 px-3.5 focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50/50" 
           />
         </div>
@@ -46,7 +96,7 @@ sidebar_link: false
           <label class="block font-bold text-gray-700 mb-1">Endereço Completo do Canteiro:</label>
           <input 
             type="text" 
-            value="Alameda dos Anapurus, 780 - Apto 82" 
+            bind:value={projectAddress} 
             class="w-full border border-gray-300 rounded-xl py-2.5 px-3.5 focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50/50" 
           />
         </div>
@@ -54,7 +104,7 @@ sidebar_link: false
           <label class="block font-bold text-gray-700 mb-1">Área Estimada (m²):</label>
           <input 
             type="number" 
-            value="72" 
+            bind:value={projectArea} 
             class="w-full border border-gray-300 rounded-xl py-2.5 px-3.5 focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50/50" 
           />
         </div>
@@ -62,7 +112,7 @@ sidebar_link: false
           <label class="block font-bold text-gray-700 mb-1">Teto Orçamentário Máximo do Cliente:</label>
           <input 
             type="text" 
-            value="R$ 45.000,00" 
+            bind:value={projectBudget} 
             class="w-full border border-gray-300 rounded-xl py-2.5 px-3.5 focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50/50" 
           />
         </div>
@@ -70,7 +120,7 @@ sidebar_link: false
 
       <div class="mt-4 text-xs">
         <label class="block font-bold text-gray-700 mb-1">Escopo Preliminar da Intervenção:</label>
-        <textarea rows="2" class="w-full border border-gray-300 rounded-xl py-2.5 px-3.5 focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50/50">Reforma completa de loft: integração da cozinha com a sala, demolição pontual de mureta divisória, piso porcelanato 120x120, forro de gesso e iluminação linear.</textarea>
+        <textarea rows="2" bind:value={projectScope} class="w-full border border-gray-300 rounded-xl py-2.5 px-3.5 focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50/50"></textarea>
       </div>
     </div>
 
@@ -92,7 +142,7 @@ sidebar_link: false
           <div class="text-[11px] text-gray-500 mb-3">[ Arraste ou Selecione ]</div>
           <div class="bg-white border border-blue-200 rounded-xl p-2 text-left text-[11px] text-blue-900 font-mono flex items-center gap-1.5">
             <span class="text-emerald-500 font-bold">✔️</span>
-            <span class="truncate">planta_loft.pdf (2.4MB)</span>
+            <span class="truncate">{docPdf} (2.4MB)</span>
           </div>
         </div>
 
@@ -103,7 +153,7 @@ sidebar_link: false
           <div class="text-[11px] text-gray-500 mb-3">[ Arraste ou Selecione ]</div>
           <div class="bg-white border border-emerald-200 rounded-xl p-2 text-left text-[11px] text-emerald-900 font-mono flex items-center gap-1.5">
             <span class="text-emerald-500 font-bold">✔️</span>
-            <span class="truncate">sinapi_loft.xlsx (840KB)</span>
+            <span class="truncate">{docSpreadsheet} (840KB)</span>
           </div>
         </div>
 
@@ -114,7 +164,7 @@ sidebar_link: false
           <div class="text-[11px] text-gray-500 mb-3">[ Arraste ou Selecione ]</div>
           <div class="bg-white border border-purple-200 rounded-xl p-2 text-left text-[11px] text-purple-900 font-mono flex items-center gap-1.5">
             <span class="text-emerald-500 font-bold">✔️</span>
-            <span class="truncate">memorial.txt (45KB)</span>
+            <span class="truncate">{docTxt} (45KB)</span>
           </div>
         </div>
 
@@ -131,12 +181,13 @@ sidebar_link: false
         <a href="/onboarding/" class="text-xs text-gray-500 hover:text-gray-700 font-bold px-4 py-2 no-underline">
           Cancelar
         </a>
-        <a 
-          href="/processamento/" 
-          class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-6 rounded-xl shadow-md shadow-indigo-600/20 no-underline transition-all flex items-center gap-2"
+        <button 
+          on:click={submitToAI}
+          disabled={isSaving}
+          class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-6 rounded-xl shadow-md shadow-indigo-600/20 no-underline transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
         >
-          <span>⚡</span> Enviar para Processamento IA →
-        </a>
+          <span>⚡</span> {isSaving ? 'Gravando em Disco...' : 'Enviar para Processamento IA →'}
+        </button>
       </div>
     </div>
 
