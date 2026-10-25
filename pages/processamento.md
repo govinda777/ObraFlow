@@ -143,9 +143,9 @@ Retorne ESTRITAMENTE um objeto JSON válido (sem tags markdown, sem crases extra
   "orcamento_base": 43500,
   "confianca_pct": 95,
   "epicos": [
-    { "id": "epic_5", "title": "1. Demolição e Adequação Elétrica", "order_index": 1 },
-    { "id": "epic_6", "title": "2. Revestimentos e Porcelanatos", "order_index": 2 },
-    { "id": "epic_7", "title": "3. Forro Drywall e Iluminação Linear", "order_index": 3 }
+    { "id": "epic_5", "title": "1. Demolição e Adequação Elétrica", "order_index": 1, "start_date": "2026-10-25T00:00:00Z", "end_date": "2026-10-31T00:00:00Z" },
+    { "id": "epic_6", "title": "2. Revestimentos e Porcelanatos", "order_index": 2, "start_date": "2026-11-01T00:00:00Z", "end_date": "2026-11-14T00:00:00Z" },
+    { "id": "epic_7", "title": "3. Forro Drywall e Iluminação Linear", "order_index": 3, "start_date": "2026-11-15T00:00:00Z", "end_date": "2026-11-26T00:00:00Z" }
   ],
   "tarefas": [
     { "id": 1, "epic_id": "epic_5", "title": "1. Demolição de Alvenaria e Remoção de Entulho", "cat": "EXECUTION", "due_date": "28/10/2026", "labor": 2200, "mats": 400 },
@@ -223,14 +223,22 @@ Retorne ESTRITAMENTE um objeto JSON válido (sem tags markdown, sem crases extra
                     eapTasks = parsedData.tarefas;
                 }
                 if (Array.isArray(parsedData.epicos) && parsedData.epicos.length > 0) {
-                    eapEpics = parsedData.epicos.map(e => ({
-                        ...e,
-                        project_id: activeProject.id,
-                        status: "IN_PROGRESS",
-                        requires_materials_purchase: true,
-                        ai_generated: true,
-                        contractor_approved: true
-                    }));
+                    const now = new Date();
+                    eapEpics = parsedData.epicos.map((e, i) => {
+                        // Garante start_date e end_date válidos mesmo se o LLM omitir
+                        const sDate = e.start_date || new Date(now.getTime() + i * 10 * 86400000).toISOString();
+                        const eDate = e.end_date || new Date(now.getTime() + (i * 10 + 9) * 86400000).toISOString();
+                        return {
+                            ...e,
+                            project_id: activeProject.id,
+                            status: i === 0 ? "IN_PROGRESS" : "LOCKED",
+                            requires_materials_purchase: true,
+                            start_date: sDate,
+                            end_date: eDate,
+                            ai_generated: true,
+                            contractor_approved: true
+                        };
+                    });
                 }
                 activeProject.status = "BUDGET_READY";
 
