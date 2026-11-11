@@ -42,7 +42,7 @@ O projeto foi arquitetado tirando o máximo proveito do ecossistema moderno **Ve
 
 * **Frontend & Backend:** **Next.js (App Router)** com **Server Actions** e **TypeScript**.
 * **Estilização:** **Tailwind CSS** e **Shadcn UI**.
-* **Autenticação:** **Privy** (login simplificado via E-mail, Google e Social Logins com gerenciamento seguro de sessões e perfis).
+* **Autenticação:** **Thirdweb** (login por e-mail, social, passkey ou wallet, com identidade e sessões verificadas server-side).
 * **Banco de Dados:** **PostgreSQL** (hospedado via Neon) gerenciado com **Drizzle ORM**.
 * **Armazenamento de Arquivos:** **Vercel Blob** (para armazenamento seguro de PDFs de projetos e fotos de evidência do canteiro).
 
@@ -53,13 +53,14 @@ O projeto foi arquitetado tirando o máximo proveito do ecossistema moderno **Ve
 1. **Cliente Final (Proprietário):** Acompanha o dashboard, progresso, cronograma simplificado e galeria de fotos comprovadas.
 2. **Orçamentista / Engenheiro:** Gerencia os projetos recebidos, define o orçamento, insumos de materiais e custos de mão de obra.
 3. **Mestre de Obras / Operacional:** Atualiza o status das tarefas em campo e dispara as fotos de evidência.
-4. **Administrador:** Visão consolidada de todos os canteiros, margens e fluxo operacional da construtora.
+4. **Administrador / Empreiteiro:** Visão consolidada de todos os canteiros, compras de insumos, folha de pagamento PIX, margens e fluxo operacional da construtora.
+5. **Designer de Interiores:** Estúdio de simulação Antes x Depois em canteiro e acompanhamento de acabamentos, marmoraria e iluminação.
 
 ---
 
 ## ⚙️ Instalação e Execução do Protótipo Local
 
-O protótipo do **ObraFlow** é executado como uma aplicação **BI-as-Code** interativa alimentada por **Evidence.dev + DuckDB** consultando diretamente os dados de simulação em [`mock_data/`](./mock_data).
+O protótipo do **ObraFlow** é executado localmente como uma aplicação interativa alimentada por **Evidence.dev + DuckDB** (`http://localhost:3000`) integrada ao **Servidor Transacional Local** (`http://localhost:3001`), persistindo mutações em [`mock_data/`](./mock_data) e arquivos físicos enviados em `./uploads/`.
 
 ### Pré-requisitos
 * **Node.js**: Versão 18, 20 ou superior
@@ -80,17 +81,23 @@ O protótipo do **ObraFlow** é executado como uma aplicação **BI-as-Code** in
    npm install
    ```
 
-3. **Compile as fontes de dados (DuckDB):**
-   ```bash
-   npm run sources
-   ```
-   > Este comando lê todos os arquivos `.json` da pasta `mock_data/` e gera as tabelas analíticas em formato Parquet/DuckDB.
-
-4. **Inicie o servidor de desenvolvimento:**
+3. **Inicie o ambiente local integrado (API `:3001` + UI `:3000` + compilação DuckDB):**
    ```bash
    npm run dev
    ```
-   Abra seu navegador em [http://localhost:3000](http://localhost:3000) (ou na porta indicada no terminal) para interagir com o protótipo.
+   Abra seu navegador em [http://localhost:3000](http://localhost:3000) para interagir com o protótipo completo.
+
+---
+
+## 📂 Kit de Documentos para Demonstração de Orçamento
+
+Para testar ou apresentar ao vivo o fluxo de **Novo Orçamento (`/novo-projeto/`) → Diagnóstico IA & Revisão da EAP (`/processamento/`) → Contrato & Canteiro**, o projeto já inclui 3 documentos reais de engenharia prontos para seleção manual no computador em [`docs/exemplos-orcamento/`](./docs/exemplos-orcamento/README.md):
+
+1. **Planta Executiva (PDF):** [`docs/exemplos-orcamento/01_planta_executiva_cobertura_pinheiros.pdf`](./docs/exemplos-orcamento/01_planta_executiva_cobertura_pinheiros.pdf) — Planta baixa arquitetônica vetorial A4 Paisagem (`94,00 m²`, escala `1:50`, carimbo ABNT NBR 6492).
+2. **Planilha de Custos (CSV/XLSX):** [`docs/exemplos-orcamento/02_planilha_custos_sinapi_pinheiros.csv`](./docs/exemplos-orcamento/02_planilha_custos_sinapi_pinheiros.csv) — Planilha estruturada com 8 serviços em 4 macroetapas totalizando **R$ 92.630,00** (lida linha a linha pelo motor local de IA).
+3. **Memorial Descritivo (TXT/MD):** [`docs/exemplos-orcamento/03_memorial_descritivo_abnt_pinheiros.md`](./docs/exemplos-orcamento/03_memorial_descritivo_abnt_pinheiros.md) — Caderno de encargos conforme **ABNT NBR 16280**, **NBR 5410**, **NBR 13753** e **NBR 15758**.
+
+Consulte o passo a passo completo da apresentação em [`docs/exemplos-orcamento/README.md`](./docs/exemplos-orcamento/README.md).
 
 ---
 
@@ -114,4 +121,3 @@ npm run build
 # Pré-visualizar o build localmente
 npm run preview
 ```
-

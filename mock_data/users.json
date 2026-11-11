@@ -1,7 +1,7 @@
 [
   {
     "id": "usr_1",
-    "privy_id": "did:privy:cl_joao_001",
+    "thirdweb_id": "thirdweb:user:cl_joao_001",
     "name": "João Mendes (Proprietário)",
     "email": "joao.mendes@email.com",
     "role": "CLIENT",
@@ -9,7 +9,7 @@
   },
   {
     "id": "usr_2",
-    "privy_id": "did:privy:ct_alpha_002",
+    "thirdweb_id": "thirdweb:user:ct_alpha_002",
     "name": "Construtora Alpha (Eng. Maria Souza)",
     "email": "maria@alphaengenharia.com.br",
     "role": "CONTRACTOR",
@@ -17,7 +17,7 @@
   },
   {
     "id": "usr_3",
-    "privy_id": "did:privy:eng_carlos_003",
+    "thirdweb_id": "thirdweb:user:eng_carlos_003",
     "name": "Eng. Carlos Eduardo (Orçamentista)",
     "email": "carlos@alphaengenharia.com.br",
     "role": "ENGINEER",
@@ -25,7 +25,7 @@
   },
   {
     "id": "usr_4",
-    "privy_id": "did:privy:for_jose_004",
+    "thirdweb_id": "thirdweb:user:for_jose_004",
     "name": "Mestre José Silva (Campo)",
     "email": "jose.mestre@alphaengenharia.com.br",
     "role": "FOREMAN",
@@ -33,10 +33,18 @@
   },
   {
     "id": "usr_5",
-    "privy_id": "did:privy:cl_marina_005",
-    "name": "Marina Costa (Nova Cliente)",
+    "thirdweb_id": "thirdweb:user:cl_marina_005",
+    "name": "Marina Costa (Cliente)",
     "email": "marina.costa@email.com",
     "role": "CLIENT",
     "created_at": "2026-10-24T18:00:00Z"
+  },
+  {
+    "id": "usr_6",
+    "thirdweb_id": "thirdweb:user:des_beatriz_006",
+    "name": "Arq. Beatriz Nogueira (Designer de Interiores)",
+    "email": "beatriz@estudiodecor.com.br",
+    "role": "DESIGNER",
+    "created_at": "2026-10-24T19:00:00Z"
   }
 ]

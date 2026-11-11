@@ -262,7 +262,7 @@ sequenceDiagram
 |  |     cronograma físico-financeiro com vistorias por evidência fotográfica.         |  |
 |  +----------------------------------------------------------------------------------+  |
 |                                                                                        |
-|  Registro de Assinatura: contract_signed_at = 25/10/2026 09:00:12 (did:privy:cl_marina)|
+|  Registro de Assinatura: contract_signed_at = 25/10/2026 09:00:12 (thirdweb:user:cl_marina)|
 |  Status da Obra: [ CONTRACT_SIGNED ] ➔ [ 🚀 IN_PROGRESS ]                               |
 |                                                                                        |
 |  [ ✅ CONFIRMAR ACEITE E CADASTRAR NOVA OBRA NO SISTEMA ]                               |

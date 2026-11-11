@@ -8,7 +8,7 @@ A nova arquitetura de dados do ObraFlow expande o motor central de Épicos e Kan
 erDiagram
     User {
         string id PK
-        string privy_id UK "Autenticação via Privy"
+        string thirdweb_id UK "Identidade via Thirdweb"
         string name "Nome completo"
         string email UK "E-mail"
         string role "CLIENT | CONTRACTOR | ENGINEER | FOREMAN | ADMIN"
@@ -148,7 +148,7 @@ erDiagram
 
 Abaixo explicamos o papel de cada entidade (tabela) que compõe a arquitetura do ObraFlow:
 
-* **User**: Tabela central de usuários. Armazena a identidade (nome, e-mail) e o papel (`role`) no sistema (Cliente, Empreiteiro, Engenheiro, etc.). A autenticação real é delegada ao provedor externo (Privy), por isso o campo `privy_id`.
+* **User**: Tabela central de usuários. Armazena a identidade (nome, e-mail) e o papel (`role`) no sistema (Cliente, Empreiteiro, Engenheiro, etc.). A autenticação real é delegada ao Thirdweb, por isso o campo `thirdweb_id`.
 * **Project**: Representa a obra em si. É o núcleo que liga o proprietário (`client_id`) à construtora (`contractor_id`). Controla a jornada desde o orçamento (`QUOTE_REQUESTED`) até a execução (`IN_PROGRESS`), armazenando links vitais como o PDF do projeto e do contrato assinado.
 * **Collaborator**: Representa a força de trabalho operacional do empreiteiro (pedreiros, mestres de obras, eletricistas). Armazena seus dados básicos, taxa de remuneração (diária/salário) e chave de pagamento.
 * **Payroll**: Tabela de folha de pagamento que cruza o colaborador com a obra em que ele trabalhou num período específico, gerando a obrigação de pagamento (status pendente ou pago).
