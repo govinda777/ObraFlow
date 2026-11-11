@@ -6,7 +6,7 @@
 | **Data** | 2026-10-25 |
 | **Autores** | Equipe ObraFlow |
 | **Contexto** | `pages/processamento.md`, `pages/novo-projeto.md`, `mock_data/` |
-| **Decisões Relacionadas** | [RFC-0002](./0002-adr-jornada-orcamento-contrato-ia.md), [MER.md](../MER.md), [JOURNEYS.md](../JOURNEYS.md) |
+| **Decisões Relacionadas** | [RFC-0002](./0002-adr-jornada-orcamento-contrato-ia.md), [MER.md](../../MER.md), [JOURNEYS.md](../../JOURNEYS.md) |
 
 ---
 
@@ -57,7 +57,7 @@ Além disso, ao avançar pelas sub-etapas até o aceite final do contrato, os da
 
 * **Benefícios:**
   - **Experiência Realista:** O cliente e o orçamentista veem a IA trabalhando sobre as informações reais da obra, estruturando de fato os épicos e as tarefas da construção.
-  - **Zero Código Legado:** Mantém a coerência estrita com [MER.md](../MER.md) e o formato JSON do `mock_data/`.
+  - **Zero Código Legado:** Mantém a coerência estrita com [MER.md](../../MER.md) e o formato JSON do `mock_data/`.
   - **Continuidade Ponta a Ponta:** Uma obra recém-criada via formulário agora aparece instantaneamente na lista de obras, no Master Pipeline e no Kanban.
 * **Riscos Mitigados:**
   - Caso a API Key do Gemini não seja fornecida ou atinja limites de quota, o sistema carrega um conjunto pré-calibrado de alta fidelidade como fallback automático, nunca travando o fluxo do usuário.
