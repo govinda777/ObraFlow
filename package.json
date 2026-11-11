@@ -5,15 +5,23 @@
   "type": "module",
   "scripts": {
     "sources": "evidence sources",
-    "dev": "evidence dev",
+    "dev": "node scripts/dev-local.js",
+    "dev:ui": "evidence dev",
     "mock-server": "node scripts/mock-data-server.js",
     "build": "evidence build",
-    "preview": "evidence preview"
+    "preview": "evidence preview",
+    "db:migrate": "node scripts/db/migrate.js",
+    "db:seed": "node scripts/db/seed-demo.js",
+    "db:seed:clean": "node scripts/db/seed-clean.js",
+    "db:reset": "node scripts/db/migrate.js --reset && node scripts/db/seed-demo.js"
   },
   "dependencies": {
     "@evidence-dev/core-components": "^5.4.2",
     "@evidence-dev/duckdb": "^2.0.1",
     "@evidence-dev/evidence": "^40.1.8",
+    "@neondatabase/serverless": "^1.2.0",
+    "dotenv": "^18.0.9",
+    "pg": "^8.23.1",
     "typescript": "5.4.2"
   }
 }

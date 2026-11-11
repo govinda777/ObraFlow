@@ -151,3 +151,7 @@ vite.config.ts.timestamp-*
 # Evidence.dev build/cache
 .evidence/
 build/
+
+# Local prototype uploads
+uploads/*
+!uploads/.gitkeep

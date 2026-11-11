@@ -1,6 +1,7 @@
 ---
 title: ObraFlow — Plataforma de Gestão de Obras com IA
 hide_title: true
+hide_sidebar: true
 ---
 
 ```sql resumo_obras
@@ -12,9 +13,19 @@ SELECT
          FROM obraflow.financial_transactions 
          WHERE type = 'RECEIVABLE' AND category = 'CLIENT_INSTALLMENT'),
         0
-    ) AS volume_total_gerenciado
+    ) AS volume_total_gerenciado,
+    (SELECT COUNT(*) FROM obraflow.evidences) AS total_evidencias
 FROM obraflow.projects
 ```
+
+<script>
+    function enterPersona(role, dest) {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('obraflow_active_role', role);
+            window.location.href = dest;
+        }
+    }
+</script>
 
 <!-- TOPBAR INSTITUCIONAL DE MARKETING -->
 <div class="flex items-center justify-between pb-6 mb-8 border-b border-gray-100">
@@ -24,7 +35,7 @@ FROM obraflow.projects
         </div>
         <div>
             <span class="text-base font-black text-gray-900 tracking-tight">OBRAFLOW</span>
-            <span class="text-[10px] block font-bold uppercase tracking-wider text-indigo-600">SaaS de Engenharia Civil</span>
+            <span class="text-[10px] block font-bold uppercase tracking-wider text-indigo-600">SaaS de Engenharia Civil • Ambiente Local</span>
         </div>
     </div>
 
@@ -43,7 +54,7 @@ FROM obraflow.projects
     <div class="relative z-10 max-w-3xl">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-400/30 text-indigo-300 text-xs font-semibold mb-4">
             <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            Plataforma Integrada de Gestão de Reformas & Obras
+            Protótipo Funcional Local • Persistência Real em Disco & DuckDB
         </div>
         
         <h1 class="text-3xl md:text-5xl font-black tracking-tight leading-tight mb-4">
@@ -51,7 +62,7 @@ FROM obraflow.projects
         </h1>
         
         <p class="text-slate-300 text-sm md:text-base leading-relaxed mb-8 max-w-2xl">
-            Conectamos o <strong>Cliente Proprietário</strong>, <strong>Empreiteiro</strong>, <strong>Orçamentista</strong>, <strong>Mestre de Obras</strong> e <strong>Designer de Interiores</strong>. Orçamentos gerados em segundos a partir de plantas e planilhas com Google Gemini e liberação de pagamentos condicionada rigorosamente a evidências fotográficas.
+            Conectamos o <strong>Cliente Proprietário</strong>, <strong>Empreiteiro</strong>, <strong>Orçamentista</strong>, <strong>Mestre de Obras</strong> e <strong>Designer de Interiores</strong>. Orçamentos gerados localmente ou via Google Gemini Multimodal e liberação de pagamentos condicionada rigorosamente a evidências fotográficas reais.
         </p>
 
         <div class="flex flex-wrap gap-3">
@@ -65,27 +76,29 @@ FROM obraflow.projects
     </div>
 </div>
 
-<!-- 4 NÚMEROS DINÂMICOS DA PLATAFORMA (SEM HARDCODE) -->
+<!-- 4 NÚMEROS DINÂMICOS DA PLATAFORMA (100% SQL) -->
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
     <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm text-center">
         <div class="text-2xl font-black text-gray-900">
             <Value data={resumo_obras} column="total_obras" /> Canteiros
         </div>
-        <div class="text-xs text-gray-500 font-medium mt-1">Obras sob Gestão Ativa</div>
+        <div class="text-xs text-gray-500 font-medium mt-1">Obras Cadastradas no Banco Local</div>
     </div>
     <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm text-center">
         <div class="text-2xl font-black text-indigo-600">
             <Value data={resumo_obras} column="volume_total_gerenciado" fmt="brl" />
         </div>
-        <div class="text-xs text-gray-500 font-medium mt-1">Volume Contratual em EAP</div>
+        <div class="text-xs text-gray-500 font-medium mt-1">Volume Contratual em Recebíveis</div>
     </div>
     <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm text-center">
-        <div class="text-2xl font-black text-emerald-600">100%</div>
-        <div class="text-xs text-gray-500 font-medium mt-1">Medições c/ Evidência Fotográfica</div>
+        <div class="text-2xl font-black text-emerald-600">
+            <Value data={resumo_obras} column="total_evidencias" /> Fotos
+        </div>
+        <div class="text-xs text-gray-500 font-medium mt-1">Vistorias Auditadas em Canteiro</div>
     </div>
     <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm text-center">
-        <div class="text-2xl font-black text-purple-600">Gemini 1.5</div>
-        <div class="text-xs text-gray-500 font-medium mt-1">Leitura Multimodal de PDF/XLSX</div>
+        <div class="text-2xl font-black text-purple-600">IA Híbrida</div>
+        <div class="text-xs text-gray-500 font-medium mt-1">Motor Local Offline + Gemini API</div>
     </div>
 </div>
 
@@ -104,7 +117,7 @@ FROM obraflow.projects
             </div>
             <h3 class="text-base font-bold text-gray-900 m-0">Orçamento Inteligente com IA</h3>
             <p class="text-xs text-gray-600 leading-relaxed m-0">
-                O cliente ou orçamentista envia Planta (PDF), Planilha SINAPI (XLSX) e Memorial (TXT). O Google Gemini decompõe automaticamente em macroetapas e tarefas atômicas da EAP em menos de 1 minuto.
+                Envie Planta (PDF), Planilha (CSV/XLSX) e Memorial (TXT) salvos em disco local. O motor técnico decompõe automaticamente em macroetapas, tarefas e insumos da EAP.
             </p>
         </div>
 
@@ -114,7 +127,7 @@ FROM obraflow.projects
             </div>
             <h3 class="text-base font-bold text-gray-900 m-0">Cláusula Pétrea de Evidência</h3>
             <p class="text-xs text-gray-600 leading-relaxed m-0">
-                Nenhuma parcela é liberada por estimativa ou relatório em papel. O Mestre de Obras envia fotos obrigatórias no canteiro, gerando auditoria transparente e destravando a medição financeira.
+                Nenhuma tarefa muda para concluída sem foto anexada. O Mestre de Obras envia fotos reais do canteiro, destravando o avanço físico auditado em tempo real.
             </p>
         </div>
 
@@ -124,7 +137,7 @@ FROM obraflow.projects
             </div>
             <h3 class="text-base font-bold text-gray-900 m-0">Termômetro Físico vs. Financeiro</h3>
             <p class="text-xs text-gray-600 leading-relaxed m-0">
-                Cockpit executivo que alerta imediatamente quando o percentual pago pelo cliente não condiz com o avanço físico real executado, evitando quebras de caixa da construtora.
+                Cockpit executivo com ERP integrado (folha de pagamento, compras e fluxo de caixa) que compara o avanço financeiro com o avanço físico comprovado por fotos.
             </p>
         </div>
     </div>
@@ -136,7 +149,7 @@ FROM obraflow.projects
         <div>
             <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Ecossistema Completo</span>
             <h2 class="text-xl md:text-2xl font-black text-gray-900 m-0">5 Visões Especializadas por Perfil</h2>
-            <p class="text-xs text-gray-500 mt-1">Cada usuário atua com as ferramentas e indicadores específicos do seu papel na obra:</p>
+            <p class="text-xs text-gray-500 mt-1">Clique diretamente em qualquer persona abaixo para abrir seu painel específico:</p>
         </div>
         <a href="/onboarding/" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 no-underline mt-2 md:mt-0">
             Ir para Central de Onboarding →
@@ -144,53 +157,48 @@ FROM obraflow.projects
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-        <!-- 1. Cliente -->
-        <a href="/dashboard/" class="p-5 rounded-2xl border border-blue-100 bg-blue-50/20 hover:bg-blue-50/60 hover:border-blue-300 transition-all no-underline block space-y-2">
+        <button on:click={() => enterPersona('CLIENT', '/dashboard/')} class="text-left p-5 rounded-2xl border border-blue-100 bg-blue-50/20 hover:bg-blue-50/60 hover:border-blue-300 transition-all cursor-pointer space-y-2">
             <div class="text-3xl">👤</div>
             <div class="font-bold text-sm text-gray-900">Cliente / Proprietário</div>
-            <p class="text-xs text-gray-600 m-0 leading-relaxed">Portal de transparência, acompanhamento por fotos de vistoria e botão exclusivo para solicitar novos orçamentos.</p>
+            <p class="text-xs text-gray-600 m-0 leading-relaxed">Portal de transparência, acompanhamento por fotos de vistoria, aprovação de simulações IA e solicitação de novos orçamentos.</p>
             <div class="pt-2 text-xs font-bold text-blue-600">Acessar Visão do Cliente →</div>
-        </a>
+        </button>
 
-        <!-- 2. Empreiteiro -->
-        <a href="/dashboard/" class="p-5 rounded-2xl border border-indigo-100 bg-indigo-50/20 hover:bg-indigo-50/60 hover:border-indigo-300 transition-all no-underline block space-y-2">
+        <button on:click={() => enterPersona('CONTRACTOR', '/dashboard/')} class="text-left p-5 rounded-2xl border border-indigo-100 bg-indigo-50/20 hover:bg-indigo-50/60 hover:border-indigo-300 transition-all cursor-pointer space-y-2">
             <div class="text-3xl">🏢</div>
             <div class="font-bold text-sm text-gray-900">Empreiteiro Geral (Gestor)</div>
-            <p class="text-xs text-gray-600 m-0 leading-relaxed">Cockpit multi-obra, termômetro físico x financeiro, alertas de compras críticas de suprimentos e fluxo de caixa.</p>
+            <p class="text-xs text-gray-600 m-0 leading-relaxed">Cockpit multi-obra, termômetro físico x financeiro, compra de suprimentos críticos, folha de pagamento e fluxo de caixa.</p>
             <div class="pt-2 text-xs font-bold text-indigo-600">Acessar Cockpit de Gestão →</div>
-        </a>
+        </button>
 
-        <!-- 3. Orçamentista -->
-        <a href="/novo-projeto/" class="p-5 rounded-2xl border border-emerald-100 bg-emerald-50/20 hover:bg-emerald-50/60 hover:border-emerald-300 transition-all no-underline block space-y-2">
+        <button on:click={() => enterPersona('ENGINEER', '/processamento/')} class="text-left p-5 rounded-2xl border border-emerald-100 bg-emerald-50/20 hover:bg-emerald-50/60 hover:border-emerald-300 transition-all cursor-pointer space-y-2">
             <div class="text-3xl">📐</div>
             <div class="font-bold text-sm text-gray-900">Engenheiro Orçamentista</div>
-            <p class="text-xs text-gray-600 m-0 leading-relaxed">Leitura assistida por IA (PDF, XLSX, TXT), calibração técnica de diárias, insumos e emissão de propostas formais.</p>
-            <div class="pt-2 text-xs font-bold text-emerald-600">Iniciar Novo Orçamento →</div>
-        </a>
+            <p class="text-xs text-gray-600 m-0 leading-relaxed">Esteira de projetos e leitura de documentos (PDF, CSV, TXT), calibração editável de diárias e insumos na EAP e emissão contratual.</p>
+            <div class="pt-2 text-xs font-bold text-emerald-600">Abrir Esteira de Orçamentos →</div>
+        </button>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- 4. Mestre de Obras -->
-        <a href="/detalhes/" class="p-5 rounded-2xl border border-amber-100 bg-amber-50/20 hover:bg-amber-50/60 hover:border-amber-300 transition-all no-underline block space-y-2">
+        <button on:click={() => enterPersona('FOREMAN', '/detalhes/?tab=MESTRE')} class="text-left p-5 rounded-2xl border border-amber-100 bg-amber-50/20 hover:bg-amber-50/60 hover:border-amber-300 transition-all cursor-pointer space-y-2">
             <div class="text-3xl">🏗️</div>
             <div class="font-bold text-sm text-gray-900">Mestre de Obras (Canteiro Mobile)</div>
-            <p class="text-xs text-gray-600 m-0 leading-relaxed">Tarefas de hoje, checklist de recebimento de materiais e botão direto para envio de fotos de comprovação.</p>
+            <p class="text-xs text-gray-600 m-0 leading-relaxed">Tarefas de campo da obra ativa, conferência de recebimento com registro de avarias e upload real de fotos de comprovação.</p>
             <div class="pt-2 text-xs font-bold text-amber-600">Abrir Canteiro Mobile →</div>
-        </a>
+        </button>
 
-        <!-- 5. Designer -->
-        <a href="/detalhes/" class="p-5 rounded-2xl border border-purple-100 bg-purple-50/20 hover:bg-purple-50/60 hover:border-purple-300 transition-all no-underline block space-y-2">
+        <button on:click={() => enterPersona('DESIGNER', '/detalhes/?tab=DESIGNER')} class="text-left p-5 rounded-2xl border border-purple-100 bg-purple-50/20 hover:bg-purple-50/60 hover:border-purple-300 transition-all cursor-pointer space-y-2">
             <div class="text-3xl">🎨</div>
             <div class="font-bold text-sm text-gray-900">Designer de Interiores</div>
-            <p class="text-xs text-gray-600 m-0 leading-relaxed">Estúdio de acabamentos com visualizador Antes x Depois em 3D, controle de aprovações e marcenaria fina.</p>
+            <p class="text-xs text-gray-600 m-0 leading-relaxed">Estúdio de acabamentos com comparador visual Antes x Depois, criação local de simulações e gestão de fornecedores decorativos.</p>
             <div class="pt-2 text-xs font-bold text-purple-600">Abrir Estúdio de Design →</div>
-        </a>
+        </button>
     </div>
 </div>
 
 <!-- FOOTER SAAS INSTITUCIONAL -->
 <div class="pt-8 pb-12 border-t border-gray-200 text-center text-xs text-gray-500 space-y-2">
     <div class="font-bold text-gray-800">ObraFlow Tecnologia da Construção Civil Ltda.</div>
-    <div>Plataforma desenvolvida para construtoras, engenheiros e clientes que exigem transparência e conformidade técnica.</div>
+    <div>Protótipo Local Integrado • Evidence.dev + DuckDB + Node Local Server (:3001)</div>
     <div class="text-[11px] text-gray-400">© 2026 ObraFlow. Todos os direitos reservados.</div>
 </div>
