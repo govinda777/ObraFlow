@@ -7,25 +7,25 @@
 | **Status** | 🔵 `Accepted` (Aprovada — Opção B: Evidence.dev + DuckDB) |
 | **Data de Criação** | 2026-10-24 |
 | **Autores** | Equipe ObraFlow |
-| **Documentos Base** | [MER.md](../MER.md), [ACTORS.md](../ACTORS.md), [README.md](../README.md), [mock_data/](../mock_data) |
+| **Documentos Base** | [MER.md](../../MER.md), [ACTORS.md](../../ACTORS.md), [README.md](../../README.md), [mock_data/](../../mock_data) |
 
 ---
 
 ## 1. Sumário Executivo
 
-Esta RFC define a estratégia técnica para **prototipar cenários de dados e visualizar os relatórios analíticos** especificados no [MER.md](../MER.md) utilizando a **menor quantidade possível de código**. Em vez de desenvolver telas customizadas do zero nesta fase, propomos utilizar ferramentas declarativas ou *No-Code Database UIs* acopladas a *Views SQL* sobre a massa de testes em [mock_data/](../mock_data).
+Esta RFC define a estratégia técnica para **prototipar cenários de dados e visualizar os relatórios analíticos** especificados no [MER.md](../../MER.md) utilizando a **menor quantidade possível de código**. Em vez de desenvolver telas customizadas do zero nesta fase, propomos utilizar ferramentas declarativas ou *No-Code Database UIs* acopladas a *Views SQL* sobre a massa de testes em [mock_data/](../../mock_data).
 
 ---
 
 ## 2. Contexto e Motivação
 
-O modelo de dados do **ObraFlow** ([MER.md](../MER.md)) abrange **10 entidades inter-relacionadas**:
+O modelo de dados do **ObraFlow** ([MER.md](../../MER.md)) abrange **10 entidades inter-relacionadas**:
 * **Núcleo Comercial e Acesso:** `users`, `projects`
 * **ERP do Empreiteiro:** `collaborators`, `payrolls`, `financial_transactions`
 * **Motor de Execução e Logística:** `epics`, `tasks`, `materials`, `evidences`
 * **Inovação em Acabamentos:** `ai_room_simulations`
 
-Antes de iniciar a codificação completa da aplicação em **Next.js + Drizzle ORM + PostgreSQL**, precisamos validar visualmente se as regras de cálculo e os relatórios fazem sentido para os atores do sistema ([ACTORS.md](../ACTORS.md)). Escrever HTML/JS manual ou construir todo o frontend definitivo agora geraria código extenso e difícil de alterar durante os testes de modelagem.
+Antes de iniciar a codificação completa da aplicação em **Next.js + Drizzle ORM + PostgreSQL**, precisamos validar visualmente se as regras de cálculo e os relatórios fazem sentido para os atores do sistema ([ACTORS.md](../../ACTORS.md)). Escrever HTML/JS manual ou construir todo o frontend definitivo agora geraria código extenso e difícil de alterar durante os testes de modelagem.
 
 ---
 
@@ -44,8 +44,8 @@ Antes de iniciar a codificação completa da aplicação em **Next.js + Drizzle 
 
 ### 3.2. Restrições Técnicas e Não-Objetivos
 * **Mínimo Absoluto de Código:** Não escrever HTML, CSS ou lógica imperativa de manipulação de DOM.
-* **Sem Infraestrutura Pesada:** Deve rodar localmente a partir dos arquivos em [mock_data/](../mock_data).
-* **Fora de Escopo:** Autenticação real via Privy, armazenamento em nuvem via Vercel Blob e deploy em produção.
+* **Sem Infraestrutura Pesada:** Deve rodar localmente a partir dos arquivos em [mock_data/](../../mock_data).
+* **Fora de Escopo:** Autenticação real via Thirdweb, armazenamento em nuvem via Vercel Blob e deploy em produção.
 
 ---
 
@@ -142,7 +142,7 @@ Independentemente do visualizador escolhido (A, B ou C), **100% da inteligência
 4. `vw_contractor_cashflow`: Consolida entradas, saídas por categoria e margem líquida do empreiteiro (`R6`).
 
 ### Plano de Implementação em 2 Passos Curtos:
-1. **Passo 1 (Camada Analítica Mínima):** Criar um único arquivo SQL (`sql/views_relatorios.sql`) que lê os arquivos de [mock_data/](../mock_data) e materializa as 4 visões acima.
+1. **Passo 1 (Camada Analítica Mínima):** Criar um único arquivo SQL (`sql/views_relatorios.sql`) que lê os arquivos de [mock_data/](../../mock_data) e materializa as 4 visões acima.
 2. **Passo 2 (Camada Visual):** Conectar a ferramenta escolhida na Seção 7 (**Opção A, B ou C**) diretamente sobre essas 4 Views.
 
 ---

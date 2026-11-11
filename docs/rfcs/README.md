@@ -8,8 +8,9 @@ Este diretório centraliza todas as **RFCs (Request for Comments)** do projeto *
 
 | ID | Título | Status | Data | Documentos Relacionados |
 | :--- | :--- | :---: | :---: | :--- |
-| **[RFC-0001](./0001-prototipagem-dados-e-relatorios.md)** | Estratégia de Prototipagem de Dados e Visualização de Relatórios (Minimal-Code) | 🔵 `Aprovada` | 2026-10-24 | [MER.md](../MER.md), [mock_data/](../mock_data) |
-| **[RFC-0002](./0002-adr-jornada-orcamento-contrato-ia.md)** | Arquitetura de Prototipagem da Jornada Comercial, Orçamento e EAP com IA (Minimal-Code) | 🔵 `Aprovada` | 2026-10-25 | [MER.md](../MER.md), [ACTORS.md](../ACTORS.md), [RFC-0001](./0001-prototipagem-dados-e-relatorios.md) |
+| **[RFC-0001](./0001-prototipagem-dados-e-relatorios.md)** | Estratégia de Prototipagem de Dados e Visualização de Relatórios (Minimal-Code) | 🔵 `Aprovada` | 2026-10-24 | [MER.md](../../MER.md), [mock_data/](../../mock_data) |
+| **[RFC-0002](./0002-adr-jornada-orcamento-contrato-ia.md)** | Arquitetura de Prototipagem da Jornada Comercial, Orçamento e EAP com IA (Minimal-Code) | 🔵 `Aprovada` | 2026-10-25 | [MER.md](../../MER.md), [ACTORS.md](../../ACTORS.md), [RFC-0001](./0001-prototipagem-dados-e-relatorios.md) |
+| **[ADR-0005](./0005-adr-autorizacao-por-jwt-neon-e-auditoria-de-eventos.md)** | Autorização por JWT, Neon e Auditoria de Eventos | 🟡 `Proposta` | 2026-11-11 | [ADR-0004](./0004-adr-migracao-neon-db-infra-vercel.md), [MER.md](../../MER.md) |
 
 ---
 

@@ -7,19 +7,19 @@
 | **Status** | 🔵 `Accepted` |
 | **Data de Criação** | 2026-10-25 |
 | **Autores** | Equipe ObraFlow |
-| **Documentos Base** | [MER.md](../MER.md), [ACTORS.md](../ACTORS.md), [RFC-0001](./0001-prototipagem-dados-e-relatorios.md), [mock_data/](../mock_data) |
+| **Documentos Base** | [MER.md](../../MER.md), [ACTORS.md](../../ACTORS.md), [RFC-0001](./0001-prototipagem-dados-e-relatorios.md), [mock_data/](../../mock_data) |
 
 ---
 
 ## 1. Sumário Executivo
 
-Esta RFC define a arquitetura para prototipar a jornada de ponta a ponta de aquisição e estruturação de uma obra no **ObraFlow**: desde a criação de usuário e solicitação de orçamento, upload e processamento de documentos técnicos (PDF, Planilha, TXT) via Inteligência Artificial (**Google Gemini API**), até a formalização de contrato, geração automática da EAP (Épicos e Tarefas) e aprovação/edição pelo empreiteiro. A solução mantém o princípio **Minimal-Code** e **DRY (Don't Repeat Yourself)**, utilizando a infraestrutura declarativa existente em **Evidence.dev + DuckDB** em [`pages/index.md`](../pages/index.md) sem duplicar código nem infraestruturas pesadas.
+Esta RFC define a arquitetura para prototipar a jornada de ponta a ponta de aquisição e estruturação de uma obra no **ObraFlow**: desde a criação de usuário e solicitação de orçamento, upload e processamento de documentos técnicos (PDF, Planilha, TXT) via Inteligência Artificial (**Google Gemini API**), até a formalização de contrato, geração automática da EAP (Épicos e Tarefas) e aprovação/edição pelo empreiteiro. A solução mantém o princípio **Minimal-Code** e **DRY (Don't Repeat Yourself)**, utilizando a infraestrutura declarativa existente em **Evidence.dev + DuckDB** em [`pages/index.md`](../../pages/index.md) sem duplicar código nem infraestruturas pesadas.
 
 ---
 
 ## 2. Contexto e Motivação
 
-Conforme estabelecido no [MER.md](../MER.md) e no [ACTORS.md](../ACTORS.md), o ciclo de vida do projeto compreende os seguintes estados formais:
+Conforme estabelecido no [MER.md](../../MER.md) e no [ACTORS.md](../../ACTORS.md), o ciclo de vida do projeto compreende os seguintes estados formais:
 `QUOTE_REQUESTED` $\rightarrow$ `AI_ANALYZING` $\rightarrow$ `BUDGET_READY` $\rightarrow$ `APPROVED` $\rightarrow$ `CONTRACT_SIGNED` $\rightarrow$ `IN_PROGRESS` $\rightarrow$ `COMPLETED`.
 
 Antes de implementar o sistema transacional completo em Next.js + PostgreSQL + Drizzle ORM, é essencial validar a experiência do usuário e do empreiteiro:
@@ -45,7 +45,7 @@ Antes de implementar o sistema transacional completo em Next.js + PostgreSQL + D
 ### 3.2. Restrições Técnicas
 * **Zero Duplicação de Código (DRY):** O dashboard executivo atual de relatórios e Kanban deve ser parametrizado pelo projeto ativo, compartilhando as mesmas queries analíticas para qualquer obra.
 * **Compatibilidade Estática:** O protótipo deve continuar funcionando e compilando via `npm run build` para publicação estática no GitHub Pages.
-* **Chamada Real à IA:** Utilização direta da API do Google Gemini via fetch no navegador, com chave configurável e fallback instantâneo alimentado por [`mock_data/`](../mock_data).
+* **Chamada Real à IA:** Utilização direta da API do Google Gemini via fetch no navegador, com chave configurável e fallback instantâneo alimentado por [`mock_data/`](../../mock_data).
 
 ---
 
@@ -94,4 +94,4 @@ flowchart TD
 
 ## 6. Decisão e Próximos Passos
 
-Aprovada a implementação da abordagem **State Machine Reativa com chamada à API do Google Gemini** integrada na página principal [`pages/index.md`](../pages/index.md), acompanhada da ampliação da massa de dados em [`mock_data/`](../mock_data) com a inclusão do projeto `proj_2`.
+Aprovada a implementação da abordagem **State Machine Reativa com chamada à API do Google Gemini** integrada na página principal [`pages/index.md`](../../pages/index.md), acompanhada da ampliação da massa de dados em [`mock_data/`](../../mock_data) com a inclusão do projeto `proj_2`.
