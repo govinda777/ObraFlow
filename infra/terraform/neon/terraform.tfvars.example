@@ -1,0 +1,11 @@
+project_name                  = "obraflow"
+database_name                 = "obraflow"
+environment                   = "development"
+region_id                     = "<select-region-near-vercel>"
+history_retention_seconds     = 86400
+autoscaling_min_cu            = 0.25
+autoscaling_max_cu            = 1
+manage_runtime_role           = false
+runtime_role_password_version = "1"
+manage_migration_role         = false
+migration_role_password_version = "1"

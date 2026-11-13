@@ -6,14 +6,25 @@
   "scripts": {
     "sources": "evidence sources",
     "dev": "node scripts/dev-local.js",
+    "dev:web": "next dev",
     "dev:ui": "evidence dev",
     "mock-server": "node scripts/mock-data-server.js",
     "build": "evidence build",
+    "build:web": "next build",
     "preview": "evidence preview",
+    "start:web": "next start",
+    "typecheck:web": "next typegen && tsc --noEmit",
+    "test:unit": "node --test tests/unit/*.test.js",
+    "test:bdd": "cucumber-js --config cucumber.mjs",
+    "test:health": "node --test tests/unit/health.test.js && cucumber-js --config cucumber.mjs --tags @health",
+    "test:health:routes": "node --test tests/integration/health-routes.test.js",
+    "test:db": "node --test tests/integration/database-security.test.js tests/integration/demo-seed.test.js",
+    "test:iac": "tofu -chdir=infra/terraform/neon test && tofu -chdir=infra/terraform/vercel test",
+    "test:web": "npm run typecheck:web && npm run test:unit && npm run test:db && npm run test:bdd && npm run build:web && npm run test:health:routes",
     "db:migrate": "node scripts/db/migrate.js",
+    "db:migrate:dry-run": "node scripts/db/migrate.js --dry-run",
     "db:seed": "node scripts/db/seed-demo.js",
-    "db:seed:clean": "node scripts/db/seed-clean.js",
-    "db:reset": "node scripts/db/migrate.js --reset && node scripts/db/seed-demo.js"
+    "db:seed:clean": "node scripts/db/seed-clean.js"
   },
   "dependencies": {
     "@evidence-dev/core-components": "^5.4.2",
@@ -21,7 +32,17 @@
     "@evidence-dev/evidence": "^40.1.8",
     "@neondatabase/serverless": "^1.2.0",
     "dotenv": "^18.0.9",
+    "next": "^16.4.6",
     "pg": "^8.23.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "thirdweb": "^5.122.1",
     "typescript": "5.4.2"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^13.3.0",
+    "@electric-sql/pglite": "0.5.12",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0"
   }
 }

@@ -61,6 +61,10 @@ flowchart TD
 - **Drivers Suportados:**
   - `@neondatabase/serverless` para requisições Edge/HTTP ultrarrápidas;
   - `pg` (node-postgres) para conexões persistentes e scripts de migração/seed.
+- **Configuração como código:** Projeto, branch raiz, compute, database e roles PostgreSQL serão declarados em OpenTofu; migrations versionadas declararão schema, grants e RLS. Configuração manual no Console não será fonte de verdade.
+- **Identidades PostgreSQL separadas:** A aplicação usará uma role de runtime sem `SUPERUSER`, `CREATEDB`, `CREATEROLE`, `REPLICATION` ou `BYPASSRLS`, com grants mínimos e RLS forçada. Migrations usarão role própria (`obraflow_migrator`), sem `SUPERUSER`, `CREATEDB`, `CREATEROLE` ou `BYPASSRLS`, com privilégios de DDL limitados ao database/schema, conexão direta e nunca o pooler. O executor de migrations verificará a identidade da conexão. A URL pooled runtime será injetada como secret no ambiente Vercel; a URL de migration ficará somente no executor/CI.
+- **Criação segura de roles:** Roles criadas pela API/Console Neon herdam `neon_superuser`; por isso, a role de aplicação será criada via provider PostgreSQL/SQL com privilégios explicitamente limitados, não via `neon_role`. Consulte [a documentação oficial de roles Neon](https://neon.com/docs/manage/roles).
+- **Secrets e state:** Senhas serão injetadas por secret manager, não gravadas em arquivos `.tfvars`, outputs ou repositório. Senhas das roles runtime e migration serão write-only/efêmeras no OpenTofu. Variáveis Vercel server-only usarão argumentos write-only e valores efêmeros, separadas por target e branch; variáveis `NEXT_PUBLIC_*` serão tratadas como públicas. State remoto com criptografia, locking e acesso restrito é requisito para ambientes compartilhados. Credenciais de migration e seed não serão entregues à aplicação Vercel.
 
 ### 2.2. Armazenamento de Arquivos: Vercel Blob
 - Plantas arquitetônicas (`.pdf`), planilhas orçamentárias (`.csv`), memoriais (`.md`), fotos de vistoria (`.jpg`, `.png`) e simulações SVG não residirão no banco de dados nem no disco efêmero, sendo servidas via **Vercel Blob CDN** com URLs assinadas e permanentes.
@@ -107,152 +111,34 @@ As Functions terão `maxDuration` configurado de acordo com o tipo de processame
 
 Essa decisão substitui a abordagem de chamada direta ao Gemini pelo navegador descrita nos documentos de prototipagem. A chamada client-side poderá existir apenas em ambiente local/demonstração, com chave temporária e sem dados reais de produção.
 
-### 2.4. Autorização de Perfis, Thirdweb e Multi-tenancy
+### 2.4. Identidade, Autorização de Negócio e Integração Thirdweb
 
-O **Thirdweb não será o sistema de autorização dos perfis de negócio do ObraFlow**. Ele será utilizado apenas para recursos Web3 explicitamente adotados, como wallets, contratos, Account Abstraction, RPC ou pagamentos. A autorização principal continuará no backend do ObraFlow, com identidade autenticada, organização/tenant, papel e permissões persistidos no Neon.
+Esta ADR define a plataforma de deploy e infraestrutura; **não cria um modelo de autorização paralelo**. As regras de autenticação da aplicação, memberships, perfis, permissões, JWT e RLS são detalhadas pela [ADR-0005](./0005-adr-autorizacao-por-jwt-neon-e-auditoria-de-eventos.md). Como a ADR-0005 está `Proposed`, sua implementação em produção depende de aprovação. Uma vez aprovada, ela será a fonte de verdade para autorização e substituirá qualquer descrição divergente desta seção.
 
-Essa separação evita que uma permissão de membro no painel do Thirdweb seja confundida com autorização para acessar obras, custos, documentos ou dados de outros tenants. No Thirdweb, os papéis de equipe controlam colaboração e administração da conta/projeto; no ObraFlow, os papéis controlam os dados e operações da aplicação. O Thirdweb documenta os papéis de equipe `Member` e `Owner`, enquanto permissões de contratos/wallets são uma camada distinta. [Thirdweb team members](https://portal.thirdweb.com/account/teams/manage-team-members), [Thirdweb permissions](https://portal.thirdweb.com/tokens/build/extensions/general/Permissions)
+O Thirdweb comprova a identidade/autenticidade da wallet e fornece capacidades Web3. Não é a fonte de autorização para dados e perfis de negócio do ObraFlow. Os papéis de equipe Thirdweb (`Member`, `Owner`) governam acesso à equipe/projeto Thirdweb e não equivalem aos perfis do SaaS. [Thirdweb team members](https://portal.thirdweb.com/account/teams/manage-team-members), [Thirdweb permissions](https://portal.thirdweb.com/tokens/build/extensions/general/Permissions)
 
-#### Matriz de autorização do ObraFlow
+#### Fluxo de identidade e sessão
 
-| Perfil ObraFlow | Escopo padrão | Permissões principais | Uso Thirdweb |
-| :--- | :--- | :--- | :--- |
-| `CLIENT` | Própria organização e projetos explicitamente vinculados | Consultar andamento, documentos autorizados, orçamento e evidências; aprovar etapas conforme workflow | Wallet opcional; nunca concede acesso administrativo ao projeto Thirdweb |
-| `CONTRACTOR` | Organização e carteira de obras administradas | Gerenciar obras, orçamento, compras, folha, caixa, contratos e usuários autorizados | Operações Web3 somente quando habilitadas por uma permissão específica |
-| `ENGINEER` | Projetos atribuídos | Criar/revisar orçamento, EAP, custos técnicos e diagnóstico de IA | Sem acesso a segredos ou administração Thirdweb |
-| `FOREMAN` | Canteiros/projetos atribuídos | Atualizar tarefas e enviar evidências fotográficas | Wallet opcional; sem permissão de transferência ou administração |
-| `DESIGNER` | Projetos atribuídos | Gerenciar acabamentos e simulações de ambientes | Wallet opcional; sem acesso financeiro por padrão |
-| `PLATFORM_ADMIN` | Plataforma inteira, com auditoria | Administrar tenants, políticas, integrações e incidentes | Único perfil autorizado a operar configurações administrativas sensíveis, sempre com MFA e auditoria |
+- O fluxo de wallet adotado é SIWE/EIP-4361. Acrescentar outro método de login requer decisão explícita e atualização da ADR de autenticação.
+- O backend valida o desafio/assinatura Thirdweb, localiza a identidade (`thirdweb_id`) e consulta no Neon o tenant e o membership ativo.
+- Após essa resolução, o backend emite a **sessão da aplicação** de curta duração usando Thirdweb Auth server-side. O token ou estado enviado pelo client não é fonte de claims de autorização; `tenant_id`, membership, perfil e permissões são derivados do Neon.
+- O perfil pertence ao membership do usuário em um tenant, não à identidade global. O mesmo usuário pode ter perfis diferentes em tenants diferentes; o acesso a projetos também exige vínculo autorizado ao projeto.
+- A autorização é avaliada no backend e reforçada por RLS no Neon. Claims de sessão são um snapshot limitado; operações críticas verificam o membership atual. Selecionar um perfil no cadastro não concede acesso a tenants existentes.
 
-As permissões serão avaliadas no servidor em todas as rotas e Server Actions, seguindo:
+#### Roles e operações on-chain
 
-1. validar sessão e identidade do usuário;
-2. resolver a organização/tenant ativo;
-3. verificar associação do usuário ao tenant;
-4. verificar o papel e a permissão da operação;
-5. verificar o vínculo do recurso ao tenant e ao projeto;
-6. aplicar regras adicionais de estado, como aprovação, assinatura ou evidência obrigatória;
-7. registrar auditoria para operações financeiras, administrativas e Web3.
+Não haverá mapeamento global ou automático de `CLIENT`, `CONTRACTOR`, `ENGINEER`, `FOREMAN`, `DESIGNER` ou `PLATFORM_ADMIN` para roles on-chain. Esses perfis e permissões de negócio ficam no Neon. Assinaturas EIP-712 e ancoragem de hashes são mecanismos de prova/integridade, não uma fonte alternativa de RBAC.
 
-O frontend poderá ocultar ações por conveniência, mas nunca será a fonte de autorização. A ausência de uma permissão deve resultar em `403`; ausência de autenticação, em `401`; e referência a recurso de outro tenant deve resultar em `404` ou `403` sem revelar sua existência.
+Se uma feature futura exigir que um contrato imponha autorização on-chain, ela deverá ter uma ADR própria definindo funções/roles específicas do contrato, chain, escopo, operador, concessão/revogação e reconciliação. Essa permissão será um requisito adicional apenas para a operação on-chain em questão: não concederá acesso a dados privados do ObraFlow e não será sincronizada automaticamente a partir do perfil de negócio. Quando aplicável, a operação exige tanto a autorização do ObraFlow/Neon quanto a regra específica do contrato. Nenhum perfil operacional receberá `DEFAULT_ADMIN_ROLE` ou poderes irrestritos de smart account.
 
-#### Autenticação e identidade com Thirdweb
+#### Configuração e segurança Thirdweb
 
-O Thirdweb será o provedor primário de autenticação e wallet do ObraFlow. O provedor anterior está fora da arquitetura-alvo e não será usado em produção. O usuário poderá autenticar pelos métodos suportados pelo projeto Thirdweb; o backend validará o token/JWT emitido pelo Thirdweb e sincronizará a identidade com o usuário local no Neon.
-
-#### Decisão simplificada para regras de acesso
-
-As regras de acesso do SaaS **não serão implementadas por roles on-chain**. A arquitetura terá uma única fonte de verdade para autorização de dados: o Neon, com `tenant_id`, `user_id`, `role`, vínculos de projeto e políticas de acesso. O Thirdweb fornecerá a identidade autenticada e, quando aplicável, o endereço da wallet. A aplicação não precisará sincronizar cada troca de perfil com uma transação blockchain.
-
-O modelo será:
-
-```text
-Thirdweb autentica
-        ↓
-Backend valida token e resolve thirdweb_id
-        ↓
-Neon resolve tenant, perfil e vínculos
-        ↓
-Policy de acesso filtra automaticamente os dados
-        ↓
-API retorna somente recursos autorizados
-```
-
-As regras serão centralizadas em uma policy server-side e reforçadas no banco com Row-Level Security (RLS), sempre que a camada de acesso escolhida suportar essa configuração. Todas as tabelas de negócio terão `tenant_id`; tabelas vinculadas a projeto terão `project_id` e serão filtradas pelo tenant do projeto. O backend definirá o contexto da sessão em cada transação antes de consultar ou alterar dados:
-
-```sql
-SELECT set_config('app.user_id', $1, true);
-SELECT set_config('app.tenant_id', $2, true);
-SELECT set_config('app.role', $3, true);
-```
-
-Uma policy típica permitirá acesso somente quando:
-
-```text
-registro.tenant_id = sessão.tenant_id
-AND usuário está ativo
-AND usuário possui vínculo com o projeto
-AND role permite a ação solicitada
-```
-
-O código da aplicação continuará validando a ação (`read`, `create`, `update`, `approve`, `pay`, `admin`), mas a consulta ao Neon nunca dependerá apenas de um filtro enviado pelo frontend. A ausência de contexto ou de policy deverá negar a operação por padrão.
-
-O mapeamento automático será simples:
-
-| Identidade Thirdweb | Neon | Resultado |
-| :--- | :--- | :--- |
-| `thirdweb_id` autenticado | `users.thirdweb_id` | Localiza o usuário |
-| Usuário | `tenant_memberships` | Resolve organizações permitidas |
-| Usuário + projeto | `project_memberships` | Resolve obras acessíveis |
-| `role` + ação | `role_permissions` | Resolve a operação permitida |
-| Contexto da requisição | RLS/policy | Filtra e protege os registros |
-
-Assim, trocar o perfil no Neon altera automaticamente o comportamento da aplicação na próxima requisição, sem deploy, sem atualização de contrato e sem transação blockchain.
-
-Roles on-chain somente serão introduzidas em uma feature específica que precise de autorização verificável fora do ObraFlow, como movimentação de ativos ou assinatura de uma operação blockchain. Elas não farão parte do caminho padrão de login, leitura de obras, fotos, orçamento, tarefas ou dashboards.
-
-- `THIRDWEB_CLIENT_ID` será usado no client somente com domínios permitidos por ambiente.
-- `THIRDWEB_SECRET_KEY` ficará exclusivamente no backend/Vercel.
-- O identificador externo persistido será `thirdweb_id`; não serão criados novos fluxos baseados no identificador do provedor anterior.
-- A wallet Thirdweb será vinculada ao `user_id` após validação do token e/ou assinatura exigida pelo fluxo.
-- O Neon continuará armazenando o perfil de negócio e o tenant; Thirdweb autentica a identidade, mas o backend decide autorização de dados e operações.
-- Logout, expiração, revogação e troca de wallet deverão invalidar ou atualizar a sessão local conforme o estado verificado no Thirdweb.
-
-#### Mapeamento com Thirdweb
-
-- `THIRDWEB_CLIENT_ID` poderá ser público no frontend somente quando restrito aos domínios autorizados do projeto.
-- `THIRDWEB_SECRET_KEY`, chaves de deployer, relayer, webhooks e credenciais administrativas serão exclusivamente server-side, armazenadas como secrets da Vercel/secret manager.
-- O projeto Thirdweb deverá restringir os domínios permitidos por ambiente (`localhost`, preview e produção), mantendo projetos ou credenciais separados para testnet e mainnet. Chaves secretas Thirdweb concedem acesso amplo aos serviços e não podem ser expostas no client-side. [Thirdweb API keys](https://portal.thirdweb.com/account/api-keys/create)
-- A wallet vinculada ao usuário será uma credencial/identidade Web3 adicional, não substituindo a sessão e o RBAC do ObraFlow.
-- A associação `user_id -> wallet_address` será verificada por assinatura/challenge ou fluxo oficial de autenticação; um endereço informado livremente não será considerado prova de posse.
-- Operações de contrato serão permitidas por uma policy explícita, com chain ID, contract address, função, limite de valor, tenant e papel autorizado.
-- Session keys, quando usadas, terão contratos-alvo, janela de validade e limite de valor restritos. Administradores de smart accounts não serão atribuídos a usuários operacionais.
-- Webhooks Thirdweb validarão assinatura, timestamp, nonce/replay protection e idempotência antes de alterar o Neon.
-
-#### Regulação dos perfis em operações on-chain
-
-Quando uma funcionalidade exigir autorização em contrato, o ObraFlow usará roles on-chain compatíveis com o modelo `Permissions`/`PermissionsEnumerable` do Thirdweb. As roles serão determinísticas, por exemplo:
-
-```text
-OBRAFLOW_PLATFORM_ADMIN_ROLE
-OBRAFLOW_CONTRACTOR_ROLE
-OBRAFLOW_ENGINEER_ROLE
-OBRAFLOW_FOREMAN_ROLE
-OBRAFLOW_CLIENT_ROLE
-OBRAFLOW_DESIGNER_ROLE
-```
-
-O mapeamento será:
-
-| Perfil no Neon | Role no contrato | Escopo on-chain padrão |
-| :--- | :--- | :--- |
-| `PLATFORM_ADMIN` | `OBRAFLOW_PLATFORM_ADMIN_ROLE` | Administrar roles e configurações, sempre com MFA e auditoria |
-| `CONTRACTOR` | `OBRAFLOW_CONTRACTOR_ROLE` | Operar recursos da própria organização previamente permitidos |
-| `ENGINEER` | `OBRAFLOW_ENGINEER_ROLE` | Operar funções técnicas explicitamente permitidas |
-| `FOREMAN` | `OBRAFLOW_FOREMAN_ROLE` | Registrar evidências/avanços quando exigido pelo contrato |
-| `CLIENT` | `OBRAFLOW_CLIENT_ROLE` | Aprovar operações da própria obra quando habilitado |
-| `DESIGNER` | `OBRAFLOW_DESIGNER_ROLE` | Operar recursos de design explicitamente permitidos |
-
-O fluxo de concessão será obrigatório e auditável:
-
-1. O usuário autentica no ObraFlow pelo Thirdweb; o backend valida o token/JWT, identifica a wallet/identidade, tenant e perfil no Neon.
-2. O usuário prova a posse da wallet por assinatura/challenge; o backend associa somente a wallet verificada ao `user_id`.
-3. O backend verifica tenant, projeto, perfil e policy da operação.
-4. Uma operação administrativa autorizada concede ou revoga a role on-chain por meio do executor do contrato.
-5. O backend registra confirmação, `tx_hash`, chain ID, contrato, wallet, role, operador e timestamps no Neon.
-6. Operações Web3 exigem autorização simultânea do ObraFlow e a role on-chain exigida pela feature.
-
-O Neon é a fonte de verdade para identidade, tenant, perfil e acesso a dados privados. O contrato é a fonte de verdade apenas para a autorização de operações on-chain. Uma role on-chain, sozinha, nunca concede acesso a documentos, custos, projetos ou dados privados.
-
-Conceder um perfil no Neon não concede automaticamente uma role on-chain. Suspender ou remover o usuário no Neon bloqueia imediatamente as rotas do ObraFlow e inicia a revogação on-chain. Remover a role on-chain bloqueia a operação Web3, mas não altera automaticamente o perfil no Neon. Divergências entre os dois estados negam a operação e criam o estado `PERMISSION_RECONCILIATION_REQUIRED` para reconciliação idempotente.
-
-Nenhum perfil operacional receberá `DEFAULT_ADMIN_ROLE` ou permissão irrestrita de smart account. Session keys, quando usadas, serão limitadas por contrato-alvo, funções, janela temporal e valor máximo.
-
-#### Regra de precedência
-
-Uma autorização Web3 válida nunca supera uma restrição de negócio do ObraFlow. Por exemplo, possuir a wallet correta não permite acessar uma obra de outro tenant, alterar uma folha sem permissão ou transferir fundos sem a policy correspondente. Do mesmo modo, ser `CONTRACTOR` no ObraFlow não concede automaticamente papel `Owner` no time Thirdweb.
-
-O inventário real do time `govinda-systems`, seus projetos, chains, contratos e membros será descoberto por acesso autenticado e registrado por ambiente. IDs, endereços e permissões não serão inferidos a partir da URL nem codificados como valores fictícios.
+- `THIRDWEB_CLIENT_ID` poderá ser usado no client somente com domínios/origens permitidos por ambiente.
+- `THIRDWEB_SECRET_KEY`, chave de assinatura de sessão, chaves de deployer/relayer e segredos de webhook ficam exclusivamente server-side, como secrets da Vercel/secret manager.
+- Separar configuração e credenciais de preview/testnet das de produção/mainnet; não inferir IDs, contratos ou permissões a partir da URL. [Thirdweb API keys](https://portal.thirdweb.com/account/api-keys/create)
+- Associar uma wallet ao usuário somente após prova de posse por assinatura/challenge; endereço informado livremente não prova identidade.
+- Webhooks Thirdweb, quando usados, validam assinatura, timestamp, nonce/replay protection e idempotência antes de alterar o Neon.
+- Inspecionar a equipe real `govinda-systems` por acesso autenticado e registrar valores verificados por ambiente. Ser membro/`Owner` da equipe Thirdweb não concede perfil de negócio no ObraFlow.
 
 ### 2.5. Sistema Declarativo de Seeds
 Para garantir governança entre ambientes locais, testes de CI e nuvem, a infraestrutura adota 2 modos de inicialização:

@@ -1,0 +1,11 @@
+project_name      = "obraflow"
+team_id           = "<verified-vercel-team-id>"
+git_repository    = "<verified-owner>/<verified-repository>"
+production_branch = "main"
+function_region   = "<select-region-near-neon>"
+manage_environment_secrets = false
+environment_target = null
+environment_git_branch = null
+environment_secret_names = []
+environment_secret_versions = {}
+public_environment_values = {}

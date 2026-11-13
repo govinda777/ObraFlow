@@ -1,6 +1,8 @@
 -- ============================================================================
--- ObraFlow Database Schema (PostgreSQL / Neon DB)
--- Mapeamento estrito das 10 Entidades do MER.md e regras da ADR-0004
+-- ObraFlow legacy baseline (PostgreSQL / Neon DB).
+-- This preserves the original prototype schema for a deterministic upgrade.
+-- Authorization in this legacy model is not secure: users.role is global.
+-- Migration 0002 moves access to tenant/project memberships and enables RLS.
 -- ============================================================================
 
 -- 1. TIPOS ENUM DECLARATIVOS
