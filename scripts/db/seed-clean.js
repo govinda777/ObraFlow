@@ -18,7 +18,8 @@ const ROOT_DIR = path.resolve(__dirname, '../..');
 dotenv.config({ path: path.join(ROOT_DIR, '.env') });
 
 const { Pool } = pg;
-const DATABASE_URL = process.env.DATABASE_URL;
+const DATABASE_URL = process.env.SEED_DATABASE_URL;
+const allowDemoSeed = process.env.ALLOW_DEMO_SEED === 'true';
 const isDryRun = process.argv.includes('--dry-run');
 
 console.log('🧼 [ObraFlow Seed Clean] Inicializando banco limpo apenas com as 5 Personas de referência...');
@@ -83,18 +84,18 @@ async function runCleanSeed() {
     return;
   }
 
+  if (process.env.NODE_ENV === 'production' || !allowDemoSeed) {
+    throw new Error('Database writes require a non-production environment and ALLOW_DEMO_SEED=true.');
+  }
+
   const pool = new Pool({
     connectionString: DATABASE_URL,
-    ssl: DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false }
+    ssl: DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: true }
   });
 
   const client = await pool.connect();
   try {
     await client.query('BEGIN;');
-
-    // Limpa obras antigas se houver
-    await client.query('DELETE FROM projects;');
-    await client.query('DELETE FROM collaborators;');
 
     for (const u of baseUsers) {
       await client.query(

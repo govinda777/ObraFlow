@@ -25,18 +25,28 @@ Adotar os seguintes componentes:
 - **Blockchain:** opcional para assinaturas estruturadas, operações que realmente exigem estado on-chain e ancoragem de hashes de auditoria.
 - **Redis:** fora do caminho padrão de autorização; poderá ser avaliado futuramente apenas se métricas mostrarem necessidade concreta.
 
-O fluxo de autenticação Thirdweb documenta a verificação de um payload SIWE e a emissão de um JWT pelo servidor. O Thirdweb Auth permite adicionar contexto customizado ao JWT. [Thirdweb Auth para Next.js](https://portal.thirdweb.com/wallets/auth/frameworks/next), [API `createAuth`](https://portal.thirdweb.com/typescript/v5/createAuth)
+Esta ADR é a fonte de verdade para autorização de negócio e detalha a seção 2.4 da ADR-0004. Enquanto estiver `Proposed`, a implementação de produção deste modelo aguarda aprovação; uma vez aprovada, qualquer descrição divergente de roles, sessão ou autorização na ADR-0004 fica substituída por esta decisão. A ADR-0004 continua sendo a referência para infraestrutura e deploy.
+
+#### Fonte de identidade e fonte de autorização
+
+- **Thirdweb autentica a identidade** por SIWE/EIP-4361 e prova o controle da wallet. Papéis de equipe Thirdweb (`Member`/`Owner`) não são perfis do ObraFlow.
+- **O backend emite a sessão da aplicação** usando Thirdweb Auth server-side, somente depois de validar a prova Thirdweb e consultar no Neon o usuário e seu membership ativo. Não se deve aceitar claims de autorização fornecidas pelo client nem tratar o token de identidade do client como decisão de acesso.
+- **O Neon autoriza o negócio:** `role` pertence a `tenant_memberships`, não ao usuário global; permissões e vínculos de projeto limitam cada ação/recurso. Uma mesma identidade pode ter memberships e roles diferentes por tenant.
+- **Não existe mapeamento automático de perfis de negócio para roles on-chain.** EIP-712 comprova a assinatura de uma mensagem e ancoragem comprova integridade; nenhum dos dois substitui membership, permissões ou RLS.
+- Uma feature que exigir autorização executada por contrato deverá definir seus papéis/funções on-chain em uma ADR própria. Essa autorização será específica à operação e adicional à policy ObraFlow; nunca concederá acesso a dados privados e nunca será concedida automaticamente por mudar `role` no Neon.
+
+O fluxo Thirdweb Auth permite que o servidor valide o payload SIWE e emita o JWT de sessão com contexto customizado. O signer e a emissão são server-side; o backend resolve os claims de autorização no Neon antes de assinar a sessão. [Thirdweb Auth para Next.js](https://portal.thirdweb.com/wallets/auth/frameworks/next), [API `createAuth`](https://portal.thirdweb.com/typescript/v5/createAuth)
 
 ### Arquitetura
 
 ```mermaid
 flowchart LR
     U[Usuário] --> TW[Thirdweb SIWE]
-    TW -->|wallet + prova assinada| API[Backend Vercel]
-    API -->|valida payload| AUTH[Thirdweb Auth]
-    API -->|resolve usuário, tenant e memberships| DB[(Neon)]
-    DB -->|contexto autorizado| API
-    API -->|JWT curto com claims| U
+    TW -->|wallet + prova SIWE assinada| API[Backend Vercel]
+    API -->|valida desafio/prova| AUTH[Thirdweb Auth server-side]
+    API -->|resolve usuário e membership ativo| DB[(Neon)]
+    DB -->|contexto de autorização| API
+    API -->|emite JWT de sessão da aplicação| U
     U -->|requisição com cookie JWT| API
     API -->|valida assinatura e expiração| GUARD[Authorization Guard]
     GUARD -->|contexto de transação| RLS[Neon RLS]
@@ -241,7 +251,10 @@ Health checks não devem revelar claims, tenants, dados, topology interna ou sec
 ### Testes
 
 - token ausente, expirado ou inválido retorna `401`;
+- claims de role, tenant ou permissões enviados/adulterados pelo client não elevam acesso; a sessão é emitida pelo backend após consultar o Neon;
 - seleção de perfil no cadastro não concede acesso a tenants existentes;
+- a mesma identidade pode ter roles diferentes em memberships de tenants distintos, sem que uma role seja tratada como global;
+- papéis `Member`/`Owner` da equipe Thirdweb não são convertidos em perfis ou permissões do ObraFlow;
 - membership pendente/suspensa/revogada não acessa dados;
 - troca de tenant emite sessão para membership validado;
 - tenant A não lê nem altera dados do tenant B;
@@ -251,6 +264,7 @@ Health checks não devem revelar claims, tenants, dados, topology interna ou sec
 - aprovação repetida com a mesma idempotency key não duplica evento;
 - webhook de pagamento inválido ou repetido não duplica confirmação;
 - assinatura EIP-712 com nonce expirado ou reutilizado é rejeitada;
+- alterar um perfil no Neon não concede nem revoga automaticamente roles on-chain; se uma feature adotar roles de contrato, sua autorização específica é testada adicionalmente e não libera acesso a dados privados;
 - hash do documento assinado corresponde à versão armazenada;
 - upload/evidência é privado e vinculado a tenant/projeto/tarefa;
 - publicação/ancoragem falha sem alterar ou apagar o evento original;

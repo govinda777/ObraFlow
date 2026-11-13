@@ -77,6 +77,7 @@ web_modules/
 # Next.js build output
 .next
 out
+next-env.d.ts
 
 # Nuxt.js build / generate output
 .nuxt
@@ -155,3 +156,13 @@ build/
 # Local prototype uploads
 uploads/*
 !uploads/.gitkeep
+
+# Terraform/OpenTofu state, plans, and per-environment values
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+!*.tfvars.example
+infra/terraform/neon/.terraform.lock.hcl
+
