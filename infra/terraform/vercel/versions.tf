@@ -11,6 +11,4 @@ terraform {
   }
 }
 
-provider "vercel" {
-  team = var.team_id
-}
+provider "vercel" {}
