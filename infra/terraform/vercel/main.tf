@@ -6,7 +6,6 @@ resource "vercel_project" "obraflow" {
   node_version    = "22.x"
   install_command = "npm ci --legacy-peer-deps"
   build_command   = "npm run build:web"
-  ignore_command  = var.ignore_command
 
   git_fork_protection = true
   git_repository = {
