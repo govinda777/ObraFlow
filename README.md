@@ -78,7 +78,7 @@ O protótipo do **ObraFlow** é executado localmente como uma aplicação intera
 
 2. **Instale as dependências:**
    ```bash
-   npm install
+   npm install --legacy-peer-deps
    ```
 
 3. **Inicie o ambiente local integrado (API `:3001` + UI `:3000` + compilação DuckDB):**
@@ -86,6 +86,49 @@ O protótipo do **ObraFlow** é executado localmente como uma aplicação intera
    npm run dev
    ```
    Abra seu navegador em [http://localhost:3000](http://localhost:3000) para interagir com o protótipo completo.
+
+---
+
+## ☁️ Infraestrutura como Código (OpenTofu: Neon + Vercel)
+
+Você pode criar e destruir a infraestrutura completa (banco Neon e projeto Vercel) 100% via código:
+
+### 1. Login Interativo (apenas na 1ª vez via navegador)
+```bash
+npx neonctl login
+npx vercel login
+```
+
+### 2. Comandos NPM de Infraestrutura
+
+#### Gerenciar Tudo (Neon + Vercel):
+```bash
+# Simular e visualizar plano
+npm run infra:plan
+
+# Criar a infraestrutura completa (Neon + Vercel)
+npm run infra:up
+
+# Excluir e limpar toda a infraestrutura
+npm run infra:down
+```
+
+#### Gerenciar Individualmente:
+```bash
+# Apenas Neon
+npm run infra:plan:neon
+npm run infra:up:neon
+npm run infra:down:neon
+
+# Apenas Vercel
+npm run infra:plan:vercel
+npm run infra:up:vercel
+npm run infra:down:vercel
+```
+
+> **Zero Chaves Manuais:** O comando gera uma chave temporária a partir da sua sessão do navegador, roda o OpenTofu e revoga a chave imediatamente ao concluir.
+
+---
 
 ---
 

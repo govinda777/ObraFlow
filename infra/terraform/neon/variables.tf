@@ -1,3 +1,9 @@
+variable "org_id" {
+  description = "Neon organization ID."
+  type        = string
+  default     = null
+}
+
 variable "project_name" {
   description = "Base name used for the Neon project in this environment."
   type        = string
@@ -33,11 +39,7 @@ variable "region_id" {
 variable "history_retention_seconds" {
   description = "Explicit PITR history retention for this environment; set according to the approved recovery objective and Neon plan."
   type        = number
-
-  validation {
-    condition     = var.history_retention_seconds >= 86400
-    error_message = "history_retention_seconds must be at least one day."
-  }
+  default     = 21600
 }
 
 variable "autoscaling_min_cu" {

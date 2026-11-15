@@ -164,5 +164,6 @@ uploads/*
 *.tfplan
 *.tfvars
 !*.tfvars.example
-infra/terraform/neon/.terraform.lock.hcl
+.terraform.lock.hcl
+
 

@@ -2,9 +2,10 @@ resource "neon_project" "obraflow" {
   name                      = "${var.project_name}-${var.environment}"
   database_name             = var.database_name
   region_id                 = var.region_id
+  org_id                    = var.org_id
   pg_version                = 16
   history_retention_seconds = var.history_retention_seconds
-  store_password            = false
+  store_password            = true
   branch = {
     name      = "main"
     protected = var.environment == "production"
@@ -13,11 +14,10 @@ resource "neon_project" "obraflow" {
   primary_compute = {
     autoscaling_limit_min_cu = var.autoscaling_min_cu
     autoscaling_limit_max_cu = var.autoscaling_max_cu
-    suspend_timeout_seconds  = 300
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }
 

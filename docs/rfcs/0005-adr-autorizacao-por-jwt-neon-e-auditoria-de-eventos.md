@@ -2,7 +2,7 @@
 
 | Metadado | Valor |
 | :--- | :--- |
-| **Status** | 🟡 `Proposed` |
+| **Status** | 🟢 `Accepted` |
 | **Data** | 2026-11-11 |
 | **Autores** | Equipe ObraFlow |
 | **Contexto** | Autenticação Thirdweb, autorização multi-tenant, registro auditável de eventos e assinaturas |
@@ -25,7 +25,7 @@ Adotar os seguintes componentes:
 - **Blockchain:** opcional para assinaturas estruturadas, operações que realmente exigem estado on-chain e ancoragem de hashes de auditoria.
 - **Redis:** fora do caminho padrão de autorização; poderá ser avaliado futuramente apenas se métricas mostrarem necessidade concreta.
 
-Esta ADR é a fonte de verdade para autorização de negócio e detalha a seção 2.4 da ADR-0004. Enquanto estiver `Proposed`, a implementação de produção deste modelo aguarda aprovação; uma vez aprovada, qualquer descrição divergente de roles, sessão ou autorização na ADR-0004 fica substituída por esta decisão. A ADR-0004 continua sendo a referência para infraestrutura e deploy.
+Esta ADR é a fonte de verdade para autorização de negócio e detalha a seção 2.4 da ADR-0004. Com sua aprovação, qualquer descrição divergente anterior de roles, sessão ou autorização fica substituída por esta decisão. A ADR-0004 continua sendo a referência para infraestrutura e deploy.
 
 #### Fonte de identidade e fonte de autorização
 

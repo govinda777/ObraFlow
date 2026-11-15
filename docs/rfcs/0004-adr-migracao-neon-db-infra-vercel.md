@@ -113,7 +113,7 @@ Essa decisão substitui a abordagem de chamada direta ao Gemini pelo navegador d
 
 ### 2.4. Identidade, Autorização de Negócio e Integração Thirdweb
 
-Esta ADR define a plataforma de deploy e infraestrutura; **não cria um modelo de autorização paralelo**. As regras de autenticação da aplicação, memberships, perfis, permissões, JWT e RLS são detalhadas pela [ADR-0005](./0005-adr-autorizacao-por-jwt-neon-e-auditoria-de-eventos.md). Como a ADR-0005 está `Proposed`, sua implementação em produção depende de aprovação. Uma vez aprovada, ela será a fonte de verdade para autorização e substituirá qualquer descrição divergente desta seção.
+Esta ADR define a plataforma de deploy e infraestrutura; **não cria um modelo de autorização paralelo**. As regras de autenticação da aplicação, memberships, perfis, permissões, JWT e RLS são detalhadas e padronizadas pela [ADR-0005](./0005-adr-autorizacao-por-jwt-neon-e-auditoria-de-eventos.md) (`Accepted`), que é a fonte de verdade para autorização.
 
 O Thirdweb comprova a identidade/autenticidade da wallet e fornece capacidades Web3. Não é a fonte de autorização para dados e perfis de negócio do ObraFlow. Os papéis de equipe Thirdweb (`Member`, `Owner`) governam acesso à equipe/projeto Thirdweb e não equivalem aos perfis do SaaS. [Thirdweb team members](https://portal.thirdweb.com/account/teams/manage-team-members), [Thirdweb permissions](https://portal.thirdweb.com/tokens/build/extensions/general/Permissions)
 
