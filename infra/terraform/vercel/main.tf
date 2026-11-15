@@ -3,7 +3,6 @@ resource "vercel_project" "obraflow" {
   team_id   = var.team_id
   framework = "nextjs"
 
-  root_directory  = "."
   node_version    = "22.x"
   install_command = "npm ci --legacy-peer-deps"
   build_command   = "npm run build:web"
