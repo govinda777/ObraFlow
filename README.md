@@ -13,6 +13,14 @@ O **ObraFlow** é uma solução SaaS moderna desenvolvida para eliminar a falta 
 
 ## 🚀 Principais Funcionalidades
 
+### 0. Esteira DevOps GitOps & Multi-Ambiente (ADR-0007)
+
+* **Ambientes Isolados**: 
+  - `staging`: alimentado por commits e merges na branch `develop`.
+  - `production`: alimentado por releases na branch `main`.
+* **State Locking Transacional**: Armazenamento de estado OpenTofu persistido no PostgreSQL do Neon (`backend "pg"`).
+* **Filtros de Build Vercel**: Builds da Vercel acionados estritamente na branch correspondente ao ambiente.
+
 ### 1. Onboarding e Gestão de Projetos por IA
 
 * **Upload de Documentos:** O cliente ou gestor faz o upload do PDF do projeto (arquitetônico, memorial descritivo ou escopo).
