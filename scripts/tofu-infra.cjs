@@ -88,7 +88,25 @@ function runTofu(dir, args, envVars, name) {
 }
 
 // URL de estado compartilhada (ADR 0007)
-const stateDbUrl = process.env.STATE_DATABASE_URL || "postgresql://neondb_owner:ROTATED_SECRET_REMOVED@ep-divine-boat-bc94p1ba.c-16.us-east-1.aws.neon.tech/neondb?sslmode=require";
+// Obtida de STATE_DATABASE_URL ou consultada via neonctl caso não definida em ambiente
+let stateDbUrl = process.env.STATE_DATABASE_URL;
+if (!stateDbUrl) {
+  try {
+    const connOut = spawnSync('npx', ['neonctl', 'connection-string', '--project-id', 'dark-band-48803278'], {
+      encoding: 'utf8'
+    });
+    if (connOut.stdout) {
+      stateDbUrl = connOut.stdout.trim();
+    }
+  } catch (e) {
+    // fallback
+  }
+}
+
+if (!stateDbUrl) {
+  console.error('❌ STATE_DATABASE_URL não configurada e não foi possível obter via neonctl.');
+  process.exit(1);
+}
 
 // NEON
 if (target === 'neon' || target === 'both') {
