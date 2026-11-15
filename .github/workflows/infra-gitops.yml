@@ -1,0 +1,121 @@
+name: Infrastructure GitOps (Plan & Apply)
+
+on:
+  pull_request:
+    paths:
+      - 'infra/terraform/**'
+      - '.github/workflows/infra-gitops.yml'
+  push:
+    branches: ["main"]
+    paths:
+      - 'infra/terraform/**'
+      - '.github/workflows/infra-gitops.yml'
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'OpenTofu Action'
+        required: true
+        default: 'plan'
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  opentofu:
+    name: OpenTofu (${{ github.event_name == 'push' && 'Apply' || github.event_name == 'pull_request' && 'Plan' || github.event.inputs.action }})
+    runs-on: ubuntu-latest
+    env:
+      NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+      VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.12.5
+
+      # 1. NEON
+      - name: OpenTofu Init (Neon)
+        run: tofu -chdir=infra/terraform/neon init
+
+      - name: OpenTofu Plan (Neon)
+        id: plan-neon
+        run: |
+          tofu -chdir=infra/terraform/neon plan \
+            -var=environment=development \
+            -var=region_id=aws-us-east-1 \
+            -var=history_retention_seconds=21600 \
+            -var=org_id=org-late-frog-57080945 \
+            -var=project_name=obraflow-sandbox \
+            -no-color
+
+      - name: OpenTofu Apply (Neon on Main push / manual apply)
+        if: |
+          (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+          (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'apply')
+        run: |
+          tofu -chdir=infra/terraform/neon apply \
+            -var=environment=development \
+            -var=region_id=aws-us-east-1 \
+            -var=history_retention_seconds=21600 \
+            -var=org_id=org-late-frog-57080945 \
+            -var=project_name=obraflow-sandbox \
+            -auto-approve
+
+      - name: OpenTofu Destroy (Neon on manual destroy)
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'destroy'
+        run: |
+          tofu -chdir=infra/terraform/neon destroy \
+            -var=environment=development \
+            -var=region_id=aws-us-east-1 \
+            -var=history_retention_seconds=21600 \
+            -var=org_id=org-late-frog-57080945 \
+            -var=project_name=obraflow-sandbox \
+            -auto-approve
+
+      # 2. VERCEL
+      - name: OpenTofu Init (Vercel)
+        run: tofu -chdir=infra/terraform/vercel init
+
+      - name: OpenTofu Plan (Vercel)
+        id: plan-vercel
+        run: |
+          tofu -chdir=infra/terraform/vercel plan \
+            -var=project_name=obraflow-sandbox \
+            -var=team_id=team_IDilvuF0u9Aceg0yggcAQmZ8 \
+            -var=git_repository=govinda777/ObraFlow \
+            -var=production_branch=main \
+            -var=function_region=iad1 \
+            -no-color
+
+      - name: OpenTofu Apply (Vercel on Main push / manual apply)
+        if: |
+          (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+          (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'apply')
+        run: |
+          tofu -chdir=infra/terraform/vercel apply \
+            -var=project_name=obraflow-sandbox \
+            -var=team_id=team_IDilvuF0u9Aceg0yggcAQmZ8 \
+            -var=git_repository=govinda777/ObraFlow \
+            -var=production_branch=main \
+            -var=function_region=iad1 \
+            -auto-approve
+
+      - name: OpenTofu Destroy (Vercel on manual destroy)
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'destroy'
+        run: |
+          tofu -chdir=infra/terraform/vercel destroy \
+            -var=project_name=obraflow-sandbox \
+            -var=team_id=team_IDilvuF0u9Aceg0yggcAQmZ8 \
+            -var=git_repository=govinda777/ObraFlow \
+            -var=production_branch=main \
+            -var=function_region=iad1 \
+            -auto-approve
