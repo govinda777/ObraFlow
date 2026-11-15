@@ -165,6 +165,6 @@ uploads/*
 *.tfvars
 !infra/terraform/**/environments/*.tfvars
 !*.tfvars.example
-.terraform.lock.hcl
+
 
 
