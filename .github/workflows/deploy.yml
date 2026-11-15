@@ -3,6 +3,12 @@ name: Deploy ObraFlow to GitHub Pages
 on:
   push:
     branches: ["main"]
+    paths:
+      - 'pages/**'
+      - 'sources/**'
+      - 'components/**'
+      - 'evidence.plugins.yaml'
+      - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
 permissions:
