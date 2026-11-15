@@ -25,6 +25,12 @@ variable "production_branch" {
   default     = "main"
 }
 
+variable "ignore_command" {
+  description = "Custom script or command to cancel unnecessary builds on Vercel (exit 1 to build, exit 0 to skip)."
+  type        = string
+  default     = null
+}
+
 variable "function_region" {
   description = "Vercel Function region selected to be close to the Neon project."
   type        = string
