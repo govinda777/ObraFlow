@@ -72,6 +72,7 @@ jobs:
     env:
       NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      STATE_DATABASE_URL: ${{ secrets.STATE_DATABASE_URL }}
       TARGET_ENV: ${{ needs.determine-env.outputs.env_name }}
       ACTION: ${{ needs.determine-env.outputs.action }}
     steps:
@@ -85,7 +86,11 @@ jobs:
 
       # 1. NEON
       - name: OpenTofu Init (Neon)
-        run: tofu -chdir=infra/terraform/neon init
+        run: |
+          tofu -chdir=infra/terraform/neon init \
+            -backend-config="conn_str=${STATE_DATABASE_URL}" \
+            -backend-config="schema_name=tofu_state_neon_${TARGET_ENV}" \
+            -reconfigure
 
       - name: OpenTofu Plan (Neon)
         id: plan-neon
@@ -110,7 +115,11 @@ jobs:
 
       # 2. VERCEL
       - name: OpenTofu Init (Vercel)
-        run: tofu -chdir=infra/terraform/vercel init
+        run: |
+          tofu -chdir=infra/terraform/vercel init \
+            -backend-config="conn_str=${STATE_DATABASE_URL}" \
+            -backend-config="schema_name=tofu_state_vercel_${TARGET_ENV}" \
+            -reconfigure
 
       - name: OpenTofu Plan (Vercel)
         id: plan-vercel
