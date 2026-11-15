@@ -1,0 +1,113 @@
+#!/usr/bin/env node
+
+/**
+ * Script mestre para gerenciar a infraestrutura completa (Neon + Vercel) com OpenTofu.
+ * Ciclo:
+ * 1. Recupera as sessões OAuth ativas locais da Neon e da Vercel (zero tokens manuais).
+ * 2. Executa o OpenTofu para o Neon.
+ * 3. Executa o OpenTofu para a Vercel.
+ */
+
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+const { spawnSync } = require('child_process');
+
+const action = process.argv[2] || 'plan'; // plan, apply, destroy
+const target = process.argv[3] || 'both'; // neon, vercel, both
+
+const validActions = ['plan', 'apply', 'destroy'];
+if (!validActions.includes(action)) {
+  console.error(`Ação inválida: "${action}". Use: plan, apply, ou destroy.`);
+  process.exit(1);
+}
+
+// 1. Obter credencial Neon
+const neonCredPath = path.join(os.homedir(), '.config/neon/credentials.json');
+let neonToken = null;
+if (target === 'neon' || target === 'both') {
+  if (!fs.existsSync(neonCredPath)) {
+    console.error('❌ Nenhuma sessão Neon encontrada. Faça login com: npx neonctl login');
+    process.exit(1);
+  }
+  const cred = JSON.parse(fs.readFileSync(neonCredPath, 'utf8'));
+  neonToken = cred.access_token;
+  if (!neonToken) {
+    console.error('❌ Token Neon não encontrado. Renove com: npx neonctl login');
+    process.exit(1);
+  }
+  console.log('🐘 Sessão Neon ativa detectada.');
+}
+
+// 2. Obter credencial Vercel
+const vercelAuthPath = path.join(os.homedir(), 'Library/Application Support/com.vercel.cli/auth.json');
+let vercelToken = null;
+if (target === 'vercel' || target === 'both') {
+  if (!fs.existsSync(vercelAuthPath)) {
+    console.error('❌ Nenhuma sessão Vercel encontrada. Faça login com: npx vercel login');
+    process.exit(1);
+  }
+  const auth = JSON.parse(fs.readFileSync(vercelAuthPath, 'utf8'));
+  vercelToken = auth.token;
+  if (!vercelToken) {
+    console.error('❌ Token Vercel não encontrado. Renove com: npx vercel login');
+    process.exit(1);
+  }
+  console.log('▲ Sessão Vercel ativa detectada.');
+}
+
+function runTofu(dir, args, envVars, name) {
+  console.log(`\n========================================`);
+  console.log(`🚀 Executando OpenTofu [${name}]: tofu ${args.join(' ')}`);
+  console.log(`========================================\n`);
+
+  const res = spawnSync('tofu', args, {
+    cwd: dir,
+    stdio: 'inherit',
+    env: {
+      ...process.env,
+      ...envVars
+    }
+  });
+
+  if (res.error) {
+    console.error(`❌ Erro ao executar ${name}:`, res.error);
+    process.exit(1);
+  }
+  if (res.status !== 0) {
+    console.error(`❌ Falha na execução de ${name} (código ${res.status}).`);
+    process.exit(res.status);
+  }
+}
+
+// NEON
+if (target === 'neon' || target === 'both') {
+  const neonDir = path.resolve(__dirname, '../infra/terraform/neon');
+  const neonVars = [
+    action,
+    '-var=environment=development',
+    '-var=region_id=aws-us-east-1',
+    '-var=history_retention_seconds=21600',
+    '-var=org_id=org-late-frog-57080945',
+    '-var=project_name=obraflow-sandbox'
+  ];
+  if (action === 'apply' || action === 'destroy') neonVars.push('-auto-approve');
+  runTofu(neonDir, neonVars, { NEON_API_KEY: neonToken }, 'Neon Database');
+}
+
+// VERCEL
+if (target === 'vercel' || target === 'both') {
+  const vercelDir = path.resolve(__dirname, '../infra/terraform/vercel');
+  const vercelVars = [
+    action,
+    '-var=project_name=obraflow-sandbox',
+    '-var=team_id=team_IDilvuF0u9Aceg0yggcAQmZ8',
+    '-var=git_repository=govinda777/ObraFlow',
+    '-var=production_branch=main',
+    '-var=function_region=iad1'
+  ];
+  if (action === 'apply' || action === 'destroy') vercelVars.push('-auto-approve');
+  runTofu(vercelDir, vercelVars, { VERCEL_API_TOKEN: vercelToken }, 'Vercel App');
+}
+
+console.log(`\n🎉 Operação "${action}" concluída com sucesso para toda a infraestrutura!`);

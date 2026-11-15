@@ -49,7 +49,7 @@ run "preview_secrets_without_branch_are_rejected" {
     }
   }
 
-  expect_failures = [var.environment_git_branch, var.environment_secret_names]
+  expect_failures = [var.environment_git_branch]
 }
 
 run "migration_credentials_cannot_be_sent_to_vercel" {

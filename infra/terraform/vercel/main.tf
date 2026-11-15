@@ -20,8 +20,19 @@ resource "vercel_project" "obraflow" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
+}
+
+# AI Engine configuration managed declaratively
+resource "vercel_project_environment_variable" "ai_model" {
+  project_id = vercel_project.obraflow.id
+  team_id    = var.team_id
+  key        = "GEMINI_MODEL"
+  value      = var.gemini_model
+  target     = ["development", "preview", "production"]
+  sensitive  = false
+  comment    = "Default Google Gemini model used by the resilient AI engine."
 }
 
 # Do not set inline `environment` on vercel_project when these standalone

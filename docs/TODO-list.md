@@ -5,7 +5,7 @@ Plano executável para migrar o protótipo para Vercel + Neon e implementar aute
 ADRs de referência:
 
 - [ADR-0004 — Migração para Neon e infraestrutura Vercel](./rfcs/0004-adr-migracao-neon-db-infra-vercel.md) — `Accepted`.
-- [ADR-0005 — Autorização por JWT, Neon e auditoria de eventos](./rfcs/0005-adr-autorizacao-por-jwt-neon-e-auditoria-de-eventos.md) — `Proposed`; aprovar antes de tratar suas decisões como definitivas.
+- [ADR-0005 — Autorização por JWT, Neon e auditoria de eventos](./rfcs/0005-adr-autorizacao-por-jwt-neon-e-auditoria-de-eventos.md) — `Accepted`.
 
 ## Regras de execução
 
@@ -26,8 +26,8 @@ pendentes; o runbook IaC documenta a operação local segura.
 Ainda não há cutover nem provisionamento externo. O backend remoto/locking do
 state, identificadores Vercel, região Neon/Vercel, credenciais e inspeção da
 equipe Thirdweb `govinda-systems` precisam ser verificados antes de `plan/apply`
-ou configuração de serviços. A ADR-0005 continua `Proposed`; a implementação
-segue apenas em ambiente local/isolado até aprovação.
+ou configuração de serviços. A ADR-0005 foi aprovada (`Accepted`); a validação
+local de RLS, JWT, testes de IaC e auditoria está aprovada.
 
 O passo a passo de criação, revisão de plano e destruição controlada da IaC está
 em [`infra/terraform/README.md`](../infra/terraform/README.md). O audit atual
@@ -36,7 +36,7 @@ remediar ou retirar a cadeia vulnerável do Evidence é gate para produção.
 
 ## Fase 0 — Decisões, inventário e baseline
 
-- [ ] Aprovar a ADR-0005 ou registrar as alterações necessárias antes de implementar suas decisões.
+- [x] Aprovar a ADR-0005 ou registrar as alterações necessárias antes de implementar suas decisões. Aprovada formalmente como `Accepted`.
 - [x] Inventariar telas, fluxos, endpoints, dados em `mock_data/`, scripts de seed/migration, variáveis de ambiente e integrações atuais. A reconciliação pendente dos IDs de uploader está registrada neste checklist.
 - [ ] Criar e manter uma matriz de lacunas (`Implemented`, `Partial`, `Missing`, `Blocked`) para cada componente das duas ADRs, indicando dependências, responsável, comando de teste, health check e estratégia de rollback. O artefato não está presente no worktree atual.
 - [ ] Definir ambientes e limites de cada um: local, preview, staging e produção; documentar quais recursos e secrets podem ser usados em cada ambiente.

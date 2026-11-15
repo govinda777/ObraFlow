@@ -30,6 +30,12 @@ variable "function_region" {
   type        = string
 }
 
+variable "gemini_model" {
+  description = "Google Gemini model selected for resilient AI diagnostics."
+  type        = string
+  default     = "gemini-2.5-flash"
+}
+
 variable "manage_environment_secrets" {
   description = "Enable write-only secret variables after a project/environment and a secret-manager handoff are verified."
   type        = bool
