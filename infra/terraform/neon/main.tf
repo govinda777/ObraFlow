@@ -8,7 +8,7 @@ resource "neon_project" "obraflow" {
   store_password            = true
   branch = {
     name      = "main"
-    protected = var.environment == "production"
+    protected = false
   }
 
   primary_compute = {
