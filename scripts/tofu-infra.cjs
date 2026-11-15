@@ -87,10 +87,22 @@ function runTofu(dir, args, envVars, name) {
   }
 }
 
+// URL de estado compartilhada (ADR 0007)
+const stateDbUrl = process.env.STATE_DATABASE_URL || "postgresql://neondb_owner:ROTATED_SECRET_REMOVED@ep-divine-boat-bc94p1ba.c-16.us-east-1.aws.neon.tech/neondb?sslmode=require";
+
 // NEON
 if (target === 'neon' || target === 'both') {
   const neonDir = path.resolve(__dirname, '../infra/terraform/neon');
   const varFile = path.resolve(neonDir, `environments/${envName}.tfvars`);
+  
+  // Garantir init com o backend pg do Neon
+  runTofu(neonDir, [
+    'init',
+    `-backend-config=conn_str=${stateDbUrl}`,
+    `-backend-config=schema_name=tofu_state_neon_${envName}`,
+    '-reconfigure'
+  ], { NEON_API_KEY: neonToken }, `Neon Init [${envName}]`);
+
   const neonVars = [
     action,
     `-var-file=${varFile}`
@@ -103,6 +115,15 @@ if (target === 'neon' || target === 'both') {
 if (target === 'vercel' || target === 'both') {
   const vercelDir = path.resolve(__dirname, '../infra/terraform/vercel');
   const varFile = path.resolve(vercelDir, `environments/${envName}.tfvars`);
+
+  // Garantir init com o backend pg da Vercel
+  runTofu(vercelDir, [
+    'init',
+    `-backend-config=conn_str=${stateDbUrl}`,
+    `-backend-config=schema_name=tofu_state_vercel_${envName}`,
+    '-reconfigure'
+  ], { VERCEL_API_TOKEN: vercelToken }, `Vercel Init [${envName}]`);
+
   const vercelVars = [
     action,
     `-var-file=${varFile}`
