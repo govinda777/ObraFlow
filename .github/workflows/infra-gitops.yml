@@ -6,12 +6,22 @@ on:
       - 'infra/terraform/**'
       - '.github/workflows/infra-gitops.yml'
   push:
-    branches: ["main"]
+    branches:
+      - "main"
+      - "develop"
     paths:
       - 'infra/terraform/**'
       - '.github/workflows/infra-gitops.yml'
   workflow_dispatch:
     inputs:
+      environment:
+        description: 'Target Environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
       action:
         description: 'OpenTofu Action'
         required: true
@@ -27,12 +37,39 @@ permissions:
   pull-requests: write
 
 jobs:
-  opentofu:
-    name: OpenTofu (${{ github.event_name == 'push' && 'Apply' || github.event_name == 'pull_request' && 'Plan' || github.event.inputs.action }})
+  determine-env:
+    name: Resolve Target Environment
     runs-on: ubuntu-latest
+    outputs:
+      env_name: ${{ steps.resolve.outputs.env_name }}
+      action: ${{ steps.resolve.outputs.action }}
+    steps:
+      - id: resolve
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "env_name=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
+            echo "action=${{ github.event.inputs.action }}" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "env_name=production" >> $GITHUB_OUTPUT
+            echo "action=apply" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" = "refs/heads/develop" ]; then
+            echo "env_name=staging" >> $GITHUB_OUTPUT
+            echo "action=apply" >> $GITHUB_OUTPUT
+          else
+            echo "env_name=staging" >> $GITHUB_OUTPUT
+            echo "action=plan" >> $GITHUB_OUTPUT
+          fi
+
+  opentofu:
+    name: OpenTofu (${{ needs.determine-env.outputs.env_name }} - ${{ needs.determine-env.outputs.action }})
+    needs: determine-env
+    runs-on: ubuntu-latest
+    environment: ${{ needs.determine-env.outputs.env_name }}
     env:
       NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      TARGET_ENV: ${{ needs.determine-env.outputs.env_name }}
+      ACTION: ${{ needs.determine-env.outputs.action }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -50,35 +87,21 @@ jobs:
         id: plan-neon
         run: |
           tofu -chdir=infra/terraform/neon plan \
-            -var=environment=development \
-            -var=region_id=aws-us-east-1 \
-            -var=history_retention_seconds=21600 \
-            -var=org_id=org-late-frog-57080945 \
-            -var=project_name=obraflow-sandbox \
+            -var-file=environments/${TARGET_ENV}.tfvars \
             -no-color
 
-      - name: OpenTofu Apply (Neon on Main push / manual apply)
-        if: |
-          (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-          (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'apply')
+      - name: OpenTofu Apply (Neon)
+        if: env.ACTION == 'apply'
         run: |
           tofu -chdir=infra/terraform/neon apply \
-            -var=environment=development \
-            -var=region_id=aws-us-east-1 \
-            -var=history_retention_seconds=21600 \
-            -var=org_id=org-late-frog-57080945 \
-            -var=project_name=obraflow-sandbox \
+            -var-file=environments/${TARGET_ENV}.tfvars \
             -auto-approve
 
-      - name: OpenTofu Destroy (Neon on manual destroy)
-        if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'destroy'
+      - name: OpenTofu Destroy (Neon)
+        if: env.ACTION == 'destroy'
         run: |
           tofu -chdir=infra/terraform/neon destroy \
-            -var=environment=development \
-            -var=region_id=aws-us-east-1 \
-            -var=history_retention_seconds=21600 \
-            -var=org_id=org-late-frog-57080945 \
-            -var=project_name=obraflow-sandbox \
+            -var-file=environments/${TARGET_ENV}.tfvars \
             -auto-approve
 
       # 2. VERCEL
@@ -89,33 +112,19 @@ jobs:
         id: plan-vercel
         run: |
           tofu -chdir=infra/terraform/vercel plan \
-            -var=project_name=obraflow-sandbox \
-            -var=team_id=team_IDilvuF0u9Aceg0yggcAQmZ8 \
-            -var=git_repository=govinda777/ObraFlow \
-            -var=production_branch=main \
-            -var=function_region=iad1 \
+            -var-file=environments/${TARGET_ENV}.tfvars \
             -no-color
 
-      - name: OpenTofu Apply (Vercel on Main push / manual apply)
-        if: |
-          (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-          (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'apply')
+      - name: OpenTofu Apply (Vercel)
+        if: env.ACTION == 'apply'
         run: |
           tofu -chdir=infra/terraform/vercel apply \
-            -var=project_name=obraflow-sandbox \
-            -var=team_id=team_IDilvuF0u9Aceg0yggcAQmZ8 \
-            -var=git_repository=govinda777/ObraFlow \
-            -var=production_branch=main \
-            -var=function_region=iad1 \
+            -var-file=environments/${TARGET_ENV}.tfvars \
             -auto-approve
 
-      - name: OpenTofu Destroy (Vercel on manual destroy)
-        if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'destroy'
+      - name: OpenTofu Destroy (Vercel)
+        if: env.ACTION == 'destroy'
         run: |
           tofu -chdir=infra/terraform/vercel destroy \
-            -var=project_name=obraflow-sandbox \
-            -var=team_id=team_IDilvuF0u9Aceg0yggcAQmZ8 \
-            -var=git_repository=govinda777/ObraFlow \
-            -var=production_branch=main \
-            -var=function_region=iad1 \
+            -var-file=environments/${TARGET_ENV}.tfvars \
             -auto-approve

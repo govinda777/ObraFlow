@@ -15,10 +15,17 @@ const { spawnSync } = require('child_process');
 
 const action = process.argv[2] || 'plan'; // plan, apply, destroy
 const target = process.argv[3] || 'both'; // neon, vercel, both
+const envName = process.argv[4] || 'staging'; // staging, production
 
 const validActions = ['plan', 'apply', 'destroy'];
 if (!validActions.includes(action)) {
   console.error(`Ação inválida: "${action}". Use: plan, apply, ou destroy.`);
+  process.exit(1);
+}
+
+const validEnvs = ['staging', 'production'];
+if (!validEnvs.includes(envName)) {
+  console.error(`Ambiente inválido: "${envName}". Use: staging ou production.`);
   process.exit(1);
 }
 
@@ -83,31 +90,25 @@ function runTofu(dir, args, envVars, name) {
 // NEON
 if (target === 'neon' || target === 'both') {
   const neonDir = path.resolve(__dirname, '../infra/terraform/neon');
+  const varFile = path.resolve(neonDir, `environments/${envName}.tfvars`);
   const neonVars = [
     action,
-    '-var=environment=development',
-    '-var=region_id=aws-us-east-1',
-    '-var=history_retention_seconds=21600',
-    '-var=org_id=org-late-frog-57080945',
-    '-var=project_name=obraflow-sandbox'
+    `-var-file=${varFile}`
   ];
   if (action === 'apply' || action === 'destroy') neonVars.push('-auto-approve');
-  runTofu(neonDir, neonVars, { NEON_API_KEY: neonToken }, 'Neon Database');
+  runTofu(neonDir, neonVars, { NEON_API_KEY: neonToken }, `Neon Database (${envName})`);
 }
 
 // VERCEL
 if (target === 'vercel' || target === 'both') {
   const vercelDir = path.resolve(__dirname, '../infra/terraform/vercel');
+  const varFile = path.resolve(vercelDir, `environments/${envName}.tfvars`);
   const vercelVars = [
     action,
-    '-var=project_name=obraflow-sandbox',
-    '-var=team_id=team_IDilvuF0u9Aceg0yggcAQmZ8',
-    '-var=git_repository=govinda777/ObraFlow',
-    '-var=production_branch=main',
-    '-var=function_region=iad1'
+    `-var-file=${varFile}`
   ];
   if (action === 'apply' || action === 'destroy') vercelVars.push('-auto-approve');
-  runTofu(vercelDir, vercelVars, { VERCEL_API_TOKEN: vercelToken }, 'Vercel App');
+  runTofu(vercelDir, vercelVars, { VERCEL_API_TOKEN: vercelToken }, `Vercel App (${envName})`);
 }
 
 console.log(`\n🎉 Operação "${action}" concluída com sucesso para toda a infraestrutura!`);
